@@ -1,0 +1,18 @@
+---
+title: "What is R and RStudio?"
+---
+
+R is a programming language, along with many other programming languages. Perhaps you've heard of some of them? Python, Java, Javascript, PHP, C, C++... We use these programming languages to communicate with the computer. Typically, there are lots of trade-offs with using one language over another, for example whether you want your code to be easily readable by a human, or whether it should make the requests run fast. Also, some programming languages are good for web development (e.g. Javascript and PHP), some work great for background processes (e.g. C and C++), and some are favorites for mathematics and statistical computing (e.g. python and R). We will be focusing on R in these sessions, though we have a long-term hope of integrating some python as well.
+
+Learning R is a journey - and a quite frustrating journey at times, especially if it's the first programming language you learn. So why bother learning it? Why not just use excel or something? Well...
+
+-   R is free. It's non-proprietary and requires no license. Down with the big corporations, knowledge for all!
+-   R enhances reproducibility. Anybody can re-run your code to use for their own applications, or to replicate your studies.
+-   R makes it easier to spot errors. Although errors are pain, we would rather have an error message early in the process than spotting a mistake two days before you think you've finished the project.
+-   R offers a large and supportive community to help you, both on the web and in real life. R-Meetups, RLadies, RStudio conference, you name it.
+
+We often say that we "code in R", but we "work in RStudio". The reason for this is that R is the machine doing the calculations, while RStudio is the framework we work within. So if programming was a car, then R would be the engine and RStudio would be the bodywork.
+
+```{r, out.width="80%", fig.align="center", echo = FALSE}
+knitr::include_graphics("../figures/car.jpg")
+```
