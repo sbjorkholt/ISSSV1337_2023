@@ -23,11 +23,29 @@ book:
         - 2_Data_wrangling/11_joins.qmd
     - part: "Descriptive statistics"
       chapters: 
-        - 3_Descriptives/12_measurement_level.qmd
+        - 3_Descriptives/12_measuring_concepts.qmd
         - 3_Descriptives/13_descriptives.qmd
         - 3_Descriptives/14_descriptive_display.qmd
         - 3_Descriptives/15_briefly_on_visualization.qmd
-
+    - part: "Data collection"
+      chapters:
+        - 4_Data_collection/16_data_sources.qmd
+        - 4_Data_collection/17_databases_and_SQL.qmd
+        - 4_Data_collection/18_webscraping.qmd
+        - 4_Data_collection/19_webcrawling.qmd
+        - 4_Data_collection/20_API.qmd
+    - part: "Visualization"
+      chapters: 
+        - 5_Visualization/21_graphs_with_ggplot.qmd
+        - 5_Visualization/22_graphs_with_plotly.qmd
+        - 5_Visualization/23_dashboards_and_shiny.qmd
+    - part: "Text as data"
+      chapters:
+        - 6_Text_as_data/24_text_manipulation.qmd
+        - 6_Text_as_data/25_text_preprocessing.qmd
+        - 6_Text_as_data/26_text_tokenization.qmd
+        - 6_Text_as_data/27_text_vectorization.qmd
+        - 6_Text_as_data/28_topic_modelling.qmd
 
 bibliography: references.bib
 

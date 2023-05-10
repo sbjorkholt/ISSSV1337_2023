@@ -1,5 +1,0 @@
----
-title: "Measurement level of variables"
----
-
-Variables have different measurement levels, depending on 
