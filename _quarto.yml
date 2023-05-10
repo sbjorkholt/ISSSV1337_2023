@@ -20,12 +20,13 @@ book:
         - 2_Data_wrangling/8_data-import.qmd
         - 2_Data_wrangling/9_core_functions.qmd
         - 2_Data_wrangling/10_missings.qmd
-        - 2_Data_wrangling/13_joins.qmd
+        - 2_Data_wrangling/11_joins.qmd
     - part: "Descriptive statistics"
       chapters: 
-        - 3_Descriptives/11_descriptives.qmd
-        - 3_Descriptives/12_descriptive_display.qmd
-
+        - 3_Descriptives/12_measurement_level.qmd
+        - 3_Descriptives/13_descriptives.qmd
+        - 3_Descriptives/14_descriptive_display.qmd
+        - 3_Descriptives/15_briefly_on_visualization.qmd
 
 
 bibliography: references.bib
@@ -36,5 +37,5 @@ format:
   pdf:
     documentclass: scrreprt
 
-editor: visual
+editor: source
 
