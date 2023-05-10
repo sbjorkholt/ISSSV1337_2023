@@ -12,7 +12,7 @@ book:
         - 1_Getting_ready/2_installing.qmd
         - 1_Getting_ready/3_writing_running_code.qmd
         - 1_Getting_ready/4_pathsfolders.qmd
-        - 1_Getting_ready/5_rmarkdown.qmd
+        - 1_Getting_ready/5_quarto.qmd
         - 1_Getting_ready/6_github.qmd
     - part: "Data wrangling and data handling"
       chapters:

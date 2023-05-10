@@ -2,6 +2,10 @@
 
 ## What to expect from this course
 
+```{r echo = FALSE}
+renv::init()
+```
+
 ```{r, out.width="60%", fig.align="center", echo = FALSE}
 knitr::include_graphics("./figures/running.jpg")
 ```
