@@ -2,4 +2,58 @@
 title: "Briefly on visualization"
 ---
 
+```{r, message = FALSE, error = FALSE, warning= FALSE, echo = FALSE}
+library(tidyverse)
 
+costofliving <- read_rds("../datafolder/costofliving2.rds") %>%
+  distinct(city, .keep_all = TRUE)
+```
+
+Visualization is an important component of descriptive statistics. Through visualization, we can get an overview of both central tendency and spread that can give extra information about the variable in question. Specifically, many plots tell us something about the *distribution* of a variable. 
+
+The chapter on Visualization will go in more depth on what visualization is, why we would want to visualize something and what we should think about when visualizing. This chapter briefly shows how we can use visualization for descriptive statistics.
+
+Measures of **central tendency** try to catch the general value of a variable in our sample. For example, we could be interested in the general cost of living in different countries. To do this, we might use the `median` or the `mean`. The code below summarizes the median and the mean of the variable "cofi" (cost of living index) using the functions `summarise()`, `mean()` and `median()`. The quantiles are given by the `quantile()` function.
+
+```{r}
+costofliving %>% 
+  summarise(mean_cofi = mean(cofi),
+            median_cofi = median(cofi),
+            second_quantile_cofi = quantile(cofi)[2],
+            third_quantile_cofi = quantile(cofi)[4])
+```
+
+To say something about the spread of a variable, we can find the standard deviation by using the function `sd`. This tells us that on average, the cities on our sample deviate from the mean of 59 by approximately 21 index units. We could also calculate the standard error and the confidence interval, which indicate the reassurance around whether the sample mean matches the population mean. Given the variation in this data, the likely overall mean of cost of living in the world is likely to be somewhere between 56 and 62 index points. 
+
+```{r}
+costofliving %>% 
+  summarise(standard_deviation_cofi = sd(cofi),
+            standard_error = standard_deviation_cofi/sqrt(nrow(.)),
+            confidence_upper = mean(cofi)+(2*standard_error),
+            confidence_lower = mean(cofi)-(2*standard_error))
+```
+
+Visualization allows us to inspect the spread and central tendency in a visual manner. In the boxplot below, we see the central tendency expressed as the line in the middle, which is the median, and the spread around. The box indicates the share of the cities that lie within the second and fourth quantile of the data. This means that 50 % of the cities have a cost of living index within the white box. The others range along the black line, while we have two outliers that have a very high cost of living. 
+
+```{r}
+costofliving %>%
+  ggplot(aes(cofi)) +
+  geom_boxplot()
+```
+
+Which cities have such a  high cost of living? A plot showing all the cities might be informative. In the plot below, we can identify Zurich and Lugano, both located in Switzerand, as having a cost of living index above 100. The plot is quite croweded however, and not easily readable. These are the kinds of things that the chapter on Visualization deals with. 
+
+```{r}
+costofliving %>%
+  ggplot(aes(fct_reorder(city, cofi), cofi)) +
+  geom_bar(stat = "identity") + 
+  coord_flip()
+```
+
+Lastly, if we are interested in seeing two continuous variables against each other, we might want to plot them with a scatterplot. In the plot below, we can see that when cities have higher rent, they usually also have higher local purchasing power (each dot is a city). However, the trend seem to flatten out slightly after the rent index passes 60, meaning that past this point, many cities have an increased rent that is not matched by increased local purchasing power. 
+
+```{r}
+costofliving %>%
+  ggplot(aes(rent_index, local_purchasing_power_index)) +
+  geom_point()
+```
