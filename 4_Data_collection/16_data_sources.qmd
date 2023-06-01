@@ -2,3 +2,135 @@
 title: "Data sources"
 ---
 
+```{r,echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+library(tidyverse)
+library(janitor)
+library(jsonlite)
+library(renv)
+
+```
+
+## Different types of data
+
+What is data, exactly? Data is a way to store and transfer information. It can be text, it can be numbers, it can be speech, it can be a lot of things. When data is saved on a computer, it's bits and bytes in the memory.
+
+To humans, data is often viewed as a collection of facts. Collections of facts are important, but they are not always useful. The reason is that human beings are unable to process large amounts of facts and make sense of it without some sort of system. That is why we have methodology -- strategies to make sense of data in order to produce insight and knowledge. Typically, the work process with regard to using data looks something like on the figure.
+
+```{r, out.width="50%", fig.align="center",echo = FALSE}
+knitr::include_graphics("../ISSSV1337_2022/figures/dataprocess.png")
+
+```
+
+How to collect data? Well, you could for example send out a survey to respondents and ask them to reply to a set of questions. You could choose an object of observation and note down things like temperature or number of swear words per day. You could conduct interviews or have focus groups. You could have some sort of monitor that stores info on e.g. transactions. Notice that all these methods simply take some information an record it. The recorded information -- that's data.
+
+This means that data is more than we conventionally deem as "data". Traditionally, we've been used to thinking of data as a spreadsheet with observations and variables. However, data comes in many different categories. We often distinguish between (1) structured, (2) semi-structured and (3) unstructured data .
+
+The good thing about structured data is that is is vastly easier to analyze it. The good thing about unstructured data is that there is so much of it.
+
+```{r, out.width="80%", fig.align="center", echo = FALSE}
+knitr::include_graphics("../figures/data-structure.png")
+```
+
+### Structured data
+
+Structured data is data with a predefined format. Often, when we think of "data", we think of structured data. It generally comes in tabular form that is represented by columns and rows. All rows in the table have the same set of columns. This includes if the data has some missing value, indicated by `NA` (not available). In the example below, the dataset contains three variables, `id`, `name` and `age`, and all the observations in the dataset -- people -- have information filled out for each variable.
+
+```{r, echo = FALSE}
+
+df <- as_tibble(list(id = c(1, 2, 3),
+                     name = c("James Kirk", "Jean-Luc Picard", "Wesley Crusher"),
+                     age = c(40, 45, NA)))
+
+df
+
+```
+
+When we have many structured datasets together in a database, we call them "relational data". In that case, we can have many tables for the same set of observations, and indicate that it is the same set of observations through the `id` variable.
+
+### Semi-structured data
+
+Semi-structured data lies somewhere between structured and unstructured data. There is some structure to it, but not in a tabular way. Each observation does not necessarily have the same number of variables. Examples of this type of data includes XML-files and JSON-files. Instead of being defined in a tabular form, they are defined in "key-value" pairs. The "key" is the variable and the "value" is the data point for that observation.
+
+```{r, out.width="60%", fig.align="center", echo = FALSE}
+knitr::include_graphics("../figures/xmljson.png")
+```
+
+### Unstructured data
+
+Unstructured data does not have a predefined model for how the computer should understand and distinguish between variables, units and observations. Often, they seem rather text-heavy, but they can also include other elements such as numbers, dates and pictures. This includes all finds of data in their native formats, including documents, audio-files, video-files, emails, sensory data, and so on.
+
+Working with unstructured data requires a lot of pre-processing, and the task can seem rather daunting at times. You need to find a way to extract the information you need from the unstructured data and use it in a structured fashion. This can either be done through structuring, or through using methods especially designed for unstructured data, such as many techniques used in unsupervised machine learning (which we will come back to).
+
+## Data formats
+
+We have already been through a few data formats. Basically, they tell us how information is stored. At the end of your file, there is a dot and a name. This suffix tells you the data format. For example, word documents typically end with `.doc`, and excel-files often end with `.xlsx`.
+
+The suffix on files tell us what format they have. Some examples of file formats include:
+
+| Format          | Suffix | Data type       |
+|-----------------|--------|-----------------|
+| R data-file     | .RData | Structured      |
+| R data-file     | .RDS   | Structured      |
+| Stata data-file | .dta   | Structured      |
+| Database-file   | .db    | Structured      |
+| CSV-file        | .csv   | Semi-structured |
+| JSON-file       | .json  | Semi-structured |
+| XML-file        | .xml   | Semi-structured |
+| HTML-file       | .html  | Semi-structured |
+| Excel-file      | .xlsx  | Semi-structured |
+| Word-document   | .doc   | Unstructured    |
+| Pdf-document    | .pdf   | Unstructured    |
+| Picture         | .jpeg  | Unstructured    |
+| Audio-file      | .mp3   | Unstructured    |
+| Media-file      | .mp4   | Unstructured    |
+
+These are examples to give an overview, but the table above is by no means the whole story. As you probably know, pictures can for example come in `.png` just as they come in `.jpeg`.
+
+To work with these files in R, we need to use different functions. The format decides which function that works.
+
+```{r, eval = FALSE}
+
+# R-data files
+load("mydata.RData") 
+df <- readRDS("mydata.RDS")
+
+# Stata file
+library(haven)
+df <- read_dta("mydata.RData") # Stata-file
+
+# Database file using SQLite
+library(RSQLite)
+con <- dbConnect(SQLite(), "mydatabase.db")
+
+# csv-file
+df <- read_csv("mydata.csv")
+
+# json-file
+library(jsonlite)
+df <- read_json("mydata.csv") %>% flatten()
+
+# xml-file 
+library(XML)
+df <- xmlParse("mydata.xml") %>% xmlToList()
+
+# html-file
+library(rvest)
+df <- read_html("mydata.html") %>% html_node("body") %>% html_text2()
+
+# excel-file
+library(readxl)
+df <- read_excel("mydata.xlsx")
+
+# word document
+library(readtext)
+df <- readtext("mydata.doc")
+
+# pdf-document
+library(readtext)
+df <- readtext("mydata.pdf")
+
+# jpeg-file
+library(jpeg)
+df <- readJPEG("mydata.jpeg")
+
+```
