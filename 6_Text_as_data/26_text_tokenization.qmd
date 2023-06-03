@@ -29,6 +29,7 @@ headline <- str_remove_all(songs, "https://www.westsidestory.com/") # Extracting
 
 ```
 
+
 ```{r, eval = FALSE}
 
 for(i in 1:length(songs)) { # For all the links to the different songs...

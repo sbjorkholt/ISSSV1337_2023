@@ -33,6 +33,7 @@ knitr::include_graphics("../figures/response.png")
 
 ## Eurostat example
 
+
 ### Building the API request
 
 To illustrate how making an API request works in practice, let's look at data provided by Eurostat. Eurostat is the organization for official statistics in Europe. They write about their API [here](https://ec.europa.eu/eurostat/web/json-and-unicode-web-services/about-this-service). It's a method they provide to extract data from their servers. These data are also available from their their old-fashioned [database](https://ec.europa.eu/eurostat/databrowser/explore/all/), and admittedly, if you have never worked with Eurostat-data before, it is usually better to start here to get an overview of the data.
@@ -75,6 +76,7 @@ knitr::include_graphics("../figures/apistring1.png")
 ```
 
 Notice how we, through the URL, specify the **dataset**, the **na_item**, the **unit**, the **geo** and the **time**. To understand more of how this works, you can use the [Eurostat query builder](https://ec.europa.eu/eurostat/web/json-and-unicode-web-services/getting-started/query-builder).
+
 
 ### Get the data into R
 
@@ -140,7 +142,8 @@ df <- fromJSONstat(json)
 
 ```
 
-# API formats
+
+## API formats
 
 APIs often give us semi-structured data. The formats are typically either JSON or XML, though you do see some APIs providing data in CSV-format as well. Let's take a brief look at how to interpret these data formats.
 
@@ -409,7 +412,8 @@ nested_df %>%
 
 ```
 
-# R-packages for API requests
+
+## R-packages for API requests
 
 If you thought gathering data through the Eurostat API was cumbersome, you are not the first one to think that. Using APIs through the `httr` package is alright, but it can be quite tricky to get into sometimes. That is why, luckily, many package builders in the R community have created their own packages to use APIs easily in R. A quick search on the internet tells us that someone have created an R package for the Eurostat API as well!
 

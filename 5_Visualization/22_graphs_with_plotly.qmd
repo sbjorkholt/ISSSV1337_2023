@@ -85,11 +85,11 @@ glimpse(vdem2)
 
 ```
 
-### Bar plots
+## Bar plots
 
 To get bar plots with `plotly`, use `type = "bar"`. In the plot below, I make a bar plot comparing the percentage of adult population with suffrage in some southern European countries for 1880, 1950 and 1980. Notice that to add customization such as titles on the axes and plot background color, I add another layer using the pipe and call the function `layout`. 
 
-```{r, eval = FALSE}
+```{r}
 
  vdem2 %>%
   filter(country_name %in% c("Spain", "Portugal", "Italy", "Greece")) %>% # Picking the countries Spain, Portugal, Italy and Greece
@@ -112,7 +112,7 @@ To make a scatterplot, add the argument `type = "scatter"` and `mode = "markers"
 
 I set the variables for the x-axis, the y-axis, and for the colors of the dots. `plotly` also offers us another neat trick when creating interactive graphs, namely specifying what you want to display when the audience hovers over the information in the plots. In this case, it could be nice to give the audience information about which country and year the different plots refer to. We do this by adding `text = `, including here the values we want to show up, then adding `hoverinfo = "text"`.
 
-```{r, eval=FALSE}
+```{r}
 
 vdem2 %>%
   mutate(v2casoe_1 = ifelse(v2casoe_1 < 0.5, "Emergency", "Non-emergency")) %>% # Recoding the v2casoe_1 variable to become "Emergency" if the value is over 0.5 and "Non-emergency" if the value is below 0.5
@@ -136,7 +136,7 @@ vdem2 %>%
 
 To make a boxplot, simply specify `type = "box"`.
 
-```{r, eval=FALSE}
+```{r}
 
 vdem2 %>%
   mutate(v2casoe_1 = ifelse(v2casoe_1 < 0.5, "Emergency", "Non-emergency")) %>%
@@ -148,11 +148,11 @@ vdem2 %>%
 
 ```
 
-### Lineplots
+## Lineplots
 
 Lineplots are made by specifying `type = "scatter"` and `mode = "lines"`. In this case, I `filter` out Norway and look at this country over time. In this plot, I also show how to add an extra line. Adding variables to the plot can be done in several other ways in `plotly` using for example `add_lines` or `add_trace`. I give names to the lines, so that this is what will show up in the legend. Lastly, what is new in this plot is that I specify the exact coordinates of the legend and whether I want the categories to show vertically or horizontally. 
 
-```{r, eval=FALSE}
+```{r}
 
 vdem2 %>%
   filter(country_name == "Norway") %>%
@@ -176,7 +176,7 @@ vdem2 %>%
 
 There is a function to go from a `ggplot2` plot to a `plotly` plot, and it's called `ggplotly`. Doing that makes you ggplots interactive.
 
-```{r, eval=FALSE}
+```{r}
 
 plot <- vdem2 %>%
   filter(country_name %in% c("Spain", "Portugal", "Italy", "Greece")) %>% 

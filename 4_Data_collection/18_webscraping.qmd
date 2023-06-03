@@ -7,7 +7,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-##Languages of the web
 
 Ah, the internet. A giant web of information, spanning space in unprecedented ways, tied together in an intricate formation by hyperlinks. The idea behind the World Wide Web was to link together pieces of information, and allow a person to access that web from any piece. Those pieces, they are HTML documents. The picture gives a visualization of a portion of the network that is the World Wide Web .
 
@@ -122,7 +121,7 @@ In the illustration below, the webpage uses the css-file "main.css" and the java
 
 ```
 
-### CSS
+## CSS
 
 CSS stands for **Cascading Style Sheets** and is used to define the look on webpages beyond what HTML can do. It gives the developer more freedom to choose text sizes, fonts, colors, formats, and so on. CSS is the traditional language for beautifying webpages, but some developers use other languages, for example Sass.
 
@@ -132,11 +131,13 @@ The difference between a webpage with and without some design language can be qu
 knitr::include_graphics("../figures/withandwithoutcss.png")
 ```
 
-### Javascript
+## Javascript
 
 Javascript is used to make interactive webpages, for example the possibility of hovering over a graph to see the value of a coordinate.
 
-# Using `rvest`
+
+
+## Using `rvest`
 
 There are many packages one can use to conduct webscraping in R. In this course, we will be focusing on the webpage `rvest`. It is a part of the `tidyverse` and is widely used and supported.
 
@@ -202,11 +203,13 @@ read_html("../datafolder/links/Oranges.html") # Read from your downloaded file
 
 ```
 
+
 So, say that the part of the information about oranges that is indicated in a red box in the picture.
 
 ```{r, out.width="100%", echo = FALSE}
 knitr::include_graphics("../figures/oranges1.png")
 ```
+
 
 To extract this part, we need to find the node. Direct your mouse to the paragraph, right-click on it and choose "Inspect". Here we go, the node containing this paragraph is a `<p>` node. To get the complete path of this node:
 
@@ -226,6 +229,7 @@ read_html("../datafolder/links/Oranges.html") %>%
   html_node("#mw-content-text > div.mw-parser-output > p:nth-child(9)")
 
 ```
+
 
 To extract the text, add `html_text` to the pipeline.
 
@@ -247,6 +251,7 @@ read_html("../datafolder/links/Oranges.html") %>%
 
 ```
 
+
 ## Extract tables
 
 Extracting text tends to be fairly easy. Tables can be a bit trickier, but many of them are quite straight forward as well. Often, tables are shown in the HTML-code with the tags `<table>` and `<tbody>`. If we scroll down on the Wikipedia-page about oranges, we find a table containing information on the nutrition of oranges.
@@ -254,6 +259,7 @@ Extracting text tends to be fairly easy. Tables can be a bit trickier, but many 
 ```{r, out.width="100%", echo = FALSE}
 knitr::include_graphics("../figures/oranges3.png")
 ```
+
 
 To scrape this table, do the same as you did before.
 
@@ -273,6 +279,7 @@ read_html("../datafolder/links/Oranges.html") %>%
 
 ```
 
+
 Usually, you have to do a bit of extra work with the table after having extracted it, for example because there are empty cells, as in this case. This often requires a bit of data manipulation and string manipulation. We will be working more with strings and text in week 3.
 
 ```{r}
@@ -287,6 +294,7 @@ table %>%
   na.omit() # Removes all NA
 
 ```
+
 
 ## Extract links
 
@@ -317,6 +325,7 @@ links <- read_html("../datafolder/links/Oranges.html") %>%
   str_c("https://en.wikipedia.org/", .) # str_c pastes together two strings, we do this in order to get the full webpage
 
 ```
+
 
 We could use these links in a loop. Under, I show an example with a for-loop where I extract the text from each page and add it to a list-element.
 
@@ -356,7 +365,8 @@ info[[3]][2]
 
 ```
 
-# Considerations when webscraping
+
+## Considerations when webscraping
 
 If you gather a lot of information from a webpage quickly and rapidly, it can add a large pressure to the server. Worst case, the server might crash, and then all the webpages go down. To avoid this, make sure to:
 

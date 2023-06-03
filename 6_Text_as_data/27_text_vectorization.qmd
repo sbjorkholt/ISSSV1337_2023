@@ -45,6 +45,7 @@ Bag of words work surprisingly well for being such a crude way of vectorizing, b
 
 To account for this, we introduce a way of weighing the words. This technique gives more weight to words that occur rather frequently in a text compared to how often the word occurs in other texts in our selection. Thus, we assume that words occurring frequently in a text compared to other texts will carry more meaning as to what the text is about. Words occurring frequently in all texts -- such as "under" and "before" -- are given less weight. The weighing mechanism is called *term frequency - inverse document frequency*, shortened *TF-IDF*.
 
+
 Basically, the TF-IDF measure counts the number of times a given term shows up in a document (term frequency), and divides it by a measure showing how frequent the term is in the selection of documents overall (inverse document frequency)^[The inverse document frequency measure for any term is calculated as $idf(term) = ln(\frac{n_{Documents}}{n_{DocumentsContainingTerm}})$]. 
 
 $TF-IDF = \frac{TermFrequency}{InverseDocumentFrequency}$

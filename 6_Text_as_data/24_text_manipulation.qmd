@@ -2,7 +2,6 @@
 title: "Text manipulation"
 ---
 
-  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, error = FALSE, warning = FALSE, message=FALSE)
 library(tidyverse)
@@ -20,7 +19,6 @@ When working with text, the stages of the work can loosely be divided into three
 - Text modelling
 
 The first is all about managing and cleaning text to create something that is useful for our purposes. Then, we need to break the text into units and convert it to something the computer can work with - preferably numbers of some sort. At last, there are various modelling techniques we can use to analyze the text. We'll go through each of these stages in these lectures, showing some basic examples of how to do each step. 
-
 
 
 Text is unstructured data -- there is no pre-defined model for how the computer should distinguish between variables, observations, and so on. The text is not made for the computer to make sense of it, and this means that we often have to do quite a lot of preparatory work on text to make it ready for computer processing. 

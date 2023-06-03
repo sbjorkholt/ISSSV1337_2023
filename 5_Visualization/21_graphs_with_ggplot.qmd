@@ -8,7 +8,6 @@ library(tidyverse)
 ```
 
 
-
 Graphs are the most effective tools a data scientist can use to communicate their findings. With a graph^[Or figure or plot -- a beloved child has many names, as we say in Norwegian], you can quickly create an overview of important findings and draw attention to the most important parts in data. Yet, of course, the effectiveness of the graph depends on the particular graph. There are many bad graphs out there, as the plot on the left below shows you (the so-called "WTF-plot").
 
 Actually, bad plotting is such a common practice that the R-community has thought they might as well create some fun from it. The [R-ladies](https://rladies.org/), for example, host occasional "ugly plot" contests, featuring fabulously ugly plots, such as the one to the right below.

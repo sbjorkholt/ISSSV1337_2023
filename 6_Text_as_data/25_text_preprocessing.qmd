@@ -104,6 +104,7 @@ str_remove_all(string, symbols)
 
 ```
 
+
 Another possibility is to replace the non-alphabetic characters with space using `str_replace_all` and `[[:alnum:]]`. The hat, `^`, means "beginning of".
 
 ```{r}

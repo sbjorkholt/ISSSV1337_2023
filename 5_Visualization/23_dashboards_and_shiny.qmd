@@ -8,6 +8,7 @@ Dashboards are extremely handy to communicate your data. They are basically visu
 knitr::include_graphics("../figures/dashboard.png")
 ```
 
+
 Many data providers today offer a dashboard along with their data to give the user a nice overview of what the data tell us. One of my favorites is [this dashboard](https://oecd.ai/en/policy-areas) on artificial intelligence from OECD. Some of the great things about dashboards is that they give a quick overview of data, and in contrast to reports, a dashboard can use the most recent data available at all times. 
 
 R offers several ways of making dashboards. One more advanced option is to use `shiny`, a package that allows you to make apps through R. This can be very useful if you want your app to communicate extensively with the user, for example by allowing the user to define certain input and extract other types of output. However, when all we want to do is to visualize some data and allow the user to click around a bit, a simpler solution is often to go for dashboard-creating packages such as `flexdashboard`. To have a look at this package, refer to for example [this page](https://pkgs.rstudio.com/flexdashboard/) or [this page](https://bookdown.org/yihui/rmarkdown/dashboards.html). 
