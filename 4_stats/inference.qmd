@@ -1,0 +1,34 @@
+---
+title: "Statistical inference"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+
+library(tidyverse)
+rtnorm <- function(n, mean, sd, a = -Inf, b = Inf){
+    qnorm(runif(n, pnorm(a, mean, sd), pnorm(b, mean, sd)), mean, sd)
+}
+
+valgdata <- tibble(
+  id = 1:100000,
+  vote = c(rep("AP", 25000), rep("H", 21000), rep("SP", 18000), rep("SV", 7000),
+             rep("KrF", 3000), rep("V", 3000), rep("FrP", 17000), rep("MDG", 3000),
+             rep("R", 3000)),
+  age = round(rtnorm(100000, 45, 10, a = 18, b = 70)),
+  gender = sample(c("male", "female"), 100000, replace = TRUE)
+  
+)
+
+```
+
+Political Science, be it qualitative studies of the bureaucracy or playing numbers with Great Power conflicts, have on common goal: to observe, and from that understand, politics.[^inference-1] To do this then (in the way we learned when discussing descriptive statistics) it should be clear that we must first observe *all* of the political life. If you do not know the intention of every voter, how can you attempt at predicting an election? Unfortunately as scientists we rarely, if ever, have the option of observing all that which we would like to understand. At best we may hope to see a small slice of the world, a sample, and hope ta it represents that which we are hoping to understand. This idea -- of going from a small sample of the world -- to a knowable yet uncertain description of the real world is what we call *statistical inference.* In this chapter we shall look firstly at what a sample is, how we can make it *representative,* and finally how that can be turned into (uncertain) *decisions.*
+
+[^inference-1]: Define that as you self please.
+
+## A not so small world
