@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.2.475">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -723,6 +723,160 @@ gdpPercap    8.403916e-04</code></pre>
 </section>
 <section id="decision-trees" class="level1">
 <h1>Decision trees</h1>
+<section id="in-a-nutshell-2" class="level2">
+<h2 class="anchored" data-anchor-id="in-a-nutshell-2">In a nutshell</h2>
+<p>Decision trees are intuitive and interpretable models that can be used for both classification and regression tasks. Imagine you have a dataset with various features (or attributes) and a target variable that you want to predict. A decision tree is a tree-like flowchart structure where each internal node represents a feature or attribute, and each leaf node represents a prediction or outcome. The decision tree starts by selecting the most important feature that best separates the data based on some criterion. This feature is chosen to maximize the separation or information gain in the dataset. The tree splits the data at this node based on different values of that feature.</p>
+<p>The process is repeated recursively for each subset of data created by the splits. At each internal node, the tree selects the next best feature to split on, creating more branches and nodes. The tree continues to split the data until a stopping criterion is met, such as reaching a maximum depth or having a minimum number of samples in a node.</p>
+<p>Once the splitting process is complete, each leaf node represents a prediction or outcome. For classification tasks, the leaf nodes represent class labels, while for regression tasks, the leaf nodes represent predicted numerical values. The prediction at each leaf node is typically based on the majority class (for classification) or the average value (for regression) of the samples in that node.</p>
+<p>One of the key advantages of decision trees is their interpretability. Each path from the root to a leaf node represents a set of decision rules. These rules can be easily understood and interpreted, making decision trees useful for explaining the decision-making process.</p>
+<p>Handling categorical and numerical features: Decision trees can handle both categorical and numerical features. For categorical features, the tree creates branches for each category, while for numerical features, the tree selects thresholds to split the data based on numerical comparisons.</p>
+<p>Decision trees have built-in mechanisms to handle missing values. During the splitting process, the tree can consider missing values as a separate category or decide on the split based on available values.</p>
+<p>Once the decision tree is built, it can be used to make predictions on new, unseen data by traversing the tree based on the feature values of the input data.</p>
+<p>Overall, decision trees provide a visual and intuitive representation of the decision-making process. They are easy to interpret and understand, making them valuable for both data analysis and communication of results.</p>
+</section>
+<section id="classifying-continent-to-which-countries-belong-to" class="level2">
+<h2 class="anchored" data-anchor-id="classifying-continent-to-which-countries-belong-to">Classifying continent to which countries belong to</h2>
+<p>We start by just loading in the “gapminder” data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> gapminder</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will need the package “caret”, “rpart” and “rpart.plot”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("caret")</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("rpart")</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("rpart.plot")</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we split the data, like we did above in training and test data, however, here I use the <code>createDataPartition()</code> from the “caret” package. This is just to show you another way of splitting data. The other way used above, works just as well. There is no right or wrong way to do this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For reproducability </span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">24</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the training data with 0.7% of the original data. List = FALSE</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>continent, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the data for training specifying the train data from data</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> data[train, ]</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the test data from data, but without the data from train </span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> data[<span class="sc">-</span>train, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Running the model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>decision_tree <span class="ot">&lt;-</span> <span class="fu">rpart</span>(lifeExp <span class="sc">~</span> pop <span class="sc">+</span> gdpPercap, <span class="at">data =</span> train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here I create a model called “decision_tree.” I use the <code>rpart()</code> function from the “rpart” package and build a model where “lifeExp” is the dependent variable, and “pop” and “gdpPercap” are independent variables. In decision tree models you can also write the model in the following way:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>decision_tree1 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(lifeExp <span class="sc">~</span> . , <span class="at">data =</span> train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here I tell R that I want all the other variables in the dataset as independent variables. A great and intuitive way to understand the results is to visualize them, graphically. For this we use the <code>rpart.plot()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(decision_tree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-regression_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Analyze the decision tree to understand its structure and decision rules. Each internal node represents a feature and a splitting condition, while each leaf node represents a predicted life expectancy value. By following the paths from the root to the leaf nodes, you can interpret the decision rules. For example, a decision rule could be “If population is less than X and GDP per capita is greater than Y, predict the life expectancy as Z.”</p>
+</section>
+<section id="lets-look-at-the-predictions" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-the-predictions">Let’s look at the predictions</h2>
+<p>So based on the model figure above, we see that our model predicts life expectancy based on certain “cutoff” values of gdp per captia.</p>
+<p>We can evaluate our model, by seing how well it predicts. I use the function <code>predict()</code> to get the predictions and then I use <code>table()</code> to see the predictions. Here we see the number of observations the model predicts in each life expectancy group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>pred_decision <span class="ot">&lt;-</span> <span class="fu">predict</span>(decision_tree, train_data)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred_decision) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pred_decision
+45.7328134153846 54.2696870229008 61.7387433628318 68.2749810126582 
+             325              262              113              316 
+74.9423146067416 
+             178 </code></pre>
+</div>
+</div>
+<p>We can see how well the model predicts on unseen data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>pred_decision1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(decision_tree, test_data)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred_decision1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pred_decision1
+45.7328134153846 54.2696870229008 61.7387433628318 68.2749810126582 
+             146              117               55              118 
+74.9423146067416 
+              74 </code></pre>
+</div>
+</div>
+<p>We can use the RMSE to provide an interpretable measure of the average prediction error. We can use the function made above <code>eval_results()</code> for this purpose. Bear in mind that this function takes tree objects. It takes first the dependent variable in the model in a single dataset (which I have to make), then it takes the predictions and then it takes the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting the dependent variable </span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> train_data<span class="sc">$</span>lifeExp</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting the output for train</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(y_train, pred_decision, train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      RMSE   Rsquare
+1 7.479726 0.6707863</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting the dependent variable from test</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> test_data<span class="sc">$</span>lifeExp</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting the output for test</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="fu">eval_results</span>(y_test, pred_decision1, test_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      RMSE   Rsquare
+1 8.117045 0.5863682</code></pre>
+</div>
+</div>
+</section>
+<section id="classification-preview" class="level2">
+<h2 class="anchored" data-anchor-id="classification-preview">Classification preview</h2>
+<p>Now, let’s consider using a decision tree for the task of predicting the continent to which a country belongs (classification problem) – using the “gapminder” dataset.</p>
+<p>We star by again loading in the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> gapminder</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We split the dataset, same as above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">23</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>train<span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>continent, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> gapminder[train, ]</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> gapminder[<span class="sc">-</span>train, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We build our model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>decision_tree2 <span class="ot">&lt;-</span> <span class="fu">rpart</span>(continent <span class="sc">~</span> lifeExp <span class="sc">+</span> pop <span class="sc">+</span> gdpPercap, <span class="at">data =</span> train_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What we are interested in here is based on the the input variables, what continent the model predicts. Let’s see what it looks like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(decision_tree2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-regression_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can follow the different classifiers all the way down. This is a great and intuitive way to understand how the model functions. Based on the input, the model “predicts” continents.</p>
+<p>Let’s look at the predictions. We use the same function as above, but here we specify <code>type="class"</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>predict_tree <span class="ot">&lt;-</span> <span class="fu">predict</span>(decision_tree2, train_data, <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(predict_tree, train_data<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            
+predict_tree Africa Americas Asia Europe Oceania
+    Africa      393       68   87      9       0
+    Americas     12      105   38     47       0
+    Asia         25        2   96      4       0
+    Europe        7       35   57    192      17
+    Oceania       0        0    0      0       0</code></pre>
+</div>
+</div>
+<p>In this table we see the difference between observed continents and predicted continents. We can see that our model predicted Africa correctly 393 times, however, “for 68 Africas, our model predicted Americas.” This sounds weird when I write it, but I hope you get the picture. We see how many predictions our model got right and how many it got wrong. We can do the same if we investigate how well our model predicts on new and unseen data (we just plot in the test data instead). This allows us to compare how our model performs on training and on the test data.</p>
+</section>
 </section>
 
 </main>

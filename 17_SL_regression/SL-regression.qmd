@@ -741,7 +741,7 @@ library(caret)
 # install.packages("rpart")
 library(rpart)
 
-install.packages("rpart.plot")
+# install.packages("rpart.plot")
 
 library(rpart.plot)
 ```
@@ -885,5 +885,5 @@ predict_tree <- predict(decision_tree2, train_data, type = "class")
 table(predict_tree, train_data$continent)
 ```
 
-In this table we see the difference between observed continents and predicted continents. We can see that our model predicted 393 of Africa, however, for 68 Africas, our model predicted Americas. This sounds weird when I write it, but I hope you get the picture. We see how many predicts our model got right and how many it got wrong. We can do the same if we investigate how well our model predicts on new and unseen data (we just plot in the test data instead). This allows us to compare how our model performs on training and on the test data. 
+In this table we see the difference between observed continents and predicted continents. We can see that our model predicted Africa correctly 393 times, however, "for 68 Africas, our model predicted Americas." This sounds weird when I write it, but I hope you get the picture. We see how many predictions our model got right and how many it got wrong. We can do the same if we investigate how well our model predicts on new and unseen data (we just plot in the test data instead). This allows us to compare how our model performs on training and on the test data. 
 
