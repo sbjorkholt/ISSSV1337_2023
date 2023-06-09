@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Louisa Boulaziz">
+
+<title>Supervised learning: Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="SL-classification_files/libs/clipboard/clipboard.min.js"></script>
+<script src="SL-classification_files/libs/quarto-html/quarto.js"></script>
+<script src="SL-classification_files/libs/quarto-html/popper.min.js"></script>
+<script src="SL-classification_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="SL-classification_files/libs/quarto-html/anchor.min.js"></script>
+<link href="SL-classification_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="SL-classification_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="SL-classification_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="SL-classification_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="SL-classification_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Supervised learning: Classification</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Louisa Boulaziz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction-to-classification" class="level1">
+<h1>Introduction to classification</h1>
+<p>Classification is a fundamental task in machine learning that involves assigning predefined categories or labels to input data based on their features or attributes. The goal is to build a model that can learn from labeled examples to accurately classify new, unseen instances into the appropriate categories.</p>
+<p>In classification, we have a set of data instances, also known as samples or observations, with associated labels or class memberships. The task is to learn a mapping between the input features and the corresponding labels, allowing the model to make predictions on new, unlabeled instances.</p>
+<p>Each data instance has a set of features or attributes that describe its characteristics. These features can be numerical, categorical, or even textual, depending on the nature of the problem. For example, in a spam email classification task, the features could be the presence or absence of certain keywords or the length of the email. In this example, imagine input words that would detect and delete spam e-mails. How often would those input words detect and delete a regular email vs how often would those input words detect and delete spam e-mails.</p>
+<p>The target variable or labels represent the predefined categories or classes that we want to predict for new instances. In binary classification, there are two classes, such as “spam” or “not spam.” In multiclass classification, there can be multiple classes, such as “cat,” “dog,” or “bird.” In the example below, we will be focusing on a binary classification between “wanting to leave the EU” and “not wanting to leave the EU” – or if you will “Remain” vs “Leave”.</p>
+<p>To build a classification model, we need training data, where each instance is associated with its correct class label. This labeled data is used to train the model, allowing it to learn the patterns and relationships between the features and the corresponding labels.</p>
+<p>Once the model is trained, it is evaluated on a separate set of test data that was not used during training. This allows us to assess the model’s performance and generalization ability. Common evaluation metrics for classification include accuracy, precision, recall, F1-score, and area under the ROC curve (AUC-ROC).</p>
+<p>After the model has been evaluated and deemed satisfactory, it can be deployed to make predictions on new, unseen instances. These instances are typically represented by their features, and the trained model assigns them to the appropriate classes based on what it has learned from the training data.</p>
+</section>
+<section id="logistic-regression-my-favorite-classifier" class="level1">
+<h1>Logistic regression – my favorite classifier</h1>
+<p>Logistic regression is a statistical model used for binary classification tasks. It is called “logistic” because it uses the logistic function to transform the output into a probability between 0 and 1.</p>
+<p>Imagine you have a dataset where each data point has some input variables (also called features) and a binary outcome, such as whether a student will pass or fail an exam based on their study hours and previous test scores.</p>
+<p>In logistic regression, we are interested in predicting the probability that a given data point belongs to a particular class (e.g., pass or fail). Instead of directly predicting the class label, logistic regression models the relationship between the input variables and the probability of belonging to a specific class.</p>
+<p>We start with a linear equation, similar to linear regression, that represents the relationship between the input variables and the log-odds of the event occurring. The log-odds, also known as the logit, is the logarithm of the probability divided by one minus the probability.</p>
+<p>To transform the linear equation into a probability, we apply the logistic function. The logistic function “squashes” the linear equation’s output into a range between 0 and 1, representing the probability of the event occurring.</p>
+<p>The logistic function converts the log-odds to the probability of belonging to a particular class. For binary classification, we can interpret the probability as the likelihood of belonging to the positive class.</p>
+<p>To estimate the parameters of the logistic regression model, we use a process called maximum likelihood estimation. The model learns the coefficients (weights) for each input variable that maximize the likelihood of the observed data.</p>
+<p>Once the model is trained, we can use it to make predictions by plugging in new input values. The model will output a probability score, and we can set a threshold (usually 0.5) to determine the predicted class label. If the probability is above the threshold, we predict the positive class; otherwise, we predict the negative class.</p>
+<section id="predicting-leave-vs-remain-for-eu-voters" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-leave-vs-remain-for-eu-voters">Predicting leave vs remain for EU voters</h2>
+<p>First we load in the data. We will be using data from the European Social Survey (ESS), round 8, from 2016. Loading also the relevant packages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/ess_teaching.rda"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data contains the following variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "vteu"         "money"        "eduyrs"       "economy"      "immigration1"
+[6] "gender"       "agea"         "cntry"       </code></pre>
+</div>
+</div>
+<ul>
+<li><p>vteu is vote to leave the EU. 0 = no, 1 = yes</p></li>
+<li><p>money is: How likely not enough money for household necessities next 12 months. 0 = not likely, 9 = very likely</p></li>
+<li><p>eduyrs is: Years of education</p></li>
+<li><p>economy: How satisfied with present state of economy in country. 0 = satisfied and 10 = dissatisfied</p></li>
+<li><p>gender: 0=man, 1=women</p></li>
+<li><p>agea: from 15 years to 100</p></li>
+<li><p>immigration1: Immigrants make my country a better place to live (=10) or a worse place to live (=0).</p></li>
+</ul>
+<p>Before we run the model, we make one test dataset, and one train dataset. The train dataset is used in the model and the testing dataset is saved to see how well my model predicts. The code as the same as in the previous chapter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">24</span>) </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample_frac</span>(data, <span class="fl">0.70</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>testing <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can run the model. For logistic regression we use the function <code>glm()</code> and specify <code>family=binomial(link="logit")</code> logistic regression. Otherwise the setup is the same as in the other models, with the depdent variable first followed by tilde and then the independent variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gm5 <span class="ot">&lt;-</span> <span class="fu">glm</span>(vteu <span class="sc">~</span> agea <span class="sc">+</span> gender <span class="sc">+</span> eduyrs <span class="sc">+</span> economy <span class="sc">+</span> money <span class="sc">+</span> immigration1, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> train, <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can look at the results using <code>summary()</code> or <code>stargazer()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(gm5, <span class="at">type =</span> <span class="st">"text"</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">title=</span><span class="st">"Regression Results"</span>, <span class="at">align=</span><span class="cn">TRUE</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">dep.var.labels=</span><span class="fu">c</span>(<span class="st">"Would vote for country to remain a member of European Union or leave"</span>), </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">covariate.labels=</span><span class="fu">c</span>(<span class="st">"Age"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Man"</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Years of education"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Satisfaction with economy"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Likely not enough money"</span>, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Anti-immigration attitudes"</span>), <span class="at">no.space=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Regression Results
+===============================================================================================
+                                                   Dependent variable:                         
+                           --------------------------------------------------------------------
+                           Would vote for country to remain a member of European Union or leave
+-----------------------------------------------------------------------------------------------
+Age                                                       0.002                                
+                                                         (0.001)                               
+Man                                                      0.184***                              
+                                                         (0.041)                               
+Years of education                                      -0.041***                              
+                                                         (0.006)                               
+Satisfaction with economy                                0.126***                              
+                                                         (0.009)                               
+Likely not enough money                                  0.044***                              
+                                                         (0.013)                               
+Anti-immigration attitudes                               0.237***                              
+                                                         (0.009)                               
+Constant                                                -3.139***                              
+                                                         (0.139)                               
+-----------------------------------------------------------------------------------------------
+Observations                                              16,984                               
+Log Likelihood                                          -7,474.833                             
+Akaike Inf. Crit.                                       14,963.670                             
+===============================================================================================
+Note:                                                               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>Keep in mind that the coefficient estimates provided here are logodds. However, from the table, we can see whether a coefficient is positively or negatively related to voting leave and we can see whether the coefficients are significant. So for example, an increase in age increases the likelyhood of voting leave, the same goes for being dissatisfied with the economy and fearing over own economic situation, and so on. However, if we want to know the probabability, we have to calculate from logodds to probability. This is done by using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">exp</span>(<span class="fu">coef</span>(gm5))<span class="sc">-</span><span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)         agea       gender       eduyrs      economy        money 
+ -95.6693869    0.1964034   20.2354763   -4.0087349   13.3998802    4.5490997 
+immigration1 
+  26.7999438 </code></pre>
+</div>
+</div>
+<p>Here I take the exponential <code>exp()</code> of the coefficients <code>coef()</code> of model “gm5”. The output can be understoon in the following way:</p>
+<p>It is a percentage change on the likelihood of voting leave: Where a one unit increase in dissatisfaction with the economy increases the likelihood of voting leave with approximately 2 percentage points. With an additional year of education the likelihood of voting leave decreases with approximately 4 percentage points and so forth.</p>
+</section>
+<section id="predictions" class="level2">
+<h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
+<p>We are interested in the number of predictions our model gets correctly based on the input. The TRUE POSITIVE RATE and the FALSE POSITIVE RATE. TPR represents the proportion of true positive predictions (correctly classified positive instances) out of all actual positive instances. It measures the model’s ability to correctly identify positive instances. FPR represents the proportion of false positive predictions (incorrectly classified negative instances) out of all actual negative instances. It measures the model’s tendency to mistakenly classify negative instances as positive. We will show graphically the amount of correct predictions our model was able to make creating a ROC curve.</p>
+<p>The ROC curve is created by plotting the TPR on the y-axis against the FPR on the x-axis at different threshold values. Each point on the curve represents a specific threshold setting of the classifier.</p>
+<p>The ideal scenario is a curve that hugs the top-left corner, indicating high TPR and low FPR for all threshold values. This represents a highly accurate and reliable classifier.</p>
+<p>We start by getting the predictions from out model on the train data and on the test data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pred_testing <span class="ot">&lt;-</span> <span class="fu">predict</span>(gm5, testing, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Training data</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>pred_train <span class="ot">&lt;-</span> <span class="fu">predict</span>(gm5, train, <span class="at">type =</span>  <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>No we can show graphically how well our predictions are using the ROC-plot from the package called “epi”. There are many packages in R made to be able to make ROC-plots. For simplicity I will only show this one. However, the other ones are only a simple google search away!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("Epi")</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Epi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testin data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ROC</span>(<span class="at">test =</span> pred_testing, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> testing<span class="sc">$</span>vteu, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="st">"ROC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Training data </span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ROC</span>(<span class="at">test =</span> pred_train, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> train<span class="sc">$</span>vteu, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="st">"ROC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>What we care about from this plot is the <em>AREA UNDER THE ROC CURVE</em> (AUC). The AUC represents the overall performance of the classifier summarized as a single value. It calculates the area under the ROC curve. AUC ranges from 0 to 1, with 0.5 indicating a random classifier (no better than random guessing) and 1 indicating a perfect classifier (no false positives or false negatives). From our two ROC-curves we see that our model is able to predict correctly on the testing data in 70% of all instances and the model predicts correctly in 69% of instances in the train data.</p>
+<p>The ROC curve allows you to visualize the trade-off between TPR and FPR for different threshold values. A point on the curve represents a specific operating point of the classifier. A classifier with a higher AUC generally indicates better performance in distinguishing between positive and negative instances. The closer the ROC curve is to the top-left corner (0,1), the better the classifier’s overall performance.</p>
+<!--
+Creating a confusion matrix to see how well our data predicts 
+
+::: {.cell}
+
+```{.r .cell-code}
+set.seed(3)
+
+# Getting the predictions, specifying test data
+preds <- predict(fit, newdata = test_data) 
+
+# Creating a confusion matrix 
+
+m <- confusionMatrix(preds, test_data$continent)
+
+print(m)
+```
+:::
+
+
+-->
+</section>
+<section id="which-predictor-is-the-most-important" class="level2">
+<h2 class="anchored" data-anchor-id="which-predictor-is-the-most-important">Which predictor is the most important?</h2>
+<p>We can also figure out which predictor in our model is the most important for the model to be able to classify “remain” vs “leave”.</p>
+<p>First we load in the package “caret”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we make a model again, this time using the <code>train()</code> from the “caret” package. I am estimating two models. One for the train data and one for the test data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>train_model <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="fu">as.factor</span>(vteu) <span class="sc">~</span> agea <span class="sc">+</span> gender <span class="sc">+</span> eduyrs <span class="sc">+</span> economy <span class="sc">+</span>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                       money <span class="sc">+</span> immigration1, <span class="at">data =</span> train, <span class="at">method =</span> <span class="st">"glm"</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">family =</span> <span class="st">"binomial"</span>) </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>test_model <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="fu">as.factor</span>(vteu) <span class="sc">~</span> agea <span class="sc">+</span> gender <span class="sc">+</span> eduyrs <span class="sc">+</span> economy <span class="sc">+</span> </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                      money <span class="sc">+</span> immigration1, <span class="at">data =</span> testing, <span class="at">method =</span> <span class="st">"glm"</span>, </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">family =</span> <span class="st">"binomial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then I use the function <code>varImp()</code> to identify the most important variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Useing the caret-model to identify the most important variable </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(train_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>glm variable importance
+
+             Overall
+immigration1 100.000
+economy       49.078
+eduyrs        22.269
+gender        11.838
+money          7.476
+agea           0.000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImp</span>(test_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>glm variable importance
+
+             Overall
+immigration1 100.000
+economy       50.226
+gender        17.157
+eduyrs         9.281
+money          4.098
+agea           0.000</code></pre>
+</div>
+</div>
+<p>Then I use the function <code>varImp()</code> inside <code>ggplot()</code> to graphically show the most important variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">varImp</span>(train_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">varImp</span>(test_model))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="assumtions-of-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="assumtions-of-logistic-regression">Assumtions of logistic regression</h2>
+<p>Are the assumption sof logistic regression met? Here I will brifly tell you want the assumptions are, and show you code for how to evaluate those assumptions.</p>
+<ol type="1">
+<li>The underlying assumptions of the logistical regression model are that the dependent variable is binary</li>
+<li>The probability curve is S-shaped and the logit curve is linear</li>
+<li>There are no influential observations; there is no multicollinearity among the predictors.</li>
+<li>There are no empty cells</li>
+<li>There is no “complete separation”</li>
+<li>No omitted variable bias</li>
+<li>The observations are independent and identically distributed</li>
+</ol>
+<p><strong>The underlying assumptions of the logistical regression model are that the dependent variable is binary</strong></p>
+<p>The dependent variable in logistic regression should be binary or categorical, representing two mutually exclusive outcomes. This one holds has the variable is binary coded:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>vteu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    0     1 
+19653  4610 </code></pre>
+</div>
+</div>
+<p><strong>The probability curve is S-shaped and the logit curve is linear</strong></p>
+<p>Logistic regression assumes that the relationship between the predictors and the log-odds of the outcome follows an S-shaped curve, typically represented by the logistic function. It assumes linearity on the logit scale.</p>
+<p>The figure below matches a logit curve to each individual variable in order to see if the logit curve is linear.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(gm5, train, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>newdata1 <span class="ot">&lt;-</span> train <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(economy, money, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         agea, immigration1, eduyrs)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>newdata1 <span class="ot">&lt;-</span> newdata1 <span class="sc">%&gt;%</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logit =</span> <span class="fu">log</span>(preds<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>preds))) <span class="sc">%&gt;%</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> <span class="st">"predictors"</span>, <span class="at">value =</span> <span class="st">"predictor.value"</span>, <span class="sc">-</span>logit)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(newdata1, <span class="fu">aes</span>(logit, predictor.value))<span class="sc">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span> </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>predictors, <span class="at">scales =</span> <span class="st">"free_y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The code uses the <code>predict()</code> function to generate predictions using a logistic regression model “gm5” on the train dataset. The argument <code>type = "response"</code> specifies that the predictions should be in terms of probabilities (response) rather than log-odds. Then I select the specific variables (economy, money, agea, immigration1, eduyrs) from the train dataset. The next line of code adds a new column called logit to the “newdata1” data frame. The <code>mutate()</code> function is used to perform calculations within the data frame. The logit column is calculated as the log-odds of the predicted probabilities “preds”. The <code>gather()</code> function is used to reshape the data frame from wide to long format, creating two new columns: “predictors” and “predictor.value.” The -logit argument in the <code>gather()</code> function specifies that the logit column should not be included as a predictor but should be used as an identifier. Then I make the plot using <code>ggplot()</code>. Note that I am vizualizing the logit values and the predicted values.</p>
+<p><strong>There are no influential observations; there is no multicollinearity among the predictors</strong> Logistic regression assumes that there are no influential observations that excessively influence the model’s parameters. It also assumes that there is no perfect multicollinearity among the predictor variables, meaning that they are not perfectly correlated with each other.</p>
+<p>Multicollinearity can be checked with a vif-test, same as for linear regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>car<span class="sc">::</span><span class="fu">vif</span>(gm5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        agea       gender       eduyrs      economy        money immigration1 
+    1.107804     1.004823     1.154773     1.112545     1.065672     1.099564 </code></pre>
+</div>
+</div>
+<p>Influential observations are considered to be observations that have residuals that are 3 standard deviations from the mean. Cook’s D is also a measure of influential values (see below). These observations can be found using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>model.data <span class="ot">&lt;-</span> <span class="fu">augment</span>(gm5) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>model.data <span class="sc">%&gt;%</span> <span class="fu">top_n</span>(<span class="dv">3</span>, .cooksd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 14
+   vteu  agea gender eduyrs economy money immigr…¹ .fitted .resid    .hat .sigma
+  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1     1    70      0      5       6     8        1   -1.86   2.00 1.46e-3  0.938
+2     1    69      0     14       8     8        1   -1.98   2.05 1.28e-3  0.938
+3     1    44      0     14       1     8        2   -2.67   2.34 7.45e-4  0.938
+# … with 3 more variables: .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;, index &lt;int&gt;, and
+#   abbreviated variable name ¹​immigration1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(model.data, <span class="fu">aes</span>(index, .std.resid)) <span class="sc">+</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> vteu), <span class="at">alpha =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Standardized residuals"</span>) <span class="sc">+</span> </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Observations"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The code creates a new data frame called “model.data” by augmenting the original model (gm5) using the <code>augment()</code> function. The <code>augment()</code> function adds additional columns to the data frame, including predicted values, residuals, standardized residuals, leverage values, and other diagnostic statistics. The <code>mutate()</code> function is used to add a new column called “index” that represents the index of each observation.</p>
+<p>The second code snippet selects the top 3 observations with the largest Cook’s distance values from the model.data data frame. Cook’s distance is a measure of each individuals observation on the regression model. The larger the Cook’s distance value, the more influential the corresponding observation is on the model. Observations with Cook’s distance values greater than 1 are often considered to have a substantial influence on the model.</p>
+<p>The plot shows the “index” and the “.std.resid” (standardized residuals). Standardized residuals that are 3 standard deviations from the mean are considered to be influential.</p>
+<p>We can even filter them out using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>model.data <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(.std.resid) <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 0 × 14
+# … with 14 variables: vteu &lt;dbl&gt;, agea &lt;dbl&gt;, gender &lt;dbl&gt;, eduyrs &lt;dbl&gt;,
+#   economy &lt;dbl&gt;, money &lt;dbl&gt;, immigration1 &lt;dbl&gt;, .fitted &lt;dbl&gt;,
+#   .resid &lt;dbl&gt;, .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;, .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;,
+#   index &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>A value of 0 in the table suggests that no values have a residual that is 3 standard deviations from the mean.</p>
+<p><strong>There are no empty cells</strong> Logistic regression assumes that there are no empty cells in the cross-tabulation of the dependent variable and the independent variables. Each combination of predictor values should have some observations. When removing missing values, there are no emply cells.</p>
+<p><strong>There is no “complete separation”</strong> Complete separation occurs when the predictor variables perfectly separate the outcome categories, resulting in perfect predictions. When there is complete seperation R produces a warning when you run the code for the <code>glm()</code> model. The warning will read “<em>Warning: glm.fit: algorithm did not converge</em>”.</p>
+<p><strong>No omitted variable bias</strong> Logistic regression assumes that all relevant predictor variables are included in the model. Omitting important variables can lead to biased and unreliable parameter estimates. No omitted variable bias is an important theoretical assumption. You have to argue that your models include the relevant control variables.</p>
+<p><strong>The observations are independent and identically distributed</strong> Logistic regression assumes that the observations are independent of each other and are identically distributed. This assumption implies that the observations are not dependent on the order in which they occur and that the model’s assumptions hold for all observations in the dataset.</p>
+</section>
+<section id="other-goodness-of-fit-tests" class="level2">
+<h2 class="anchored" data-anchor-id="other-goodness-of-fit-tests">Other goodness of fit tests</h2>
+<p>There are many other godness of fits test for the logistic model, other than testing how well it predicts. These are just names, so you know what to google if you end up using this model.</p>
+<ol type="1">
+<li><p>Pseudo <span class="math inline">\(R^2\)</span> McFadden’s pseudo R2 is a measure that compares the log-likelihood value for my model and compares it to the log-likelihood value for a model with no variables – an intercept-only- model. The value ranges from zero to one. Values closer to 1 indicates good predictive power.</p></li>
+<li><p>Hosmer-Lemeshow test The Hosmer-Lemeshow-test tests how good the model fits the data by comparing observed and predicted values – meaning that it compares the observed, real values of 1 and 0, to the models fitted values. The test does this by comparing subgroups of the population estimated. The Hosmer-Lemeshow-test is not supposed to give significant results, because this means that the model is not a good fit for the data.</p></li>
+</ol>
+</section>
+</section>
+<section id="k-nearest-neighbours" class="level1">
+<h1>K-nearest neighbours</h1>
+<section id="in-a-nutshell" class="level2">
+<h2 class="anchored" data-anchor-id="in-a-nutshell">In a nutshell</h2>
+<p>Imagine you have a dataset with labeled examples, where each example has input variables and a corresponding class or value. For classification tasks, let’s say we have data points representing different types of fruits, and we want to classify new fruits based on their features. For regression tasks, we might have data points representing housing prices, and we want to predict the price of a new house based on its features.</p>
+<p>First, we select a value for K, which represents the number of neighbors to consider when making predictions. K is typically a positive integer.</p>
+<p>When a new data point is given, the algorithm identifies the K closest data points in the training dataset based on some distance metric (usually Euclidean distance). The distance is calculated by comparing the feature values of the new data point with the feature values of the existing data points.</p>
+<p>For classification tasks, the algorithm determines the majority class among the K nearest neighbors. The new data point is assigned to that class. For regression tasks, the algorithm calculates the average or weighted average of the target values of the K nearest neighbors. The predicted value for the new data point is set as the average.</p>
+<p>The algorithm considers the K nearest neighbors as “votes” or “influences” to determine the class or value of the new data point. The idea is that similar data points tend to have similar class or value. By relying on the neighbors, the algorithm makes predictions based on the assumption that nearby points are likely to have similar characteristics.</p>
+<p>Once the prediction is made, the algorithm can repeat the process for the next new data point.</p>
+<p>The K-nearest neighbors algorithm does not involve explicit model training or parameter estimation. It is considered a lazy learning algorithm because it simply memorizes the training dataset and uses it for predictions. However, it can be computationally expensive for large datasets since it requires calculating distances for every data point.</p>
+<p>When choosing the value of K, a smaller value can make the model more sensitive to noise, resulting in overfitting, while a larger value can lead to oversimplification and underfitting. Therefore, it’s important to find an optimal value of K through experimentation or using cross-validation techniques.</p>
+<p>In summary, the K-nearest neighbors algorithm is a non-parametric method that predicts the class or value of a new data point based on the majority vote or average of the K nearest neighbors in the training dataset. It is simple to understand and implement, making it a popular choice for various machine learning tasks.</p>
+</section>
+<section id="knn-model-using-gapminder" class="level2">
+<h2 class="anchored" data-anchor-id="knn-model-using-gapminder">KNN model using gapminder</h2>
+<p>First we load in the packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("caret")</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ipred")</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pROC)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlbench)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we load in the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> gapminder</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "country"   "continent" "year"      "lifeExp"   "pop"       "gdpPercap"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># removing country </span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "continent" "year"      "lifeExp"   "pop"       "gdpPercap"</code></pre>
+</div>
+</div>
+<p>Now, we are going to classify continent. The variable looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>continent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Africa Americas     Asia   Europe  Oceania 
+     624      300      396      360       24 </code></pre>
+</div>
+</div>
+<p>Now we create, as usual, a training and test data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">24</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>train_indices <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>continent, <span class="at">p =</span> <span class="fl">0.7</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> data[train_indices, ]</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> data[<span class="sc">-</span>train_indices, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before we make the model, we will create a train control.</p>
+<p>The code below creates a train control object named “trControl” using the <code>trainControl()</code> function from the “caret” package. The method parameter is set to “repeatedcv” which stands for repeated cross-validation. It means that the data will be divided into a specified number of folds, and the model will be trained and evaluated multiple times. The number parameter is set to 10, indicating that we want to perform 10-fold cross-validation. The repeats parameter is set to 3, meaning that this process will be repeated 3 times. Finally, <code>classProbs</code> is set to TRUE, which indicates that we want to compute class probabilities during the cross-validation process.</p>
+<p>Then we define the evaluation metric we want to use for assessing the performance of the model. In this case, the metric is set to “Accuracy”, which measures the proportion of correctly classified instances.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>trControl <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"repeatedcv"</span>,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">number =</span> <span class="dv">10</span>,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">repeats =</span> <span class="dv">3</span>, </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">classProbs =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>metric <span class="ot">&lt;-</span> <span class="st">"Accuracy"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we fit a training model using the code <code>train()</code> from the “caret” package. We specify the dependent variable, the variable we want to predict, “continent” and specify the that we want to use all the variables in the dataset with “.”. The data used is the training data we created a above. Now for the specificity: <code>method = "knn"</code> specifies that we want to use the k-nearest neighbors algorithm as the modeling method. <code>tuneLength = 20</code> specifies the number of values of k (the number of nearest neighbors) to try during the tuning process. The model will be trained and evaluated with different values of k to find the optimal value. <code>trControl = trControl</code> specifies the train control object “trControl” created previously. It controls the cross-validation process and evaluation metrics used during model training. <code>metric = metric</code> specifies the evaluation metric to be used for model performance assessment. In this case, the “Accuracy” metric defined earlier will be used. Then save the model in fit and print the results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">24</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">train</span>(continent <span class="sc">~</span> ., </span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> train_data, </span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"knn"</span>, </span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">tuneLength=</span> <span class="dv">20</span>, </span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">trControl =</span> trControl, </span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">metric =</span> metric)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>k-Nearest Neighbors 
+
+1194 samples
+   4 predictor
+   5 classes: 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 1076, 1075, 1075, 1075, 1074, 1075, ... 
+Resampling results across tuning parameters:
+
+  k   Accuracy   Kappa     
+   5  0.3383525  0.08165710
+   7  0.3492370  0.08831321
+   9  0.3522992  0.08725034
+  11  0.3685114  0.10780506
+  13  0.3738103  0.11417786
+  15  0.3858300  0.12932871
+  17  0.3955541  0.13959183
+  19  0.3997793  0.14229747
+  21  0.3992425  0.14071836
+  23  0.3978469  0.13745824
+  25  0.4053866  0.14615196
+  27  0.4109352  0.15233628
+  29  0.4156829  0.15841665
+  31  0.4129075  0.15337346
+  33  0.4092824  0.14766791
+  35  0.4129028  0.15120702
+  37  0.4134748  0.15205610
+  39  0.4167988  0.15619270
+  41  0.4181901  0.15709604
+  43  0.4179216  0.15660329
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was k = 41.</code></pre>
+</div>
+</div>
+<p>How to read the results: We know that the KNN used cross-validation with 10 folds and repeated 3 times specified in the “trControl”. The sample sizes for each fold varied slightly but were around 1075. The accuracy and kappa statistics were used to assess the model performance across different values of “k”, which represents the number of nearest neighbors considered in the classification.</p>
+<p>The results show the accuracy and kappa values for each tested value of “k”. As k increases, the accuracy and kappa generally improve. The best performing model, with the highest accuracy, was obtained with <span class="math inline">\(k = 41\)</span>. This means that considering the 41 nearest neighbors resulted in the most accurate predictions for the given dataset.</p>
+<p>In summary, the kNN model achieved the highest accuracy when k was set to 41, indicating that considering a larger number of neighbors led to better classification performance for the gapminder dataset.</p>
+<p>We can also plot the results using <code>plot()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="SL-classification_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The plot shows the accuracy rate of the model at different numbers of “k” or neightbors.</p>
+<p>We can also run a prediction with the test dataset. Here I use the <code>confusionMatrix()</code> function and add the predictions I just made, and then I also add the actual values of the continents observed in the test dataset. Thiss looks a bit familiar, we can now see how well our model predicts on unseen data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting the predictions, specifying test data</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> test_data) </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a confusion matrix </span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(preds, test_data<span class="sc">$</span>continent)</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction Africa Americas Asia Europe Oceania
+  Africa      134       62   60     50       5
+  Americas      1        0    0      0       0
+  Asia         22       16   43     12       2
+  Europe       30       12   15     46       0
+  Oceania       0        0    0      0       0
+
+Overall Statistics
+                                          
+               Accuracy : 0.4373          
+                 95% CI : (0.3937, 0.4815)
+    No Information Rate : 0.3667          
+    P-Value [Acc &gt; NIR] : 0.0006216       
+                                          
+                  Kappa : 0.1847          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Africa Class: Americas Class: Asia Class: Europe
+Sensitivity                 0.7166        0.000000     0.36441        0.4259
+Specificity                 0.4520        0.997619     0.86735        0.8582
+Pos Pred Value              0.4309        0.000000     0.45263        0.4466
+Neg Pred Value              0.7337        0.823183     0.81928        0.8477
+Prevalence                  0.3667        0.176471     0.23137        0.2118
+Detection Rate              0.2627        0.000000     0.08431        0.0902
+Detection Prevalence        0.6098        0.001961     0.18627        0.2020
+Balanced Accuracy           0.5843        0.498810     0.61588        0.6421
+                     Class: Oceania
+Sensitivity                 0.00000
+Specificity                 1.00000
+Pos Pred Value                  NaN
+Neg Pred Value              0.98627
+Prevalence                  0.01373
+Detection Rate              0.00000
+Detection Prevalence        0.00000
+Balanced Accuracy           0.50000</code></pre>
+</div>
+</div>
+</section>
+<section id="selecting-k-values" class="level2">
+<h2 class="anchored" data-anchor-id="selecting-k-values">Selecting K values</h2>
+<p>So the intial value for K is generally chosen as the square root of the number of observations in the dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>initial_k <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">NROW</span>(data)) </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>initial_k</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 41.27953</code></pre>
+</div>
+</div>
+<p>Now we can measure a model with our initial K-value. First I create an object with the variable to be predicted. Then I fit the model. Notice that I include both training and test data in the model, where I specify that I do not want to include variables 1 and 2 in the data frame <code>[, -1, -2]</code>, which is the variable “country” and “continent”. I specify the varible to be predicted in the <code>cl()</code> argument. First I need to load the package “class” where the function <code>knn()</code> is from.</p>
+<p>Loading the package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("class")</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Running the model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>train_labels <span class="ot">&lt;-</span> train_data<span class="sc">$</span>continent</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>knn.mod <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span> train_data[,<span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>], </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">test=</span> test_data[, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">2</span>], </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">cl=</span>train_labels, </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">k =</span> initial_k)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Making a confusion matrix to calculate accuracy of the model</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(test_data<span class="sc">$</span>continent, knn.mod)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>cf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction Africa Americas Asia Europe Oceania
+  Africa      134        0   22     31       0
+  Americas     61        0   16     13       0
+  Asia         58        1   43     16       0
+  Europe       50        0   13     45       0
+  Oceania       5        0    2      0       0
+
+Overall Statistics
+                                          
+               Accuracy : 0.4353          
+                 95% CI : (0.3918, 0.4796)
+    No Information Rate : 0.6039          
+    P-Value [Acc &gt; NIR] : 1               
+                                          
+                  Kappa : 0.1828          
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: Africa Class: Americas Class: Asia Class: Europe
+Sensitivity                 0.4351        0.000000     0.44792       0.42857
+Specificity                 0.7376        0.823183     0.81884       0.84444
+Pos Pred Value              0.7166        0.000000     0.36441       0.41667
+Neg Pred Value              0.4613        0.997619     0.86480       0.85075
+Prevalence                  0.6039        0.001961     0.18824       0.20588
+Detection Rate              0.2627        0.000000     0.08431       0.08824
+Detection Prevalence        0.3667        0.176471     0.23137       0.21176
+Balanced Accuracy           0.5863        0.411591     0.63338       0.63651
+                     Class: Oceania
+Sensitivity                      NA
+Specificity                 0.98627
+Pos Pred Value                   NA
+Neg Pred Value                   NA
+Prevalence                  0.00000
+Detection Rate              0.00000
+Detection Prevalence        0.01373
+Balanced Accuracy                NA</code></pre>
+</div>
+</div>
+<p>The confusion matrix shows the counts of predicted classes (rows) compared to the actual classes (columns). Each row represents a predicted class, and each column represents an actual class. For example, the cell with “134” represents that 134 instances were predicted as “Africa” and actually belong to the “Africa” class. The diagonal elements represent the correct predictions.</p>
+<p><strong>Overall Statistics</strong>:</p>
+<p><strong>Accuracy:</strong> It indicates the overall accuracy of the model, which is the proportion of correctly predicted instances over the total number of instances. In this case, the accuracy is 0.4353 or 43.53%. 95% CI: It represents the 95% confidence interval for the accuracy. The interval (0.3918, 0.4796) suggests that the true accuracy of the model falls within this range with 95% confidence.</p>
+<p><strong>No Information Rate (NIR):</strong> It indicates the accuracy achieved by always predicting the most frequent class. The NIR is 0.6039 or 60.39%.</p>
+<p><strong>Kappa:</strong> Kappa is a measure of agreement between the predicted and actual classes. It ranges from -1 to 1, where 1 indicates perfect agreement and 0 indicates no agreement beyond chance. In this case, the Kappa value is 0.1828, suggesting a fair agreement.</p>
+<p><strong>Statistics by Class:</strong></p>
+<p><strong>Sensitivity (also called recall or true positive rate)</strong>: It indicates the proportion of actual positive instances correctly predicted as positive. Higher sensitivity values indicate better performance in correctly identifying instances of that class.</p>
+<p><strong>Specificity:</strong> It represents the proportion of actual negative instances correctly predicted as negative. Higher specificity values indicate better performance in correctly identifying instances not belonging to that class.</p>
+<p><strong>Positive Predictive Value (also called precision):</strong> It indicates the proportion of predicted positive instances that are actually positive. Higher positive predictive values indicate fewer false positive predictions.</p>
+<p><strong>Negative Predictive Value:</strong> It represents the proportion of predicted negative instances that are actually negative. Higher negative predictive values indicate fewer false negative predictions.</p>
+<p><strong>Prevalence:</strong> It is the proportion of instances belonging to a specific class in the dataset.</p>
+<p><strong>Detection Rate</strong>: It indicates the proportion of actual positive instances correctly predicted as positive, considering the prevalence of the class.</p>
+<p><strong>Detection Prevalence:</strong> It represents the proportion of instances predicted as positive, considering the prevalence of the class.</p>
+<p><strong>Balanced Accuracy:</strong> It is the average of sensitivity and specificity, providing an overall measure of performance for each class. Higher values indicate better performance.</p>
+<p>In summary, the results show the performance of the kNN model in classifying instances into different continents. The accuracy is relatively low, indicating that the model’s predictions are not very accurate. It’s important to analyze the specific performance measures for each class to understand the strengths and weaknesses of the model in classifying instances belonging to different continents.</p>
+<!--
+
+
+::: {.cell}
+
+```{.r .cell-code}
+3689192+966856 
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+[1] 4656048
+```
+:::
+
+```{.r .cell-code}
+4656048/2
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+[1] 2328024
+```
+:::
+
+```{.r .cell-code}
+2328024
+```
+
+::: {.cell-output .cell-output-stdout}
+```
+[1] 2328024
+```
+:::
+:::
+
+
+-->
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
