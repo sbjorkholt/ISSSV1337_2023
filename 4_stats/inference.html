@@ -116,6 +116,36 @@ ul.task-list li input[type="checkbox"] {
 <p>By embracing random sampling and assuming the i.i.d. cosmic dance, we unlock the secrets of the universe. We can analyze our celestial sample and extract insights that hold true for the entire population. It’s like unraveling the mysteries of the cosmos, but with data instead of telescopes.</p>
 <p>So, dear hitchhiker, armed with random sampling and the i.i.d. principle, you can boldly explore the statistical wonders of the galaxy. With a touch of randomness and the harmony of independence, you’ll uncover celestial truths and bring statistical enlightenment to the universe. Just remember your towel and never panic in the face of p-values!</p>
 </blockquote>
+<p>Some might argue that it’s not entirely random who I stole the style from. To them I simply say that I hope your house will be turned into a motorway. Let us now try this new style of sampling, we draw 1000 respondents from our population, this time completely at random.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="inference_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>So, what did the Liberals get at this attempt? 18.4 %. So the exact same result as when we drew five thousand voters, but with a fifth of the phone calls. Quite amazing isn’t it? Now, our last question then is really what we began with. How uncertain are we of our results?</p>
+<p><br>
+</p>
+</section>
+<section id="uncertainty" class="level1">
+<h1>Uncertainty!</h1>
+<p>So let me begin by telling you a secret. I chose a 100 000 voters because it’s a big round number. It has actually nothing of interest to us. Remember how I said that the only thing we care about is the population? Ok, that’s my 4<sup>th</sup> lie. At this point we’re going to care about the sample. Now here is a third, and final, rule. “<em>The uncertainty of a statistic from a random sample is only dependent on the sample size.”</em> Not the size of the population. Not the amount of variance. Not how much facebook commentators seems to disprove of the results. If a thousand <em>random</em> respondents is enough in Norway with 3,8 million voters, it’s enough in India with 912 million voters. You want proof? Your dad don’t buy my claim that with a thousand people I can tell you the worlds most popular basketball-player? The proof can be seen in this little formula showing the <em>standard error of the proportion</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. P here means the proportion, and n the number of respondents.<br>
+<br>
+<span class="math display">\[
+\sqrt{\frac{\hat{p}(1-\hat{p})}n}
+\]</span></p>
+<p>As is immediately visible (and really, should be expected) as the number of respondents increase the standard-error decrease. Should you somehow manage to get an infinite number of respondents, the error would be 0. One way of doing this would be to add some simple error bars to our marvellous plot. This is rather simple. Let’s first calculate the confidence interval for each of our parties. We’ll here use a 95 % confidence interval, which means that if we calculate an infinite amount of these intervals, 95 % of the time the true proportion will be within said interval. Bit confusing, but lets just use that as our uncertainty for now. To get that number we first calculate the standard error for each party, multiply this with 1.96<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, withdraw that from our percentage to get the lower limit and add it to get the upper.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="inference_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>What is then the conclusion? Well, the Liberals seems to have 18.5% of the votes, +/- 1.23 percentage points.</p>
+<blockquote class="blockquote">
+<p>And thus, we reach the underwhelming conclusion of our statistical escapade. With t-values, standard errors, and sampling errors in our cosmic toolkit, we venture forth armed with a sense of mild statistical satisfaction. While statistics may not provide the grand cosmic revelations we yearn for, it offers a humble glimpse into the patterns and uncertainties of our data-driven universe. So, dear hitchhiker, go forth with a gentle shrug of statistical acceptance, for even in the face of underwhelming conclusions, statistics continues to shed a flickering light on the mysteries that surround us.<br>
+<br>
+So long, and thanks for all the fish!</p>
+<p><span class="math inline">\(\exists n \in \mathbb{Z}^+, (n &gt; 41 \land \neg \exists m \in \mathbb{Z}^+, (m &gt; 41 \land m \neq n))\)</span></p>
+</blockquote>
 </section>
 
 
@@ -127,6 +157,8 @@ ul.task-list li input[type="checkbox"] {
 <li id="fn3"><p>Ok, so that’s a lie too. There <em>are</em> ways to find the uncertainty on non-random samples. The people over at the mathematics faculty are probably more than willing to explain it to you.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Assuming that you want an integer-number of voters. If you allow for any real-number amount of voters you may of course choose whatever values you would like.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>You may ask yourself; “But if we want to prove that we will reach the actual mean, why stop at 5K draws and not finish the 100k?” Cause my computer is slow, and it’s correct enough. Now stop asking annoying questions.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Note that there exists loads of different standard errors. Here we use the one for proportions because, well you know, we’re working with proportions.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>So where did I get 1.96 from? The t-value as it is called shows how many standard-deviances a number is from the mean. If a number is 1.96 away from the mean of t-distributed distribution, 95 % of the values will be within them. Confusing? Absolutely.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->
