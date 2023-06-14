@@ -13,7 +13,7 @@ editor_options:
 
 set.seed(4269420)
 
-library(tidyverse)
+
 rtnorm <- function(n, mean, sd, a = -Inf, b = Inf){
     qnorm(runif(n, pnorm(a, mean, sd), pnorm(b, mean, sd)), mean, sd)
 }
@@ -41,7 +41,7 @@ valgdata <- tibble(
   mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP")))
 
 
-theme_set(ggthemes::theme_excel_new())
+
 
 
 colours <- c("R" = "#e90302", "SV" = "#EB4040",  "AP" = "#EF3340", "SP" = "#00843d", "MDG" = "#5c941d",
@@ -83,7 +83,8 @@ For this chapter we will utilise some (invented) voter data to see how we can de
 #| echo: false
 #| message: false
 #| warning: false
-
+library(tidyverse)
+theme_set(ggthemes::theme_excel_new())
 ggplot(valgdata, aes(age)) +
  geom_density() +
  labs(title = "Age") 
@@ -98,6 +99,9 @@ election_plot(valgdata, vote)
 The data we have here is of course not *unobservable.* Indeed, if we choose to see out goal of prediction not as individual votes but as the election-result, this is directly and universally observable every 4th year. What we want to achieve, is to observe this also between election, usually through the use of phone-surveys and similar. This surveys attempts at creating a random sample. Lets start at non-random sample of 30 voters.
 
 ```{r}
+#| echo: false
+#| message: false
+#| warning: false
 
 election_plot(
   valgdata %>% slice_head(n = 100) %>% filter(age > 50, gender == "male"),
@@ -110,11 +114,11 @@ This shows the voting patterns of men over 50 for the first 100 rows of our data
 
 -   Firstly, we only, *only*, care about the population. If someone ever says that 25 % of the **sample** is something, you should immediately react in horror as nobody ever cares about the sample. Actually, if you write about what happens in the sample this is now your whole population and you have observed all of it! Congratulations, you are no longer uncertain about anything and can just state the correct answer. You no longer need statistics.
 
--   Secondly, you should always give an answer.[^2] That answer of course should be based on the data you have available, and the best you can make from it. Sometimes you may say to yourself: "Well this is awful data! I only have men over 50, and not even a percent of them! Certainly I'm so uncertain I couldn't say whether they vote at all!" Well that's horribly unfortunate. Luckily, statistics gives us the tools to say *how* uncertain we are.
+-   Secondly, you should always give an answer.[^2] That answer of course should be based on the data you have available, and the best you can make from it. Sometimes you may say to yourself: "Well this is awful data! I only have men over 50, and not even a percent of them! Certainly I'm so uncertain I couldn't say whether they vote at all!" Well that's terribly unfortunate. Luckily, statistics gives us the tools to say *how* uncertain we are.
 
 [^2]: At least in this course that is. In reality the uncertainty may get so high that "I ain't got the slightest clue" may be a reasonable answer.
 
-Lets look back at our sample. How many people (in Norway, not in our sample) do we believe vote for the Liberals (V)? Well, the number says 25 % so that's our answer. Now, is that correct? In other words, if we had access to the whole sample, is this what we should expect? Seems highly unlikely. Ok, so how uncertain are we about our results then? Ok, don't hate me, but I lied. Sort of, in this sample we aren't able to say how uncertain we are[^3]. Here we will look at two simple rules to get a good sample. Firstly, the law of large numbers, and secondly an i.i.d. randoms ample.
+Lets look back at our sample. How many people (in Norway, not in our sample) do we believe vote for the Liberals (V)? Well, the number says 25 % so that's our answer. Now, is that correct? In other words, if we had access to the whole population, is this what we should expect? Seems highly unlikely. Ok, so how uncertain are we about our results then? Ok, don't hate me, but I lied. Sort of, in this sample we aren't able to say how uncertain we are[^3]. Here we will look at two simple rules to get a good sample. Firstly, the law of large numbers, and secondly an i.i.d. randoms ample.
 
 [^3]:  Ok, so that's a lie too. There *are* ways to find the uncertainty on non-random samples. The people over at the mathematics faculty are probably more than willing to explain it to you.
 
@@ -129,3 +133,19 @@ $$
 Now, how can this help us in finding out election results? Lets go back to attempting to find the percentage of the voters who prefer the Liberals. Imaging that we draw one sample from the population. In this case the sample-average will be quite easy to imagine; either it is 1, we found a liberal-voter, or it is 0, we found any other voter. If we draw 2 samples, we might find that it is either 100, 50, or 0 % depending on who we ask. To find the true answer (which where around 18 %) we would need a minimum of 50 people, 9 of them being liberal-voters[^4].
 
 [^4]: Assuming that you want an integer-number of voters. If you allow for any real-number amount of voters you may of course choose whatever values you would like.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+tibble(venstre, id = 1:5000) %>% 
+  ggplot(aes(id, venstre)) +
+  geom_line() +
+  labs(x = "#Draws", y = "V %", title = "LLN")
+
+
+```
+
+This plot shows the moving percentage of liberal voters as we draw more and more people from our population[^5]. The first couple of draws are visibly incredibly wrong (both going towards 0 and up to nearly 50 %). It is also unstable, moving up and down as a drunken roller-coaster. Look, however, what starts to happen at round one thousand draws and is nearly complete at 4 000. The line at that point nearly stops moving at 18.42. That is 0.02 percent of the true value of 18,4 %. Remember, this is 5 000 draws from a population of 100 000, and still *not a random sample*. This is specifically just the *first* five thousand. To look more closely at the process, when taking the mean of 1000 draws we get 19.3 %, and the final after 5 000 is 18.42 %, a change of 0.88 %.
+
+[^5]: You may ask yourself; "But if we want to prove that we will reach the actual mean, why stop at 5K draws and not finish the 100k?" Cause my computer is slow, and it's correct enough. Now stop asking annoying questions.
