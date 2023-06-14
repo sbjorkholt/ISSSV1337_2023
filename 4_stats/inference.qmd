@@ -9,26 +9,123 @@ editor_options:
 #| warning: false
 #| message: false
 #| error: false
+#| cache: true
+
+set.seed(4269420)
 
 library(tidyverse)
 rtnorm <- function(n, mean, sd, a = -Inf, b = Inf){
     qnorm(runif(n, pnorm(a, mean, sd), pnorm(b, mean, sd)), mean, sd)
 }
+parti <- c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP")
+
+cor_sample <- function(data, pred, groups){
+  pred = enquo(pred)
+  data <- data %>%   
+  mutate(x = case_when(!!pred < quantile(!!pred, 0.25) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.5) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.75) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             TRUE ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups)))))
+
+    return(data$x)
+}
 
 valgdata <- tibble(
   id = 1:100000,
-  vote = c(rep("AP", 25000), rep("H", 21000), rep("SP", 18000), rep("SV", 7000),
-             rep("KrF", 3000), rep("V", 3000), rep("FrP", 17000), rep("MDG", 3000),
-             rep("R", 3000)),
   age = round(rtnorm(100000, 45, 10, a = 18, b = 70)),
-  gender = sample(c("male", "female"), 100000, replace = TRUE)
+  gender = sample(c("male", "female"), 100000, replace = TRUE),
+  gnd_age = (ifelse(gender == "male", 2, 1)*age)
   
-)
+  ) %>% 
+  mutate(vote = cor_sample(., gnd_age, parti)) %>% 
+  mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP")))
+
+
+theme_set(ggthemes::theme_excel_new())
+
+
+colours <- c("R" = "#e90302", "SV" = "#EB4040",  "AP" = "#EF3340", "SP" = "#00843d", "MDG" = "#5c941d",
+             "KrF" = "#ffd773", "V" = "#006666", "H" = "#0065f1", "FrP" = "#004F80")
+
+
+election_plot <- function(.data, x){
+  x = enquo(x)
+  ggplot(.data, aes(!!x, fill = !!x)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_fill_manual("legend", values = colours) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  ggthemes::theme_excel_new()
+}
+
+venstre <- numeric(5000)
+for (i in 1:5000) {
+  venstre[i] <- valgdata %>% 
+    select(vote) %>% 
+    slice_head(n = i) %>% 
+    count(vote) %>% 
+    mutate(pr = n/sum(n)*100) %>% 
+    filter(vote == "V") %>% 
+    select(pr) %>% 
+    as.numeric(.)
+}
 
 ```
 
-Political Science, be it qualitative studies of the bureaucracy or playing numbers with Great Power conflicts, have on common goal: to observe, and from that understand, politics.[^inference-1] To do this then (in the way we learned when discussing descriptive statistics) it should be clear that we must first observe *all* of the political life. If you do not know the intention of every voter, how can you attempt at predicting an election? Unfortunately as scientists we rarely, if ever, have the option of observing all that which we would like to understand. At best we may hope to see a small slice of the world, a sample, and hope ta it represents that which we are hoping to understand. This idea -- of going from a small sample of the world -- to a knowable yet uncertain description of the real world is what we call *statistical inference.* In this chapter we shall look firstly at what a sample is, how we can make it *representative,* and finally how that can be turned into (uncertain) *decisions.*
+Political Science, be it qualitative studies of the bureaucracy or playing numbers with Great Power conflicts, have on common goal: to observe, and from that understand, politics.[^1] To do this then (in the way we learned when discussing descriptive statistics) it should be clear that we must first observe *all* of the political life. If you do not know the intention of every voter, how can you attempt at predicting an election? Unfortunately as scientists we rarely, if ever, have the option of observing all that which we would like to understand. At best we may hope to see a small slice of the world, a sample, and hope that it represents that which we are hoping to understand. This idea -- of going from a small sample of the world -- to a knowable yet uncertain description of the real world is what we call *statistical inference.* In this chapter we shall look firstly at what a sample is, how we can make it *representative,* and finally how that can be turned into (uncertain) *decisions.*
 
-[^inference-1]: Define that as you self please.
+[^1]: Define that as you self please.
 
 ## A not so small world
+
+For this chapter we will utilise some (invented) voter data to see how we can describe the world. Lets first take a look at out whole sample. In total we have 100 000 voters, from 18 to 70 year old, with roughly 50/50 men and women. Seeing all of these we can take a quick look at the *true* state of the world.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+ggplot(valgdata, aes(age)) +
+ geom_density() +
+ labs(title = "Age") 
+
+
+election_plot(valgdata, vote)
+
+
+
+```
+
+The data we have here is of course not *unobservable.* Indeed, if we choose to see out goal of prediction not as individual votes but as the election-result, this is directly and universally observable every 4th year. What we want to achieve, is to observe this also between election, usually through the use of phone-surveys and similar. This surveys attempts at creating a random sample. Lets start at non-random sample of 30 voters.
+
+```{r}
+
+election_plot(
+  valgdata %>% slice_head(n = 100) %>% filter(age > 50, gender == "male"),
+  vote
+) +
+  labs(title = "Non-random sample")
+```
+
+This shows the voting patterns of men over 50 for the first 100 rows of our data. Now, before looking more at the results here we need to go through some important rules!
+
+-   Firstly, we only, *only*, care about the population. If someone ever says that 25 % of the **sample** is something, you should immediately react in horror as nobody ever cares about the sample. Actually, if you write about what happens in the sample this is now your whole population and you have observed all of it! Congratulations, you are no longer uncertain about anything and can just state the correct answer. You no longer need statistics.
+
+-   Secondly, you should always give an answer.[^2] That answer of course should be based on the data you have available, and the best you can make from it. Sometimes you may say to yourself: "Well this is awful data! I only have men over 50, and not even a percent of them! Certainly I'm so uncertain I couldn't say whether they vote at all!" Well that's horribly unfortunate. Luckily, statistics gives us the tools to say *how* uncertain we are.
+
+[^2]: At least in this course that is. In reality the uncertainty may get so high that "I ain't got the slightest clue" may be a reasonable answer.
+
+Lets look back at our sample. How many people (in Norway, not in our sample) do we believe vote for the Liberals (V)? Well, the number says 25 % so that's our answer. Now, is that correct? In other words, if we had access to the whole sample, is this what we should expect? Seems highly unlikely. Ok, so how uncertain are we about our results then? Ok, don't hate me, but I lied. Sort of, in this sample we aren't able to say how uncertain we are[^3]. Here we will look at two simple rules to get a good sample. Firstly, the law of large numbers, and secondly an i.i.d. randoms ample.
+
+[^3]:  Ok, so that's a lie too. There *are* ways to find the uncertainty on non-random samples. The people over at the mathematics faculty are probably more than willing to explain it to you.
+
+# Law of Large Numbers
+
+The law of large numbers (LLN) is quite straightforward. For our purpose we can define it something like this: *"As the number of draws from a sample increases the sample-average should converge to the population-average."* If you would like a more stringent definition you may prefer:
+
+$$
+\lim _{n\to \infty }\sum _{i=1}^{n}{\frac {X_{i}}{n}}={\overline {X}}
+$$
+
+Now, how can this help us in finding out election results? Lets go back to attempting to find the percentage of the voters who prefer the Liberals. Imaging that we draw one sample from the population. In this case the sample-average will be quite easy to imagine; either it is 1, we found a liberal-voter, or it is 0, we found any other voter. If we draw 2 samples, we might find that it is either 100, 50, or 0 % depending on who we ask. To find the true answer (which where around 18 %) we would need a minimum of 50 people, 9 of them being liberal-voters[^4].
+
+[^4]: Assuming that you want an integer-number of voters. If you allow for any real-number amount of voters you may of course choose whatever values you would like.
