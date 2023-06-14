@@ -151,3 +151,21 @@ This plot shows the moving percentage of liberal voters as we draw more and more
 [^5]: You may ask yourself; "But if we want to prove that we will reach the actual mean, why stop at 5K draws and not finish the 100k?" Cause my computer is slow, and it's correct enough. Now stop asking annoying questions.
 
 OK, so you're not yet happy? Five thousand is a lot of calling to do (you do remember that our example is phone-surveys?), and of course it *could be* that the first 5K where only far-right mensheviks. So, what can we do to make you happy. The most important way to solve this issue of having to draw an immense amount of data, is to utilise what is known as *random sampling.*
+
+# Random sampling
+
+So far, it is of course I, the grandiose author, who has written this text. This may of course for you the dear reader seem rather random. I suppose that you would have not thought any of it had it been any other author who had written the text. Let us no for a moment imagine that we we picked a completely other person, with a slightly better language, to explain random sampling and i.i.d. to you. What could (though, of course, not necessarily had to) be the result?
+
+> Ah, random sampling, a marvelous tool in the vast and perplexing galaxy of statistics. Picture this: You're on a quest to find out the percentage of voters who prefer the Liberals, but calling every sentient being in the population sounds as daunting as trying to navigate an asteroid field blindfolded. Fear not, dear hitchhiker! Random sampling comes to the rescue, offering a way to select a representative subset without losing your sanity.
+>
+> Random sampling is like waving a magical wand over the population, bestowing an equal chance upon each individual to be chosen. It's the universe's way of saying, "Hey, everyone gets a shot at being part of the party!" So, whether you're a Vogon, a Betelgeusian, or a humble Earthling, you all have an equal opportunity to be plucked from the crowd. It's democracy in action, statistical style!
+>
+> Now, let's journey deeper into the realms of "identically independently distributed" or i.i.d. In this vast cosmic carnival of statistical inference, we assume that our data behaves in a predictable and fair manner. Identically means that each observation is like a cosmic sibling, drawn from the same celestial gene pool. They share the same traits, quirks, and voting preferences. It's like a cosmic family reunion, but without the awkward arguments over interstellar politics.
+>
+> Independently is the watchword of the universe. It means that each data point has no influence over its fellow companions. They dance to their own cosmic beat, oblivious to the others' moves. It's like a synchronized swimming performance, but with each swimmer following their own unique routine. They might be part of the same watery ensemble, but they're free to do their own aquatic acrobatics.
+>
+> Lastly, distributed. Ah, the grand cosmic tapestry of probability distributions! It's like a vast intergalactic marketplace where values are bought and sold. Assuming our observations are identically independently distributed means they all come from the same celestial bazaar. They're samples from the same galactic bargain bin, each value having an equal chance of being plucked out. It's a level playing field where even a humble Earthling has a shot at galactic greatness!
+>
+> By embracing random sampling and assuming the i.i.d. cosmic dance, we unlock the secrets of the universe. We can analyze our celestial sample and extract insights that hold true for the entire population. It's like unraveling the mysteries of the cosmos, but with data instead of telescopes.
+>
+> So, dear hitchhiker, armed with random sampling and the i.i.d. principle, you can boldly explore the statistical wonders of the galaxy. With a touch of randomness and the harmony of independence, you'll uncover celestial truths and bring statistical enlightenment to the universe. Just remember your towel and never panic in the face of p-values!
