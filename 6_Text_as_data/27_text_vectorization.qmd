@@ -12,6 +12,17 @@ Imagine that you take all the documents that you're analyzing, count how many ti
 knitr::include_graphics("../figures/bagofwords.png")
 ```
 
+```{r}
+library(quanteda)
+library(tidytext)
+library(tidyverse)
+```
+
+```{r, echo = FALSE}
+westside_tokens <- read_rds("../datafolder/westside_tokens.rds")
+```
+
+
 To exemplify the process, let's pick three sentences from our songs and put them into a matrix. As you can see, the matrix quickly expands as we add text. Here, we can also see the benefits of preprocessing the text -- we could avoid quite a bit of noise if we remove the stopwords before vectorizing. 
 
 | **Sentence**                          | you | were | in | love | or | so | said | i | know | boat | a | can | get | on | she | isn't | merely | insane |
@@ -24,10 +35,6 @@ To exemplify the process, let's pick three sentences from our songs and put them
 How to create a bag of words in R? One possibility is to use the `quanteda` package and the function `cast_dfm`. To do this, we first need to `count` the number of times each words shows up in each song, as we've done before. Here, I also show how to use `name = "count"` to call the new variable "count". Then use `cast_dfm`, and as arguments, we specify (1) the documents to be the rows, (2) the tokens to be the columns and (3) the number to fill the cells. `dfm` stands for document feature matrix.
 
 ```{r}
-
-library(quanteda)
-library(tidytext)
-library(tidyverse)
 
 westside_tokens %>%
   count(songname, stem, name = "count") %>% # By default, the count-variable is called "n". Use name = "" to change it.

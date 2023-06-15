@@ -58,15 +58,13 @@ We now have an empty database which we can fill with the datasets we made above.
 
 `dbListTables` will then show the tables in the database.
 
-```{r}
+
+```{r, eval = FALSE}
 dbWriteTable(con, "salaries", dataset_salaries)
 dbWriteTable(con, "absence", dataset_absence)
 
 dbListTables(con)
 
-#dbRemoveTable(con, "salaries", dataset_salaries)
-#dbRemoveTable(con, "absence", dataset_absence)
-# run if need to render again
 ```
 
 To add more data to your database, use can use `dbWriteTable`.
@@ -90,6 +88,11 @@ df <- dbReadTable(con, "salaries")
 ```
 
 To remove a table from a database, use `dbRemoveTable`.
+
+```{r, echo = FALSE}
+dbWriteTable(con, "absence", dataset_absence, overwrite = TRUE)
+```
+
 
 ```{r}
 
@@ -115,7 +118,7 @@ The above examples uses R-code to work with databases, but this is actually just
 
 To work with SQL in R, first load the package `sqldf`.
 
-```{r}
+```{r, warning = FALSE}
 library(sqldf)
 ```
 
@@ -166,5 +169,5 @@ Other examples include:
 Many researchers also publish data for their papers in [Harvard dataverse](https://dataverse.harvard.edu/), and there can be useful avenues for using these data on other things.
 
 ```{r, include=FALSE}
-file.remove("../../datafolder/worklife.sqlite")
+file.remove("../datafolder/worklife.sqlite")
 ```

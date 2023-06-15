@@ -46,6 +46,10 @@ book:
         - 6_Text_as_data/26_text_tokenization.qmd
         - 6_Text_as_data/27_text_vectorization.qmd
         - 6_Text_as_data/28_topic_modelling.qmd
+    - part: "Supervised learning"
+      chapters:
+        - 17_SL_regression/SL-regression.qmd
+        - 18_SL_classification/SL-classification.qmd
 
 bibliography: references.bib
 
