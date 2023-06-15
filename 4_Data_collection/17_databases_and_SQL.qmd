@@ -1,3 +1,170 @@
 ---
 title: "Databases and SQL"
 ---
+
+```{r,echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+library(tidyverse)
+library(janitor)
+library(jsonlite)
+```
+
+
+When we have large amounts of structured data, we often place it in a database. In companies that rely on data (which is a large amount of companies in these days), it is very normal to have databases. One database might for example contain lots of tables detailing information on the work-life on Norwegian inhabitants, including one table on salaries and one on absence. The unit in these tables would be the same -- Norwegian inhabitants -- which makes the tables relational. You could merge them and create one big table with all variables. However, since this would overload both us and the computer with unnecessary information and make everything slower, we split it up into tables and pick and choose what we need from each table instead.
+
+There are several different databases, for example MySQL, Oracle and PostgreSQL. All of these databases are relational. Then we also have non-relational databases such as MongoDB, where the relationship between different data sources is shown in a different way. Non-relational databases work better for semi-structured and unstructured data. We are not going to go into the details on these different databases here, but it's good to know that they exist.
+
+```{r, out.width="60%", echo = FALSE}
+knitr::include_graphics("../figures/database_stackoverflow_2022.png")
+```
+
+## SQLite
+
+Databases can be large-scale and tricky, but they don't have to be. There is a smooth way into the world of databases, and that is SQLite. SQLite is a program that allows you to create databases for yourself, your friends and others who might be interested, and it's quite well integrated with R.
+
+We will give an example on how to create your own database using SQLite. First, we create two datasets to add to the database .
+
+```{r}
+
+dataset_salaries <- as_tibble(list(id = c(1, 2, 3, 4, 5),
+                                   age = c(43, 53, 25, 37, 41),
+                                   occupation = c("carpenter", "doctor", "accountant", "priest", "reseptionist"),
+                                   salary = c(5300, 6800, 2100, 1600, 1300)))
+
+dataset_absence <- as_tibble(list(id = c(1, 2, 3, 4, 5),
+                                  age = c(43, 53, 25, 37, 41),
+                                  absence_this_year = c(1, 0, 0, 0, 1)))
+
+
+```
+
+Then, we need to get the two packages `DBI` to work with databases in R and `RSQLite` to work with SQLite in R. If this is the first time you use these packages, remember to install them first using `install.packages`.
+
+```{r}
+library(DBI)
+library(RSQLite)
+```
+
+In the next step, we create a database and save it on our computer. If you want to just save it in the short-term memory and do not care about whether you save your data in the long run, you can write \`":memory:"\`\`in the last argument.
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), "../datafolder/worklife.sqlite")
+```
+
+We now have an empty database which we can fill with the datasets we made above. To add `dataset_salaries` and `dataset_absence`, use `dbCreateTable`. It takes an R dataframe and converts it to a table inside the database. This function takes three arguments: dbCreateTable(conn, name, field):
+
+-   Conn: The DBI connection object.
+-   Name: The name of the new table.
+-   Field: The data you want to insert. It has to be either a data frame or a character vector.
+
+`dbListTables` will then show the tables in the database.
+
+```{r}
+dbWriteTable(con, "salaries", dataset_salaries)
+dbWriteTable(con, "absence", dataset_absence)
+
+dbListTables(con)
+
+#dbRemoveTable(con, "salaries", dataset_salaries)
+#dbRemoveTable(con, "absence", dataset_absence)
+# run if need to render again
+```
+
+To add more data to your database, use can use `dbWriteTable`.
+
+```{r}
+
+salaries_datanew <- as_tibble(list(id = c(6, 7),
+                                   age = c(31, 73),
+                                   occupation = c("doctor", "self-employed"),
+                                   salary = c(7100, 1100)))
+
+dbWriteTable(con, name = "salaries", value = salaries_datanew, append = TRUE)
+
+```
+
+And to see what the table contains and/or fetch it into R, use `dbReadTable`.
+
+```{r}
+dbReadTable(con, "salaries")
+df <- dbReadTable(con, "salaries")
+```
+
+To remove a table from a database, use `dbRemoveTable`.
+
+```{r}
+
+dbRemoveTable(con, "absence")
+
+dbListTables(con)
+
+```
+
+To disconnect from the database:
+
+```{r}
+dbDisconnect(con)
+```
+
+To learn more on how work with SQLite in R, you can visit [this page](https://db.rstudio.com/databases/sqlite/).
+
+## SQL
+
+SQL stands for Structured Query Language. It's the computer language used to store, manipulate and retrieve data from relational databases. This is done through "SQL queries", a chuck of code that tells the computer to do something with a database, for example fetch some data from it.
+
+The above examples uses R-code to work with databases, but this is actually just a wrapper around SQL. Behind the curtains, they are not R-queries but SQL-queries. It's generally good to know a little SQL, because then you can work with databases from any program. Here, we offer a very brief introduction.
+
+To work with SQL in R, first load the package `sqldf`.
+
+```{r}
+library(sqldf)
+```
+
+Now, you can write SQL-code in R.
+
+```{r, eval = FALSE}
+
+sqldf('SELECT age
+       FROM salaries
+       WHERE occupation = "doctor"')
+
+```
+
+Of course, this all depends on the kind of database you use again (MySQL, Oracle, PostgreSQL, etc.). If we wanted to use SQL to read from the worklife.sqlite file, we could use the `dbGetQuery` function, add the name of the database-connection object and then the SQL-code. For example, the code below extracts the variable `age` from the table object `salaries` and filters the variable to where `occupation` is "doctor". So we get the ages of the people in the dataset who are doctors.
+
+```{r}
+
+con <- dbConnect(RSQLite::SQLite(), "../datafolder/worklife.sqlite")
+
+dbGetQuery(con,
+           'SELECT age
+            FROM salaries
+            WHERE occupation = "doctor"')
+
+
+dbDisconnect(con)
+
+```
+
+To learn more about how to make SQL queries in R, visit [this link](https://dept.stat.lsa.umich.edu/~jerrick/courses/stat701/notes/sql.html#introduction)
+
+## Publicly available datasets
+
+There are lots of datasets out there, and many of them are even structured. Some of them might be useful for your projects. The department of political science has a [webpage with many relevant datasets sorted by topic](https://www.sv.uio.no/isv/tjenester/kunnskap/datasett/).
+
+Other examples include:
+
+-   [The Nonviolent and Violent Campaigns and Outcomes (NAVCO) Data Project](https://korbel.du.edu/sie/research/data-downloads)
+-   [Varities of democracy](https://www.v-dem.net/)
+-   [Data on armed conflict, PRIO](https://www.prio.org/data)
+-   [European social survey](https://www.europeansocialsurvey.org/)
+-   [Quality of government](https://www.gu.se/en/quality-government/qog-data)
+-   [Afrobarometro](https://www.afrobarometer.org/)
+-   [Latinobarometro](https://www.latinobarometro.org/lat.jsp)
+-   [Political party database project (PPDB)](https://www.politicalpartydb.org/)
+-   [Parliaments and government database (PARLGOV)](https://www.parlgov.org/)
+
+Many researchers also publish data for their papers in [Harvard dataverse](https://dataverse.harvard.edu/), and there can be useful avenues for using these data on other things.
+
+```{r, include=FALSE}
+file.remove("../../datafolder/worklife.sqlite")
+```

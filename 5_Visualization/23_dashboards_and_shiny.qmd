@@ -1,3 +1,98 @@
 ---
 title: "Dashboards and Shiny"
 ---
+
+Dashboards are extremely handy to communicate your data. They are basically visual displays of your data. The picture below is an example of a dashboard.
+
+```{r, out.width="100%", echo = FALSE}
+knitr::include_graphics("../figures/dashboard.png")
+```
+
+
+Many data providers today offer a dashboard along with their data to give the user a nice overview of what the data tell us. One of my favorites is [this dashboard](https://oecd.ai/en/policy-areas) on artificial intelligence from OECD. Some of the great things about dashboards is that they give a quick overview of data, and in contrast to reports, a dashboard can use the most recent data available at all times. 
+
+R offers several ways of making dashboards. One more advanced option is to use `shiny`, a package that allows you to make apps through R. This can be very useful if you want your app to communicate extensively with the user, for example by allowing the user to define certain input and extract other types of output. However, when all we want to do is to visualize some data and allow the user to click around a bit, a simpler solution is often to go for dashboard-creating packages such as `flexdashboard`. To have a look at this package, refer to for example [this page](https://pkgs.rstudio.com/flexdashboard/) or [this page](https://bookdown.org/yihui/rmarkdown/dashboards.html). 
+
+To get started with making a dashboard using `flexdashboard`, we first need to download the package `flexdashboard` as shown below.
+
+```{r, eval = FALSE}
+
+install.packages("flexdashboard")
+
+```
+
+Having done that, click on the "File" button in RStudio to make a new file, choose R Markdown, and then choose "From Template". From the list, pick "Flex Dashboard". Now, RStudio opens a new R Markdown file which will render into a dashboard when you click "Knit". 
+
+```{r, out.width="100%", echo = FALSE}
+knitr::include_graphics("../figures/dashboard_making.png")
+```
+
+Flexdashboards are built in what we call a "grid". That basically means that we can imagine the canvas to have a lot of squares, and we fit stuff into those squares as we go about designing the dashboard. We define the squares through rows and columns. You define a row or a column by specifying either "Column" or "Row" in your script, then optionally the size of the square, followed by a striped line, as shown below.
+
+`Column {data-width = 300}`
+
+`-------------------------------------`
+
+`Row`
+
+`-------------------------------------`
+
+These are the basic components of the flexdashboard. Building on this, you can do a lot of things, for example:
+
+ - Add tabs
+ - Add navigation bar
+ - Choose colors, icons, styles
+ - Include figures, tables, text, links
+ - Include your own CSS and/or HTML
+ - Include advanced charts, graphs and maps
+ - Allow for user-communication through shiny syntax
+
+And much more. For dashboards visualizing real-time data, consider making a dashboard that communicate with an API to fetch the latest data at all times.  
+
+For an overview of some of the things that are possible, have a look at [this page](https://pkgs.rstudio.com/flexdashboard/articles/using.html). 
+
+
+
+
+3. Make your dashboard. Find some inspirational dashboards [here](https://rstudio.github.io/flexdashboard/articles/examples.html). An example of how the R Markdown file could look like can be found [here]( https://github.com/sbjorkholt/ISSSV1337/blob/main/Week%202/Day%2010%20-%20Visualization%20with%20plotly%20and%20flexdashboard/test_dashboard.Rmd)
+
+
+4. Save the `.Rmd` file to a folder that is connected to a Github repository (that is, a folder you have cloned from Github).
+
+
+5. Go to the Github repository. Go to "Settings", in the left menu choose "Pages", then click on the drop-down menu and choose "main". The repository needs to be Public for this to work.
+
+```{r, out.width="100%", fig.align ='center', echo = FALSE}
+knitr::include_graphics("../figures/github_dashbord1.PNG")
+```
+
+
+6. In the drop-down menu to the right, choose "/docs"^[Choosing */docs* will publish your dashboard from the docs folder. Choosing */root* will publish the dashboard from the main folder. Both work, but it's often tidier to have the dashboard in a separate folder if your repository also contains other things.]. Then hit the "save" button. You should get information that your site is ready to be published at a specific URL, and that the Github Pages source is saved. 
+
+```{r, out.width="100%", fig.align ='center', echo = FALSE}
+knitr::include_graphics("../figures/github_dashbord2.PNG")
+```
+
+
+7. Now, go back to RStudio (or your folders on your computer). Make a folder called "docs" in the repository-folder, and place your `.Rmd` file in there. Knit the document so that you get two files, one `.Rmd` file and one `.html` file.
+
+```{r, out.width="100%", fig.align ='center', echo = FALSE}
+knitr::include_graphics("../figures/github_dashbord3.PNG")
+```
+
+
+8. First, `pull` all changes from the Github repository. Then, `commit` your "docs" folder to the repository, including both your `.html` file and the `.Rmd` file, and `push` the changes. If you just select the "docs" folder in the Git tab in RStudio, you will automatically select all files in this folder.
+
+```{r, out.width="100%", fig.align ='center', echo = FALSE}
+knitr::include_graphics("../figures/github_dashbord5.PNG")
+```
+
+
+9. Wait some minutes. Write the URL that was shown in stage 6 into your browser and end with */name-of-your-file.html*. 
+
+```{r, out.width="100%", fig.align ='center', echo = FALSE}
+knitr::include_graphics("../figures/github_dashbord4.PNG")
+```
+
+
+10. Give others this URL for them to access your dashboard :) 
