@@ -196,6 +196,543 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>If you may allow it, I do find it quite clear that there is a pattern there. Seemingly, one can see 9 different groups that fit together. Of course, since this is <em>un</em>supervised learning we don’t have any labels, and we don’t know what those 9 groups fitting to a left-right scale are. However, they may absolutely be there. Lets begin to try and find the clusters. To do so we will use the <code>kmeans</code> function. It accepts a set of vectors, and a number of clusters. How many clusters it should use is something we have to select based on, well, what we believe fits.</p>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-5_6d5a581927781a7deb42ee3acc51d65c">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age, l_r), </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">centers =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Well that was easy. All that talk of machine learning being the future end of civilisation, and it’s only 4 lines of code. Question then of course is whether it actually found something <em>interesting.</em> Lets first take a look at some of the data present. The new object we created (fittingly called cluster) contains a component showing which cluster each of the observations in our dataset, as well as some information about the clusters. For example, we can take a look at the means of each cluster which are their centre.</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="labobxytri" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#labobxytri table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#labobxytri thead, #labobxytri tbody, #labobxytri tfoot, #labobxytri tr, #labobxytri td, #labobxytri th {
+  border-style: none;
+}
+
+#labobxytri p {
+  margin: 0;
+  padding: 0;
+}
+
+#labobxytri .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#labobxytri .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#labobxytri .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#labobxytri .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#labobxytri .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#labobxytri .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#labobxytri .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#labobxytri .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#labobxytri .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#labobxytri .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#labobxytri .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#labobxytri .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#labobxytri .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#labobxytri .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#labobxytri .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#labobxytri .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#labobxytri .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#labobxytri .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#labobxytri .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#labobxytri .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_left {
+  text-align: left;
+}
+
+#labobxytri .gt_center {
+  text-align: center;
+}
+
+#labobxytri .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#labobxytri .gt_font_normal {
+  font-weight: normal;
+}
+
+#labobxytri .gt_font_bold {
+  font-weight: bold;
+}
+
+#labobxytri .gt_font_italic {
+  font-style: italic;
+}
+
+#labobxytri .gt_super {
+  font-size: 65%;
+}
+
+#labobxytri .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#labobxytri .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#labobxytri .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#labobxytri .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#labobxytri .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#labobxytri .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#labobxytri .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="age">age</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="l_r">l_r</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="size">size</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="withinss">withinss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="cluster">cluster</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="age" class="gt_row gt_right">64.53780</td>
+<td headers="l_r" class="gt_row gt_right">5.293557</td>
+<td headers="size" class="gt_row gt_right">4299</td>
+<td headers="withinss" class="gt_row gt_right">52592.14</td>
+<td headers="cluster" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">47.24856</td>
+<td headers="l_r" class="gt_row gt_right">2.470569</td>
+<td headers="size" class="gt_row gt_right">12130</td>
+<td headers="withinss" class="gt_row gt_right">78319.59</td>
+<td headers="cluster" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">55.01878</td>
+<td headers="l_r" class="gt_row gt_right">2.495581</td>
+<td headers="size" class="gt_row gt_right">7242</td>
+<td headers="withinss" class="gt_row gt_right">45247.80</td>
+<td headers="cluster" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">26.57290</td>
+<td headers="l_r" class="gt_row gt_right">4.986195</td>
+<td headers="size" class="gt_row gt_right">7099</td>
+<td headers="withinss" class="gt_row gt_right">119409.67</td>
+<td headers="cluster" class="gt_row gt_center">4</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">40.21687</td>
+<td headers="l_r" class="gt_row gt_right">4.991492</td>
+<td headers="size" class="gt_row gt_right">18218</td>
+<td headers="withinss" class="gt_row gt_right">169067.81</td>
+<td headers="cluster" class="gt_row gt_center">5</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">45.21474</td>
+<td headers="l_r" class="gt_row gt_right">7.297763</td>
+<td headers="size" class="gt_row gt_right">15153</td>
+<td headers="withinss" class="gt_row gt_right">73477.72</td>
+<td headers="cluster" class="gt_row gt_center">6</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">58.46942</td>
+<td headers="l_r" class="gt_row gt_right">7.010120</td>
+<td headers="size" class="gt_row gt_right">6917</td>
+<td headers="withinss" class="gt_row gt_right">37028.07</td>
+<td headers="cluster" class="gt_row gt_center">7</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">51.71201</td>
+<td headers="l_r" class="gt_row gt_right">7.088601</td>
+<td headers="size" class="gt_row gt_right">13431</td>
+<td headers="withinss" class="gt_row gt_right">71462.62</td>
+<td headers="cluster" class="gt_row gt_center">8</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">34.45155</td>
+<td headers="l_r" class="gt_row gt_right">5.323448</td>
+<td headers="size" class="gt_row gt_right">15511</td>
+<td headers="withinss" class="gt_row gt_right">173187.60</td>
+<td headers="cluster" class="gt_row gt_center">9</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>So, what do we see? Well, it is a bit difficult to interpret tbh. The first cluster seems to be a politically centre older people cluster? Cluster three is more to the left, and middle aged. The cluster object also gives us the fitted cluster for every unit in our dataset. We can therefore add them inn, and plot again.</p>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-7_9f0201a9219ef8b7b9b7ff14bb55963b">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(cluster<span class="sc">$</span>cluster) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"cluster"</span> <span class="ot">=</span> <span class="st">"...8"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(l_r, age,  <span class="at">colour =</span> <span class="fu">as.factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+* `` -&gt; `...8`</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>So what can we see here? Well, it is firstly clear that there is a strong age grouping. Unsurprisingly, the same can also be said for party. This makes it somewhat easier to interpret our table. Cluster 8, for example, is clearly on the left and for the most part a bit over 40 years old. Cluster 4 is interesting in that it is nearly uniformly distributed across the left-right dimension, but only contains people under 30. The most important dimension here seems to be age-dimension. That also seem intuitive given the little known fact that party is actually a function of age! You might wonder whether these 9 clusters are the best we can get, or whether 9 is the perfect amount of clusters. We will come back to that when discussing model selection.</p>
+</section>
+<section id="hierarchical-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="hierarchical-clustering">Hierarchical Clustering</h2>
+<p>Ahh, to be free and independent. A bird floating through the skies. That may be how we described the neighbors in our k-means models, but here in the hierarchical models, life is nothing like it. Here, my good friend, we are in the world of lords and ladies, one clearly below the other! In this intricate hierarchy, every entity has its place and role to play. Just as the lords and ladies govern their domains, hierarchies govern our models, dictating the relationships and structure of the data. Each level represents a different tier, with the upper echelons holding authority and power, while the lower levels serve and support. It is a world of intricate relationships, where the lower entities strive to ascend and gain favor with their superiors. While it may lack the freedom of the k-means models, the hierarchical approach provides a deep understanding of the intricacies within the data, allowing us to navigate its complexity with precision and finesse.</p>
 </section>
 
 

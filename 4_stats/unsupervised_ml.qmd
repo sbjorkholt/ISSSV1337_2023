@@ -14,7 +14,7 @@ editor_options:
 #| message: false
 #| error: false
 
-pacman::p_load(tidyverse, tidymodels)
+pacman::p_load(tidyverse, tidymodels, gt)
 theme_set(ggthemes::theme_excel_new())
 
 ```
@@ -171,4 +171,42 @@ cluster <- kmeans(
 
 ```
 
-Well that was easy. All that talk of machine learning being the future end of civilisation, and it's only 4 lines of code.
+Well that was easy. All that talk of machine learning being the future end of civilisation, and it's only 4 lines of code. Question then of course is whether it actually found something *interesting.* Lets first take a look at some of the data present. The new object we created (fittingly called cluster) contains a component showing which cluster each of the observations in our dataset, as well as some information about the clusters. For example, we can take a look at the means of each cluster which are their centre.
+
+```{r}
+#| echo: false
+
+tidy(cluster) %>% 
+  gt()
+
+```
+
+So, what do we see? Well, it is a bit difficult to interpret tbh. The first cluster seems to be a politically centre older people cluster? Cluster three is more to the left, and middle aged. The cluster object also gives us the fitted cluster for every unit in our dataset. We can therefore add them inn, and plot again.
+
+```{r}
+#| cache: true
+
+valgdata %>% 
+  bind_cols(cluster$cluster) %>% 
+  rename("cluster" = "...8") %>%
+  ggplot(aes(l_r, age,  colour = as.factor(cluster))) +
+  geom_jitter() +
+  labs(x = "Left-Right scale", y = "Age") +
+  theme(axis.title = element_text()) 
+
+```
+
+So what can we see here? Well, it is firstly clear that there is a strong age grouping. Unsurprisingly, the same can also be said for party. This makes it somewhat easier to interpret our table. Cluster 8, for example, is clearly on the left and for the most part a bit over 40 years old. Cluster 4 is interesting in that it is nearly uniformly distributed across the left-right dimension, but only contains people under 30. The most important dimension here seems to be age-dimension. That also seem intuitive given the little known fact that party is actually a function of age! You might wonder whether these 9 clusters are the best we can get, or whether 9 is the perfect amount of clusters. We will come back to that when discussing model selection.
+
+## Hierarchical Clustering
+
+Ahh, to be free and independent. A bird floating through the skies. That may be how we described the neighbors in our k-means models, but here in the hierarchical models, life is nothing like it. Here, my good friend, we are in the world of lords and ladies, one clearly below the other! In this intricate hierarchy, every entity has its place and role to play. Just as the lords and ladies govern their domains, hierarchies govern our models, dictating the relationships and structure of the data. Each level represents a different tier, with the upper echelons holding authority and power, while the lower levels serve and support. It is a world of intricate relationships, where the lower entities strive to ascend and gain favor with their superiors. While it may lack the freedom of the k-means models, the hierarchical approach provides a deep understanding of the intricacies within the data, allowing us to navigate its complexity with precision and finesse.
+
+The idea in these models is that instead of just having clusters, we may have clusters of clusters (of clusters of clusters of clusters...). Eventually we will have a map of groups and how these relate to each other. Lets add the district data to our model and see if we can find something with that. From this point on we will also use the tidymodels framework.
+
+```{r}
+
+
+
+
+```
