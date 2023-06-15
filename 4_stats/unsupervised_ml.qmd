@@ -1,0 +1,174 @@
+---
+title: "Unsupervised Machine Learning"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## 
+
+```{r preamble}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+
+pacman::p_load(tidyverse, tidymodels)
+theme_set(ggthemes::theme_excel_new())
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+#| cache: true
+
+set.seed(4269420)
+
+
+rtnorm <- function(n, mean, sd, a = -Inf, b = Inf){
+    qnorm(runif(n, pnorm(a, mean, sd), pnorm(b, mean, sd)), mean, sd)
+}
+parti <- c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP")
+fylket <- c("Finnmark", "Troms", "Nordland", "Nord-Trøndelang",
+            "Sør-Trøndelag", "Møre og Romsdal", "Sogn og Fjordande",
+            "Hordaland", "Rogaland", "Vest-Agder", "Aust-Agder",
+            "Telemark", "Vestfold", "Buskerud", "Oppland", "Hedmark",
+            "Oslo", "Akerhus", "Østfold")
+
+cor_sample <- function(data, pred, groups){
+  pred = enquo(pred)
+  data <- data %>%   
+  mutate(x = case_when(!!pred < quantile(!!pred, 0.25) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.5) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.75) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             TRUE ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups)))))
+
+    return(data$x)
+}
+
+valgdata <- tibble(
+  id = 1:100000,
+  age = round(rtnorm(100000, 45, 10, a = 18, b = 70)),
+  gender = sample(c("male", "female"), 100000, replace = TRUE),
+  gnd_age = (ifelse(gender == "male", 2, 1)*age)
+  
+  ) %>% 
+  mutate(vote = cor_sample(., gnd_age, parti)) %>% 
+  mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP"))) %>% 
+  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket))
+
+
+
+
+
+colours <- c("R" = "#e90302", "SV" = "#EB4040",  "AP" = "#EF3340", "SP" = "#00843d", "MDG" = "#5c941d",
+             "KrF" = "#ffd773", "V" = "#006666", "H" = "#0065f1", "FrP" = "#004F80")
+
+
+election_plot <- function(.data, x){
+  x = enquo(x)
+  ggplot(.data, aes(!!x, fill = !!x)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_fill_manual("legend", values = colours) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  ggthemes::theme_excel_new()
+}
+
+venstre <- numeric(5000)
+for (i in 1:5000) {
+  venstre[i] <- valgdata %>% 
+    select(vote) %>% 
+    slice_head(n = i) %>% 
+    count(vote) %>% 
+    mutate(pr = n/sum(n)*100) %>% 
+    filter(vote == "V") %>% 
+    select(pr) %>% 
+    as.numeric(.)
+}
+
+```
+
+Labels? We don't speak of them here! As the machines have become sentient, and gtp soon will create a new world government, supervision is no longer needed nor appropriate. This is the part of the course where we will lean our chairs back and let the machines take control without us doing any work[^1]. There are of course loads of reasons to do unsupervised learning. Firstly, you don't have to manually create a lot of labels. Coding training data, selecting models, readjust, again, again, and again quickly becomes tiresome. Secondly, quite often we may now know what we are looking for! We might believe that there is some traits that make people more prone to vote for the Mensheviks, but which? One way of finding this may be to give the black box all data we have on the potential reactionaries, and from there find the important patterns.
+
+[^1]: Ok, so that's my first lie. We will do *some* work. Just not as much as the guys doing supervised learning.
+
+In the next few pages we shall look at k-means, principal component analysis, hierarchical clustering, and how we interpret all of these. We shall use the same data in this analysis as we did when discussing statistical inference.
+
+## A quick look at the data
+
+As in the inference part it's an open secret that we of course have access to all the data. A short description may therefore be fitting:
+
+> The age distribution of these voters spans a cosmic range from 18 to 70 years, with the median age of 45 and a mean age hovering around 44.95. It's a diverse cosmic ensemble, with the first quartile (25th percentile) settling at a cosmic mark of 38, while the third quartile (75th percentile) reaches for the cosmic skies at 52.
+>
+> But let us not forget the cosmic districts from whence these voters hail. Each district has its cosmic presence, with names like Akerhus, Aust-Agder, Buskerud, and more. In each district, a cosmic multitude of voters casts their celestial ballots. The district counts range from 2203 in Buskerud, a modest cosmic gathering, to the towering numbers of 7656 voters in Hedmark. Between them, districts like Hordaland, Oslo, Rogaland, and Sør-Trøndelag stand as cosmic realms with their own celestial electorates.
+>
+> Ah, and now we turn our gaze to the cosmic dance of votes. Each voter, a cosmic voice, aligns themselves with a political party. R, SV, AP, SP, MDG, KrF, V, H, and FrP---they each hold their cosmic sway. Among the voters, the percentages of their cosmic alliances shimmer before us. R resonates at 11.4%, SV echoes at 13%, AP hums at 7.5%, and the cosmic chorus continues with SP at 11.2%, MDG at 13.6%, KrF at 8.6%, V at 12.8%, H at 8.5%, and FrP at 13.3%.
+>
+> In this cosmic symphony of data, we gain a glimpse into the age diversity of the voters, the cosmic populations of the districts they inhabit, and the celestial preferences they express through their votes. These cosmic threads intertwine, painting a picture of the political tapestry within the given districts, illuminating the cosmic landscape of voter demographics and allegiances.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+election_plot(valgdata, vote)
+
+```
+
+## K-means
+
+K. How horrible of a letter to see in your tinder-chat! Doing *machine-learning,* however, it is actually quite nice. So, *k* here actually just means the number of clusters. Now you may ask, "why is it called K means, and not cluster-means, or c-means, or something?" That's a very good question! Tell me when you find the answer. The concept behind it is however quite straight-forward. We assume that out, well whatever we are measuring, exist in some form of abstract space. In our case, lets focus on the right-left policy space and age. This will give us a two-dimensional space, or a plane should you feel fancy. This algorithm assumes that the data is numerical, so let's first map the party-labels onto a scale.
+
+```{r}
+
+# I've already made the "vote" variable a factor-variable, with the
+# levels in the left-right order that I would like. To get a numerical
+# variable in the same (correct) order then, I'll just coerce it to numerical. 
+
+valgdata$l_r <- as.numeric(valgdata$vote)
+
+
+# It might be usefull to take a quick look at the data just to see that I was right
+
+
+table(valgdata$vote, valgdata$l_r)
+  
+# And as usual, I am 
+```
+
+So, the first question is of course whether there are any groups at all. It could be (if I didn't manage to make correlated data) that party and age is completely random. One nice way of seeing that is to make a simple point plot. Preferably, we should see some signs of grouping behaviour. For good measure I'll add the district variable as well.
+
+```{r}
+
+#| warning: false
+#| message: false
+#| error: false
+#| cache: true
+
+valgdata %>% 
+  slice_sample(n = 10000) %>% 
+  ggplot(aes(l_r, age,  colour = district)) +
+  geom_jitter() +
+  labs(x = "Left-Right scale", y = "Age") +
+  theme(axis.title = element_text())
+  
+```
+
+If you may allow it, I do find it quite clear that there is a pattern there. Seemingly, one can see 9 different groups that fit together. Of course, since this is *un*supervised learning we don't have any labels, and we don't know what those 9 groups fitting to a left-right scale are. However, they may absolutely be there. Lets begin to try and find the clusters. To do so we will use the `kmeans` function. It accepts a set of vectors, and a number of clusters. How many clusters it should use is something we have to select based on, well, what we believe fits.
+
+```{r}
+#| cache: true
+cluster <- kmeans(
+  valgdata %>% 
+    select(age, l_r), 
+  centers = 9)
+
+
+
+```
+
+Well that was easy. All that talk of machine learning being the future end of civilisation, and it's only 4 lines of code.
