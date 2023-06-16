@@ -1326,12 +1326,32 @@ As you can see in our dendogram (that this weird plot we have above here) we eve
 </div>
 </div>
 </section>
+<section id="principal-component-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="principal-component-analysis">Principal Component Analysis</h2>
+<p>Looking at our data again we can see that we have some high-dimensional (age, left_right, district…) data, which it could be useful to reduce to its most basic dimensions. That, inherently, is what principal component analysis (PCA) does. It takes a multi-dimensional space and reduces it down to some smaller set of dimensions based on uncorrelated variables that we call the principle components.</p>
+<p>Consider a scenario where we have two variables that are perfectly correlated, meaning one is merely a linear transformation of the other, such as the relationship between date of birth and year. In this case, we can effortlessly create a new variable, let’s call it “y,” that encapsulates both of these. However, if we have two variables like age and distance from the closest tiger, which are entirely orthogonal and unrelated to each other, there is no single new variable, say “z,” to which they can be simplified or reduced. The goal then is to find these <em>z</em> variables.</p>
+<p>Each principal component is a linear combination of the original features or variables in the dataset. The first principal component captures the maximum amount of variability present in the data. It represents the direction in the feature space along which the data points spread out the most. In other words, it accounts for the largest source of variation<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> in the data.</p>
+<p>The subsequent principal components capture the remaining variability in decreasing order of importance. Each principal component is orthogonal (uncorrelated) to the previous ones, meaning they represent independent directions of variation. The second principal component captures the second highest amount of variability, orthogonal to the first principal component. The third principal component captures the third highest amount of variability, orthogonal to both the first and second components, and so on.</p>
+<p>The importance of principal components is typically determined by their associated eigenvalues. Higher eigenvalues<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> indicate more substantial variability explained by the corresponding principal component. Therefore, the eigenvalues serve as a measure of the relative importance of each component in the data representation.</p>
+</section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Ok, so that’s my first lie. We will do <em>some</em> work. Just not as much as the guys doing supervised learning.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If you don’t remember, variation here is just how spread out or amount of diversity we have in our data. <em>Variance</em> is a way of measuring this using the averages squared deviation of a data point from the mean. If it’s small, then nearly everything is close to the mean and the variation is low. If its large, everything is spread out in every direction and it’s just chaos all over.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The what you say? Here I’m going to let our favourite AI explain it. I could also recomend 3Blue1Browns video, chapter 14 in his series on linear algebra:<br>
+<br>
+“In linear algebra, an eigenvalue is a scalar value associated with a square matrix. It plays a crucial role in the analysis of linear transformations and systems of linear equations. Specifically, in the context of Principal Component Analysis (PCA), eigenvalues are used to determine the importance and amount of variability captured by each principal component.</p>
+<p>Let’s break down the concept of eigenvalues:</p>
+<ol type="1">
+<li><p>Matrix and Vector: A matrix is a rectangular array of numbers arranged in rows and columns. A vector, on the other hand, is a column or row matrix. Both matrices and vectors can be composed of real or complex numbers.</p></li>
+<li><p>Linear Transformation: A linear transformation is a function that maps vectors from one space to another while preserving vector addition and scalar multiplication properties. In the context of PCA, the linear transformation is typically associated with the covariance matrix of the dataset.</p></li>
+<li><p>Eigenvector: An eigenvector is a non-zero vector that, when subjected to a linear transformation, remains parallel to its original direction. In other words, the direction of the eigenvector is unchanged, but it may be scaled or reversed. Eigenvectors represent the directions of maximum variability or patterns within the data.</p></li>
+<li><p>Eigenvalue: An eigenvalue is a scalar value associated with an eigenvector. It represents the scaling factor by which the eigenvector is stretched or compressed under the linear transformation. Each eigenvector has a corresponding eigenvalue, and they form an eigenvalue-eigenvector pair.</p></li>
+</ol>
+<p>In the context of PCA, the eigenvalues of the covariance matrix represent the amount of variance or variability explained by each corresponding eigenvector (principal component). Larger eigenvalues indicate more significant contributions to the overall variability in the data. Hence, eigenvalues help in determining the relative importance of the principal components and guide the selection of the most informative components for dimensionality reduction and data analysis.”<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->

@@ -14,7 +14,7 @@ editor_options:
 #| message: false
 #| error: false
 
-pacman::p_load(tidyverse, gt, broom)
+pacman::p_load(tidyverse, gt, broom, tidymodels, tidyclust)
 theme_set(ggthemes::theme_excel_new())
 
 ```
@@ -59,7 +59,8 @@ valgdata <- tibble(
   ) %>% 
   mutate(vote = cor_sample(., gnd_age, parti)) %>% 
   mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP"))) %>% 
-  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket))
+  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket)) %>% 
+  mut
 
 
 
@@ -283,5 +284,103 @@ hier_data %>%
   theme(axis.title = element_text()) +
   labs(x = "Left-Right scale", y = "Age", title = "Hierarchical Model: K = 9") +
   theme(axis.title = element_text()) 
+
+```
+
+## Principal Component Analysis
+
+Looking at our data again we can see that we have some high-dimensional (age, left_right, district...) data, which it could be useful to reduce to its most basic dimensions. That, inherently, is what principal component analysis (PCA) does. It takes a multi-dimensional space and reduces it down to some smaller set of dimensions based on uncorrelated variables that we call the principle components.
+
+Consider a scenario where we have two variables that are perfectly correlated, meaning one is merely a linear transformation of the other, such as the relationship between date of birth and year. In this case, we can effortlessly create a new variable, let's call it "y," that encapsulates both of these. However, if we have two variables like age and distance from the closest tiger, which are entirely orthogonal and unrelated to each other, there is no single new variable, say "z," to which they can be simplified or reduced. The goal then is to find these *z* variables.
+
+Each principal component is a linear combination of the original features or variables in the dataset. The first principal component captures the maximum amount of variability present in the data. It represents the direction in the feature space along which the data points spread out the most. In other words, it accounts for the largest source of variation[^2] in the data.
+
+[^2]: If you don't remember, variation here is just how spread out or amount of diversity we have in our data. *Variance* is a way of measuring this using the averages squared deviation of a data point from the mean. If it's small, then nearly everything is close to the mean and the variation is low. If its large, everything is spread out in every direction and it's just chaos all over.
+
+The subsequent principal components capture the remaining variability in decreasing order of importance. Each principal component is orthogonal (uncorrelated) to the previous ones, meaning they represent independent directions of variation. The second principal component captures the second highest amount of variability, orthogonal to the first principal component. The third principal component captures the third highest amount of variability, orthogonal to both the first and second components, and so on.
+
+The importance of principal components is typically determined by their associated eigenvalues. Higher eigenvalues[^3] indicate more substantial variability explained by the corresponding principal component. Therefore, the eigenvalues serve as a measure of the relative importance of each component in the data representation. So then, how can we do this?
+
+[^3]: The what you say? Here I'm going to let our favourite AI explain it. I could also recomend 3Blue1Browns video, chapter 14 in his series on linear algebra:\
+    \
+    "In linear algebra, an eigenvalue is a scalar value associated with a square matrix. It plays a crucial role in the analysis of linear transformations and systems of linear equations. Specifically, in the context of Principal Component Analysis (PCA), eigenvalues are used to determine the importance and amount of variability captured by each principal component.
+
+    Let's break down the concept of eigenvalues:
+
+    1.  Matrix and Vector: A matrix is a rectangular array of numbers arranged in rows and columns. A vector, on the other hand, is a column or row matrix. Both matrices and vectors can be composed of real or complex numbers.
+
+    2.  Linear Transformation: A linear transformation is a function that maps vectors from one space to another while preserving vector addition and scalar multiplication properties. In the context of PCA, the linear transformation is typically associated with the covariance matrix of the dataset.
+
+    3.  Eigenvector: An eigenvector is a non-zero vector that, when subjected to a linear transformation, remains parallel to its original direction. In other words, the direction of the eigenvector is unchanged, but it may be scaled or reversed. Eigenvectors represent the directions of maximum variability or patterns within the data.
+
+    4.  Eigenvalue: An eigenvalue is a scalar value associated with an eigenvector. It represents the scaling factor by which the eigenvector is stretched or compressed under the linear transformation. Each eigenvector has a corresponding eigenvalue, and they form an eigenvalue-eigenvector pair.
+
+    In the context of PCA, the eigenvalues of the covariance matrix represent the amount of variance or variability explained by each corresponding eigenvector (principal component). Larger eigenvalues indicate more significant contributions to the overall variability in the data. Hence, eigenvalues help in determining the relative importance of the principal components and guide the selection of the most informative components for dimensionality reduction and data analysis."
+
+```{r}
+
+# Lets first give everyone a distance to Oslo nr. based on their district
+# This is of course completely random, and def wrong
+valgdata <- valgdata %>% 
+  mutate(cap_dist = fct_relevel(district,
+    c(
+      "Oslo",
+      "Akerhus",
+      "Hedmark",
+      "Oppland",
+      "Buskerud",
+      "Østfold",
+      "Vestfold",
+      "Telemark",
+      "Aust-Agder",
+      "Hordaland",
+      "Sør-Trøndelag",
+      "Rogaland",
+      "Sogn og Fjordande",
+      "Møre og Romsdal",
+      "Vest-Agder",
+      "Nord-Trøndelang",
+      "Troms",
+      "Nordland",
+      "Finnmark"
+      
+      )
+  ),
+  cap_dist = as.numeric(cap_dist)-1
+  )
+
+
+# Now we can set up a reciepe for our data
+
+pca_data <- valgdata %>% 
+  group_by(district) %>% 
+  slice_sample(n = 50) %>%
+  ungroup() %>% 
+  select(cap_dist, age, l_r)
+
+#Lets take a quick look at the data
+
+ggplot(pca_data, aes(l_r, age, colour = cap_dist)) +
+  geom_jitter() +
+  labs(x = "Left-Right scale", y = "Age", colour = "Distance to Capital") +
+  theme(axis.title = element_text()) 
+
+pca_ret <- recipe(~., data = pca_data)
+
+#Normalise the data
+
+pca_trans <- pca_ret %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), num_comp = 4)
+
+pca_estimates <- prep(pca_trans, training = pca_data)
+
+pca_data <- bake(pca_estimates, pca_data)
+
+rng <- extendrange(c(pca_data$PC1, pca_data$PC2))
+plot(pca_data$PC1, pca_data$PC2,
+  xlim = rng, ylim = rng
+)
+
 
 ```
