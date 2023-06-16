@@ -14,6 +14,10 @@ book:
         - 1_Getting_ready/4_pathsfolders.qmd
         - 1_Getting_ready/5_quarto.qmd
         - 1_Getting_ready/6_github.qmd
+    - part: "Tasks"
+      chapters: 
+        - 1_Getting_ready/06_Tasks.qmd
+        - 1_Getting_ready/06_Solution.qmd
     - part: "Data wrangling and data handling"
       chapters:
         - 2_Data_wrangling/7_data-analysis.qmd
@@ -21,12 +25,20 @@ book:
         - 2_Data_wrangling/9_core_functions.qmd
         - 2_Data_wrangling/10_missings.qmd
         - 2_Data_wrangling/11_joins.qmd
+    - part: "Tasks"
+      chapters:
+        - 2_Data_wrangling/011_Tasks.qmd
+        - 2_Data_wrangling/011_Solutions.qmd
     - part: "Descriptive statistics"
       chapters: 
         - 3_Descriptives/12_measuring_concepts.qmd
         - 3_Descriptives/13_descriptives.qmd
         - 3_Descriptives/14_descriptive_display.qmd
         - 3_Descriptives/15_briefly_on_visualization.qmd
+    - part: "Tasks"
+      chapters: 
+        - 3_Descriptives/015_Tasks.qmd
+        - 3_Descriptives/015_Solution.qmd
     - part: "Data collection"
       chapters:
         - 4_Data_collection/16_data_sources.qmd
@@ -46,7 +58,7 @@ book:
         - 6_Text_as_data/26_text_tokenization.qmd
         - 6_Text_as_data/27_text_vectorization.qmd
         - 6_Text_as_data/28_topic_modelling.qmd
-    - part: "Supervised learning"
+    - part: "Statistics and machine learning"
       chapters:
         - 17_SL_regression/SL-regression.qmd
         - 18_SL_classification/SL-classification.qmd

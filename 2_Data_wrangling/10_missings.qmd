@@ -1,5 +1,6 @@
 ---
 title: "Missing values"
+author: "Solveig Bjørkholt"
 ---
 
 ## The dataset we are working on (after data cleaning in previous chapter):

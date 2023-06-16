@@ -1,5 +1,6 @@
 ---
 title: "Text vectorization"
+author: "Solveig Bjørkholt"
 ---
 
 Once we have tokenized the text and done the last bit of preprocessing, we are ready to vectorize the text. Text vectorization involves converting the text into a numerical representation. Once again, we have several options, but in this class we'll focus on two of the easiest; *bag of words* and *TF-IDF*.

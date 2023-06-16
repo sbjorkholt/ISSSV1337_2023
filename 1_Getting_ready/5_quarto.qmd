@@ -1,5 +1,6 @@
 ---
 title: "Quarto"
+author: "Solveig Bjørkholt"
 ---
 
 ## Introduction to Quarto

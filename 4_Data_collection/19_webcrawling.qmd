@@ -1,5 +1,6 @@
 ---
 title: "Webcrawling"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r, eval = FALSE}

@@ -1,5 +1,6 @@
 ---
 title: "Briefly on visualization"
+author: "Solveig Bjørkholt"
 ---
 
 

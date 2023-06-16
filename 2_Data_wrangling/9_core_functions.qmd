@@ -1,5 +1,6 @@
 ---
 title: "Core functions"
+author: "Solveig Bjørkholt"
 ---
 
 ## The dataset we are working on:

@@ -1,5 +1,6 @@
 ---
 title: "Github"
+author: "Solveig Bjørkholt"
 ---
 
 ## What is Github?

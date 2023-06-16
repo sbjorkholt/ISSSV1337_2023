@@ -1,5 +1,6 @@
 ---
 title: "Measuring concepts"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE}

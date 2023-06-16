@@ -1,5 +1,6 @@
 ---
 title: "Text manipulation"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r setup, include=FALSE}

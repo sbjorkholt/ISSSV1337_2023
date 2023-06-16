@@ -1,5 +1,6 @@
 ---
 title: "Text preprocessing"
+author: "Solveig Bjørkholt"
 ---
 
 Text manipulation and text preprocessing is closely related. However, while text manipulation considers the general act of juggling text and forming it into lists, dataframes and so on, text preprocessing is all about cleaning the text to make it ready for analysis.

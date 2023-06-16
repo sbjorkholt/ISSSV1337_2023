@@ -1,5 +1,6 @@
 ---
 title: "Joining datasets"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, error = FALSE}

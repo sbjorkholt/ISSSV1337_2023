@@ -1,5 +1,6 @@
 ---
 title: "Graphs with plotly"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r setup, include=FALSE}

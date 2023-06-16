@@ -1,5 +1,6 @@
 ---
 title: "Topic modelling"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r setup, include=FALSE}

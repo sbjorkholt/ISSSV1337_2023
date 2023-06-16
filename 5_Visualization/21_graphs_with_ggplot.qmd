@@ -1,5 +1,6 @@
 ---
 title: "Graphs with ggplot"
+author: "Solveig Bjørkholt"
 ---
 
 ```{r setup, include=FALSE}

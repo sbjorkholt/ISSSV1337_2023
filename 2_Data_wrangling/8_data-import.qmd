@@ -1,5 +1,6 @@
 ---
 title: "How to import data"
+author: "Solveig Bjørkholt"
 ---
 
 Most work will start with a stage of importing data. There are many ways getting data, for example from the databases, the web or API. For now, let's look at how to import regular data stored in `.csv`, `.RData`, `.rda` or `.rds`.

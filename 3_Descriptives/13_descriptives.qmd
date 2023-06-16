@@ -1,5 +1,6 @@
 ---
 title: "Descriptive measures"
+author: "Solveig Bjørkholt"
 ---
 
 Descriptive statistics are useful in giving insights about patterns in your data. We are not going to delve heavily into statistics in this course, but we'll look at a few basic measures, including finding the:

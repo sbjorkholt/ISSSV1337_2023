@@ -1,5 +1,6 @@
 ---
 title: "Installing R and RStudio"
+author: "Solveig Bjørkholt"
 ---
 
 Both R and RStudio needs to be installed on your computer. They are two separate installations, meaning that in the end, you will have one program called "R" and one program called "RStudio". Since we always work in RStudio, this is the program you open when you want to code in R.

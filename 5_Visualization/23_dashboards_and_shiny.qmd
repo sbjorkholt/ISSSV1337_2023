@@ -1,5 +1,6 @@
 ---
 title: "Dashboards and Shiny"
+author: "Solveig Bjørkholt"
 ---
 
 Dashboards are extremely handy to communicate your data. They are basically visual displays of your data. The picture below is an example of a dashboard.
