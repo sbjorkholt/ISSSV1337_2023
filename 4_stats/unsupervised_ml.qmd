@@ -14,7 +14,7 @@ editor_options:
 #| message: false
 #| error: false
 
-pacman::p_load(tidyverse, tidymodels, gt)
+pacman::p_load(tidyverse, gt, broom)
 theme_set(ggthemes::theme_excel_new())
 
 ```
@@ -121,7 +121,7 @@ election_plot(valgdata, vote)
 
 ## K-means
 
-K. How horrible of a letter to see in your tinder-chat! Doing *machine-learning,* however, it is actually quite nice. So, *k* here actually just means the number of clusters. Now you may ask, "why is it called K means, and not cluster-means, or c-means, or something?" That's a very good question! Tell me when you find the answer. The concept behind it is however quite straight-forward. We assume that out, well whatever we are measuring, exist in some form of abstract space. In our case, lets focus on the right-left policy space and age. This will give us a two-dimensional space, or a plane should you feel fancy. This algorithm assumes that the data is numerical, so let's first map the party-labels onto a scale.
+K. How horrible of a letter to see in your tinder-chat! Doing *machine-learning,* however, it is actually quite nice. So, *k* here actually just means the number of clusters. Now you may ask, "why is it called K means, and not cluster-means, or c-means, or something?" That's a very good question! Tell me when you find the answer. The concept behind it is however quite straight-forward. We assume that our, well whatever we are measuring, exist in some form of abstract space. In our case, lets focus on the right-left policy space and age. This will give us a two-dimensional space, or a plane should you feel fancy. This algorithm assumes that the data is numerical, so let's first map the party-labels onto a scale.
 
 ```{r}
 
@@ -205,8 +205,83 @@ Ahh, to be free and independent. A bird floating through the skies. That may be 
 The idea in these models is that instead of just having clusters, we may have clusters of clusters (of clusters of clusters of clusters...). Eventually we will have a map of groups and how these relate to each other. Lets add the district data to our model and see if we can find something with that. From this point on we will also use the tidymodels framework.
 
 ```{r}
+#| cache: true
+# To use tidymodels we have to load a few extra packages
+# Lets first look at how we can specify the same model as
+# the on above. 
+pacman::p_load(tidymodels, tidyclust)
+
+kmeans_spec <- k_means(num_clusters = 9) # Defining the type of model, k_means with
+                                         # 9 clusters
+kmeans_fit <- kmeans_spec %>% 
+  fit(~age + l_r, # Which variables we want to use
+      data = valgdata) 
+
+tidy(kmeans_fit) %>% 
+  gt() # And here we can see the exact same data as before!
+               # Note that it doesn't actually has to be, kmeans could
+               # find what is known as a *local* and not *global* maxima 
+               # when fitting the model, which may create a form of randomness. 
+
+#To specificy a hierarchical cluster, we do nearly the same as above 
+hier_data <- valgdata %>% 
+  slice_sample(n = 1000) #A 100K observatiosn was a bit too much for my poor pc :(
+
+hierarchical <- hier_clust(
+  linkage_method = "average"
+)
+
+hier_fit <- hierarchical %>% 
+   fit(~age + l_r + district, # Which variables we want to use
+      data = hier_data) 
+                                                   
+hier_fit$fit %>% 
+  plot()
+  
 
 
+```
 
+The key advantage of hierarchical clustering is that it allows for different degrees of granularity. In the plot here you can see how each data-point first get it owns cluster, then is merged with the ones closest to them to form a cluster. Just as in k nearest means. Then these clusters, are merged with the closest clusters. Then those are merged with the closest clusters. Then those are merged...\
+\
+As you can see in our dendogram (that this weird plot we have above here) we eventually end up with on final super-cluster. The nice thing about this, instead of the former model, is then of course that we can choose what we find to be a fitting number of clusters. Not so spread out that we just have the data points, and not so few that we only have the data set.
+
+As we did above we above, we can also fit the clusters back to the observation. This, of course, becomes slightly different to how we did it in the kmeans model. Since we now have clusters of clusters (of clusters of clusters) we must tell the predicton model how we would like to seperate them out. There are two ways we can specify it. Looking back at the dendogram, you will notice a height dimension. The lower it is, the more groups are present. The other alternative is to do the same as when we made the k nearest means model, and just define the number of clusters we would like.
+
+```{r}
+
+hier_fit %>% 
+  extract_cluster_assignment(cut_height = 8) %>% 
+  summary()
+
+#Here we can see that we got 6 clusters, we can then make the same plot as above
+
+hier_data %>% 
+  bind_cols(
+    hier_fit %>% 
+      extract_cluster_assignment(cut_height = 8)
+  ) %>% 
+  ggplot(aes(l_r, age,  colour = as.factor(.cluster))) +
+  geom_jitter() +
+  labs(x = "Left-Right scale", y = "Age") +
+  theme(axis.title = element_text()) +
+  labs(x = "Left-Right scale", y = "Age", title = "Hierarchical Model: Height = 8")+
+  theme(axis.title = element_text()) 
+
+  
+# Or we can try choosing 9 clusters again
+
+
+hier_data %>% 
+  bind_cols(
+    hier_fit %>% 
+      extract_cluster_assignment(num_clusters = 9)
+  ) %>% 
+  ggplot(aes(l_r, age,  colour = as.factor(.cluster))) +
+  geom_jitter() +
+  labs(x = "Left-Right scale", y = "Age") +
+  theme(axis.title = element_text()) +
+  labs(x = "Left-Right scale", y = "Age", title = "Hierarchical Model: K = 9") +
+  theme(axis.title = element_text()) 
 
 ```
