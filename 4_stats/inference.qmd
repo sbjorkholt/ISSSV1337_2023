@@ -10,7 +10,7 @@ editor_options:
 #| message: false
 #| error: false
 #| cache: true
-
+library(tidyverse)
 set.seed(4269420)
 
 
@@ -229,8 +229,16 @@ valgdata %>%
 
 What is then the conclusion? Well, the Liberals seems to have 18.5% of the votes, +/- 1.23 percentage points.
 
->
->
+# Hypothesis Testing
+
+So, the end of what I promised in the beginning! Hypothesis testing, t-values, p-values, significance, and experiments. All these fancy words for really, a very simple question; *"Should I be surprised by my data?"* This is the part above where I said we can use statistics to make decisions. Now we are going to introduce a third rule in the same style as above. Importantly though, this one definitely doesn't only apply here. Have you first decided to to (classical frequentist) hypothesis-testing this is *always* true.
+
+-   You are only allowed to answer *yes* or *no* when asked about your hypothesis.
+
+So, when would we force ourself to ask such a question? Well, lets look back at our Liberal friends. Preparing for the election and their campaign they may wonder which groups are more likely to vote for them than others. For example it may be that there are certain election districts where they are more popular than others. Logically, that is *not* where they should put their focus[^8]. So, first we need to find a question. Now, how may we do that? You tell me, you prob should have some theory or understanding of the world or something like that. That actually sounds like a you problem, not me. The important part is that you are only allowed to ask *yes or no* questions. If the answerer could be "maybe", or "could be", or "it goes in the square hole", you've asked the wrong question.
+
+[^8]: If you wonder about the logic, the point is that there is no reason to fight for seats they already have. You want to put resources on those places where you *may but are not guaranteed* to win.
+
 > And thus, we reach the underwhelming conclusion of our statistical escapade. With t-values, standard errors, and sampling errors in our cosmic toolkit, we venture forth armed with a sense of mild statistical satisfaction. While statistics may not provide the grand cosmic revelations we yearn for, it offers a humble glimpse into the patterns and uncertainties of our data-driven universe. So, dear hitchhiker, go forth with a gentle shrug of statistical acceptance, for even in the face of underwhelming conclusions, statistics continues to shed a flickering light on the mysteries that surround us.\
 > \
 > So long, and thanks for all the fish!
