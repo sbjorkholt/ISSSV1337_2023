@@ -1,9 +1,116 @@
 ---
-title: "Webcrawling"
+title: "Web crawling"
 author: "Solveig Bjørkholt"
 ---
 
-```{r, eval = FALSE}
+```{r}
+#| echo: false
+#| eval: true
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+
+Web crawling involves going through different links to gather up a bunch of links that are deemed relevant to the use case. **Web crawling** is a way to collect relevant links (URLs) from the internet.
+
+```{r}
+#| echo: true
+library(Rcrawler) # Package for web crawling
+```
+
+The package has many different functions. I will go through a few here that can be used to extract information and figure out which part of the webpage you would like to target for crawling. In this case, I use fortune.com as an example. We could, for example, be interested in the establishment of new enterprises working with artificial intelligence. 
+
+1. I use `LinkExtractor` to get an overview of the links in the webpage to understand which links I might want to start working from.
+
+```{r}
+#| echo: true
+page <- LinkExtractor(url = "https://fortune.com/", ExternalLInks=TRUE)
+glimpse(page)
+```
+
+2. I use `ContentScraper` to find out how to refer to the relevant parts of the webpage (i.e. which nodes I am interested in). Assuming I'm interested in the News tab on fortune.com, I check the output above and realize that this link is called *https://fortune.com/the-latest*. This will be the input to the `Url` argument in the function. In the `XpathPatterns` argument, I use the *Xpath* to the node, which I can find in just the same manner as the node, just click "Copy Xpath" instead of "Copy selector". Like so:
+
+1.  Right-click on the node.
+2.  Choose "Copy".
+3.  Choose "Copy XPath".
+
+Then I also have to add the names of the parent nodes to the Xpath. This is one *div* node and one *ul*^[*ul* nodes are unordered lists, typically lists formatted as bullet points.] node.
+
+```{r}
+#| eval: false
+#| echo: true
+ContentScraper(Url = "https://fortune.com/the-latest", 
+               XpathPatterns = "//div/ul[@class='termArchiveContentList']")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+contentscrape <- readRDS("../datafolder/contentscrape.rds")
+contentscrape
+```
+
+You can see here how the headlines in the output above refers to the headline on the actual webpage. 
+
+```{r}
+#| echo: false
+#| out-width: 70%
+knitr::include_graphics("../figures/fortune.PNG")
+```
+
+3. When I know where I want to start the crawler from and how it is useful to specify the arguments, I use the `Rcrawler` function.
+
+```{r}
+#| eval: false
+#| echo: true
+
+Rcrawler(Website = "https://fortune.com/",  # The webpage to crawl
+         #crawlUrlfilter = "/the-latest/", # A part of the webpage to start from
+         #dataUrlfilter = "/the-latest/", # Only crawl URLs that have this pattern
+         KeywordsFilter = c("enterprise"),
+         #ExtractXpathPat = "//div/ul[@class='termArchiveContentList']",
+         no_cores = 2, # Number of cores on your computer used to run function
+         no_conn = 2, # Number of connections made to webpage on one core
+         MaxDepth = 1, # How far down the link chain the crawler goes
+         saveOnDisk = FALSE, # Do not save all files on your computer
+         Obeyrobots = TRUE, # Do as the robots.txt say
+         RequestsDelay = 0.5) # Wait a bit between each time calling the webpage
+```
+
+For further information about how to use the `Rcrawler` package in R, I recommend this excellent [YouTube video](https://www.youtube.com/watch?v=JIRh025E6Dk)
+
+
+## *robots.txt*
+
+The owners of various webpages might wish to give some instructions on how to mindfully use scrapers and crawlers. This means for example not scraping content that they do not want scraped (i.e. because it's deemed sensitive) or not going too fast when scraping (as it can damage the server).
+
+To find the document with instructions for each webpage, use the format:
+
+ > https://www.webpage.domain/robots.txt
+
+For example:
+
+-   https://en.wikipedia.org/robots.txt
+
+-   https://www.brreg.no/robots.txt
+
+-   https://www.uutilsynet.no/robots.txt
+
+Paste this into your broswer and you will get something like this:
+
+```{r, out.width="80%", fig.align="center", echo = FALSE}
+knitr::include_graphics("../figures/robotstxt.PNG")
+```
+
+This tells us, among other things, that if you crawl Wikipedia too fast, you might be blocked, and gives us an overview of some types of software that is blocked from being used.
+
+
+**Another example of using Rcrawler**
+
+```{r}
+#| eval: false
+
 # Load in package for crawling
 library(Rcrawler)
 

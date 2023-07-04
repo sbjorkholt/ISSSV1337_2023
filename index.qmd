@@ -59,10 +59,10 @@ knitr::include_graphics("./figures/datascience_figure.png")
 
 -   **Evaluation**: This course gives 10 ECTS and is a pass/fail course. Your team is evaluated as a whole. There are three parts of the evaluation:
 
-    -   A github repository with your code.
+    -   A shared github repository with your code.
 
-    -   A report on 10-20 pages fleshing out the problem statement and your solution written in Quarto.
+    -   A report on approximately 10 pages fleshing out the problem statement, work process and solution written in Quarto.
 
-    -   A final presentation of about 15 minutes, where you present the content of the report.
+    -   A final presentation where you present the content of the report.
 
 -   **Administrative**: If you get sick or cannot attend for other reasons, please inform iss\@admin.uio.no. If you experience trouble within the group, would like to change groups or have any concerns about the team work, please contact the course holders.

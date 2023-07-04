@@ -33,7 +33,8 @@ gapminder %>% # Which dataset are you using
 
 ```
 
-```{r, eval = FALSE}
+```{r}
+#| eval: true
 
 gapminder %>% # Which dataset are you using
   plot_ly(x = ~lifeExp, # Which variable(s) are you plotting
@@ -192,36 +193,3 @@ plot <- vdem2 %>%
 ggplotly(plot)
 
 ```
-
-## R markdown configurations
-
-We have been working in R Markdown for a while now, and hopefully gotten familiar with some of the basic components such as putting text outside chunks and code inside chunks. When we hit the "Knit" button to make the script into a file, it *renders* the document. We can create for example html-files, pdf-files, word-files and slide-shows. Clicking the arrow down beside the "Knit" button shows us some options of the formats we can render the document to. 
-
-```{r, out.width="40%", fig.align="center", echo = FALSE}
-knitr::include_graphics("../figures/knit.png")
-```
-
-Another option is to specify what to render in the **YAML** header. YAML is the programming language in the top of the document where we specify options for the document. This is where the header of the document goes, the author, the date, and so on. In the argument `output`, we can add which formats we want to render to whenever we hit "Knit". In the example below, I render to html, pdf and word, creating in total three documents whenever I hit "render".
-
-```{yaml, eval = FALSE}
-title: "A document"
-author: "Me"
-date: "Today"
-output:
-  html_document: default
-  pdf_document:
-    extra_dependencies: ["float"]
-  word_document
-```
-
-To make slide-shows (ala powerpoint), we can use for example `ios slides` or `beamer slides`^[we can also render to powerpoint if we want]. The arguments for these are:
-
-```{yaml, render = FALSE}
-output: ioslides_presentation
-output: beamer_presentation 
-```
-
-Indentation is very important when you specify things in YAML, so if you have error messages as you try to define the properties of your document, take an extra look at the indents. For example, in the `pdf_document` argument, we have an indent with another argument belonging to the argument above - `extra_dependencies: ["float"]`. This tells R that when rendering the document to pdf, we want to use a package from the world of pdfs^[That is, from LaTex], that makes sure that the figures stay in the same position in the document when we render, and do not move around. The indentation is necessary, as it shows that the below argument belongs to the argument above.
-
-To have a look at which features that exist with regard to rendering documents, have a look at [this page](https://bookdown.org/yihui/rmarkdown/html-document.html). 
-

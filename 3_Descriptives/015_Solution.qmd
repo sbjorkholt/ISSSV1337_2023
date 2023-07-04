@@ -3,17 +3,17 @@ title: "Example solutions"
 author: "Solveig Bjørkholt"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
+#| include: false
 knitr::opts_chunk$set(echo = TRUE, tidy = TRUE)
 ```
 
-Find the script [here](https://drive.google.com/file/d/1amKB6R-BCUvknzcaUmYOJ_fGIqU3UIuG/view?usp=sharing).
-
----------------------
-
 This worksheet is centered around the workflow in the picture below. Using the example research question below, we are going to see how one can go from having data and a question, to perhaps finding some answers. 
 
-```{r, out.width="100%", echo = FALSE, fig.show="hold"}
+```{r}
+#| out-width: 100%
+#| echo: false
+#| fig-show: hold
 knitr::include_graphics("../figures/data-science-explore.png")
 ```
 
@@ -26,12 +26,15 @@ Task: Fill in the blank spaces (___) in the code.
 First, we need to install and library in the necessary packages.
 
 ```{r}
+# eval: false
 install.packages("eurostat") # Installing the package "eurostat"
 ```
 
 Eurostat is the statistical office of the European Union. They have made their own R-package which we can use to gather data directly from their database with the use of code. For a full overview of their database, see [this link](https://ec.europa.eu/eurostat/web/main/data/database). 
 
 ```{r}
+#| warning: false
+#| message: false
 library(eurostat) 
 library(tidyverse)
 ```
@@ -79,9 +82,14 @@ nrow(unexp) # Put another dataset into this function, what does the function tel
 ### 2. Missing values
 
 ```{r}
+#| eval: false
+
 unexp %>%
   complete.cases() # Print a table that shows us all units with missing values on at least one variable.  
 
+```
+
+```{r}
 minwage %>%
   select(values) %>% # Get the variable "values" from the dataset.
   is.na() %>%

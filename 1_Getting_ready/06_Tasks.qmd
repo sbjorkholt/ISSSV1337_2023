@@ -49,18 +49,29 @@ With the code between the breaks.
 
 17. Download a picture of your travel goal from the internet, save it to your working folder, and include this picture in the end of your report. To add pictures to Quarto, use the syntax below. I also show some options here, for example setting the size of the picture to 80 percent, and putting it in the middle. But be mindful that you will have to change the path to the one where you have your picture saved.
 
-` ```{r, out.width = "80%", fig.align = "center"} `
+` ```{r} `
 
-knitr::include_graphics("./path/travel-goal.png")
+`#| out-width: 80%`
+
+`#| fig.align: center`
+
+`knitr::include_graphics("./path/travel-goal.png")`
 
 ` ``` `
 
 18. Click "Render" and choose to render the file (.qmd) into either a pdf (.pdf) or an html (.html) file. 
 
-19. For all chucks where you do not want to show messages, errors and warnings when executing code, add one or more of the following to the chuck: warning=FALSE, error=FALSE, message=FALSE. Like so:
+19. For all chucks where you do not want to show messages, errors and warnings when executing code, add one or more of the following into the chuck: warning=FALSE, error=FALSE, message=FALSE. Like so:
 
 
-` ```{r, warning=FALSE, error=FALSE, message=FALSE}`
+` ```{r}`
+
+`#| warning: false`
+
+`#| error: false`
+
+`#| message: false`
+
 
 ` ``` `
 

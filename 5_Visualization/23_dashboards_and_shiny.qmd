@@ -3,28 +3,40 @@ title: "Dashboards and Shiny"
 author: "Solveig Bjørkholt"
 ---
 
+## Dashboards
+
 Dashboards are extremely handy to communicate your data. They are basically visual displays of your data. The picture below is an example of a dashboard.
 
-```{r, out.width="100%", echo = FALSE}
+```{r}
+#| echo: false
 knitr::include_graphics("../figures/dashboard.png")
 ```
 
 
-Many data providers today offer a dashboard along with their data to give the user a nice overview of what the data tell us. One of my favorites is [this dashboard](https://oecd.ai/en/policy-areas) on artificial intelligence from OECD. Some of the great things about dashboards is that they give a quick overview of data, and in contrast to reports, a dashboard can use the most recent data available at all times. 
+Many data providers today offer a dashboard along with their data to give the user a nice overview of what the data tell us. An example is [this dashboard](https://oecd.ai/en/policy-areas) on artificial intelligence from OECD. Some of the great things about dashboards is that they give a quick overview of data, and in contrast to reports, a dashboard can use the most recent data available at all times. 
 
 R offers several ways of making dashboards. One more advanced option is to use `shiny`, a package that allows you to make apps through R. This can be very useful if you want your app to communicate extensively with the user, for example by allowing the user to define certain input and extract other types of output. However, when all we want to do is to visualize some data and allow the user to click around a bit, a simpler solution is often to go for dashboard-creating packages such as `flexdashboard`. To have a look at this package, refer to for example [this page](https://pkgs.rstudio.com/flexdashboard/) or [this page](https://bookdown.org/yihui/rmarkdown/dashboards.html). 
 
 To get started with making a dashboard using `flexdashboard`, we first need to download the package `flexdashboard` as shown below.
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 
 install.packages("flexdashboard")
 
 ```
 
-Having done that, click on the "File" button in RStudio to make a new file, choose R Markdown, and then choose "From Template". From the list, pick "Flex Dashboard". Now, RStudio opens a new R Markdown file which will render into a dashboard when you click "Knit". 
+Having done that, create a custom Flexdashboard by doing the following:
 
-```{r, out.width="100%", echo = FALSE}
+1. Click on the "File" button in RStudio to make a new file. 
+2. Quarto is relatively new and support for `flexdashboard` is unfortunately not available yet. We need to use the old version for now^[R markdown will continue to be supported forward, so there is no danger that what you make will suddenly become outdated and unusable.], so choose **R Markdown**. 
+3. Then choose "From Template". 
+4. From the list, pick "Flex Dashboard". 
+
+Now, RStudio opens a new R Markdown file which will render into a dashboard when you click "Knit" (which the the R Markdown word for "Render"). 
+
+```{r}
+#| echo: false
 knitr::include_graphics("../figures/dashboard_making.png")
 ```
 
@@ -52,10 +64,7 @@ And much more. For dashboards visualizing real-time data, consider making a dash
 
 For an overview of some of the things that are possible, have a look at [this page](https://pkgs.rstudio.com/flexdashboard/articles/using.html). 
 
-
-
-
-3. Make your dashboard. Find some inspirational dashboards [here](https://rstudio.github.io/flexdashboard/articles/examples.html). An example of how the R Markdown file could look like can be found [here]( https://github.com/sbjorkholt/ISSSV1337/blob/main/Week%202/Day%2010%20-%20Visualization%20with%20plotly%20and%20flexdashboard/test_dashboard.Rmd)
+Now you can make your dashboard! To get started, find some inspirational dashboards [here](https://rstudio.github.io/flexdashboard/articles/examples.html). 
 
 
 4. Save the `.Rmd` file to a folder that is connected to a Github repository (that is, a folder you have cloned from Github).

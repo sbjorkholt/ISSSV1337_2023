@@ -3,17 +3,18 @@ title: "Tasks: Descriptive statistics"
 author: "Solveig Bjørkholt"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
+#| include: false
 knitr::opts_chunk$set(echo = TRUE, tidy = TRUE, eval = FALSE)
 ```
 
-You can download the script and fill it out directly in R. Download the script from [here](https://drive.google.com/file/d/1dsCtjsedVrF4dkftaUKV1rH96SBPzX0-/view?usp=sharing).
-
------------
-
 This worksheet is centered around the workflow in the picture below. Using the example research question below, we are going to see how one can go from having data and a question, to perhaps finding some answers. 
 
-```{r, out.width="100%", echo = FALSE, fig.show="hold", eval = TRUE}
+```{r}
+#| out-width: 100%
+#| echo: false
+#| fig-show: hold
+#| eval: true
 knitr::include_graphics("../figures/data-science-explore.png")
 ```
 

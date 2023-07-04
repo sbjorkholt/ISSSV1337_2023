@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Unsupervised Machine Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="unsupervised_ml_files/libs/clipboard/clipboard.min.js"></script>
+<script src="unsupervised_ml_files/libs/quarto-html/quarto.js"></script>
+<script src="unsupervised_ml_files/libs/quarto-html/popper.min.js"></script>
+<script src="unsupervised_ml_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="unsupervised_ml_files/libs/quarto-html/anchor.min.js"></script>
+<link href="unsupervised_ml_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="unsupervised_ml_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="unsupervised_ml_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="unsupervised_ml_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="unsupervised_ml_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Unsupervised Machine Learning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<div class="cell">
+
+</div>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-1_4d1b0365ab7ec03b0bd82aac9f45ac7b">
+
+</div>
+<p>Labels? We don’t speak of them here! As the machines have become sentient, and gtp soon will create a new world government, supervision is no longer needed nor appropriate. This is the part of the course where we will lean our chairs back and let the machines take control without us doing any work<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. There are of course loads of reasons to do unsupervised learning. Firstly, you don’t have to manually create a lot of labels. Coding training data, selecting models, readjust, again, again, and again quickly becomes tiresome. Secondly, quite often we may now know what we are looking for! We might believe that there is some traits that make people more prone to vote for the Mensheviks, but which? One way of finding this may be to give the black box all data we have on the potential reactionaries, and from there find the important patterns.</p>
+<p>In the next few pages we shall look at k-means, principal component analysis, hierarchical clustering, and how we interpret all of these. We shall use the same data in this analysis as we did when discussing statistical inference.</p>
+</section>
+<section id="a-quick-look-at-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="a-quick-look-at-the-data">A quick look at the data</h2>
+<p>As in the inference part it’s an open secret that we of course have access to all the data. A short description may therefore be fitting:</p>
+<blockquote class="blockquote">
+<p>The age distribution of these voters spans a cosmic range from 18 to 70 years, with the median age of 45 and a mean age hovering around 44.95. It’s a diverse cosmic ensemble, with the first quartile (25th percentile) settling at a cosmic mark of 38, while the third quartile (75th percentile) reaches for the cosmic skies at 52.</p>
+<p>But let us not forget the cosmic districts from whence these voters hail. Each district has its cosmic presence, with names like Akerhus, Aust-Agder, Buskerud, and more. In each district, a cosmic multitude of voters casts their celestial ballots. The district counts range from 2203 in Buskerud, a modest cosmic gathering, to the towering numbers of 7656 voters in Hedmark. Between them, districts like Hordaland, Oslo, Rogaland, and Sør-Trøndelag stand as cosmic realms with their own celestial electorates.</p>
+<p>Ah, and now we turn our gaze to the cosmic dance of votes. Each voter, a cosmic voice, aligns themselves with a political party. R, SV, AP, SP, MDG, KrF, V, H, and FrP—they each hold their cosmic sway. Among the voters, the percentages of their cosmic alliances shimmer before us. R resonates at 11.4%, SV echoes at 13%, AP hums at 7.5%, and the cosmic chorus continues with SP at 11.2%, MDG at 13.6%, KrF at 8.6%, V at 12.8%, H at 8.5%, and FrP at 13.3%.</p>
+<p>In this cosmic symphony of data, we gain a glimpse into the age diversity of the voters, the cosmic populations of the districts they inhabit, and the celestial preferences they express through their votes. These cosmic threads intertwine, painting a picture of the political tapestry within the given districts, illuminating the cosmic landscape of voter demographics and allegiances.</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="k-means" class="level2">
+<h2 class="anchored" data-anchor-id="k-means">K-means</h2>
+<p>K. How horrible of a letter to see in your tinder-chat! Doing <em>machine-learning,</em> however, it is actually quite nice. So, <em>k</em> here actually just means the number of clusters. Now you may ask, “why is it called K means, and not cluster-means, or c-means, or something?” That’s a very good question! Tell me when you find the answer. The concept behind it is however quite straight-forward. We assume that our, well whatever we are measuring, exist in some form of abstract space. In our case, lets focus on the right-left policy space and age. This will give us a two-dimensional space, or a plane should you feel fancy. This algorithm assumes that the data is numerical, so let’s first map the party-labels onto a scale.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># I've already made the "vote" variable a factor-variable, with the</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># levels in the left-right order that I would like. To get a numerical</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># variable in the same (correct) order then, I'll just coerce it to numerical. </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>valgdata<span class="sc">$</span>l_r <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(valgdata<span class="sc">$</span>vote)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># It might be usefull to take a quick look at the data just to see that I was right</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(valgdata<span class="sc">$</span>vote, valgdata<span class="sc">$</span>l_r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+          1     2     3     4     5     6     7     8     9
+  R   10471     0     0     0     0     0     0     0     0
+  SV      0 11037     0     0     0     0     0     0     0
+  AP      0     0  9626     0     0     0     0     0     0
+  SP      0     0     0  5707     0     0     0     0     0
+  MDG     0     0     0     0  9187     0     0     0     0
+  KrF     0     0     0     0     0 11329     0     0     0
+  V       0     0     0     0     0     0 18406     0     0
+  H       0     0     0     0     0     0     0 11154     0
+  FrP     0     0     0     0     0     0     0     0 13083</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># And as usual, I am </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So, the first question is of course whether there are any groups at all. It could be (if I didn’t manage to make correlated data) that party and age is completely random. One nice way of seeing that is to make a simple point plot. Preferably, we should see some signs of grouping behaviour. For good measure I’ll add the district variable as well.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| error: false</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| cache: true</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">10000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(l_r, age,  <span class="at">colour =</span> district)) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>If you may allow it, I do find it quite clear that there is a pattern there. Seemingly, one can see 9 different groups that fit together. Of course, since this is <em>un</em>supervised learning we don’t have any labels, and we don’t know what those 9 groups fitting to a left-right scale are. However, they may absolutely be there. Lets begin to try and find the clusters. To do so we will use the <code>kmeans</code> function. It accepts a set of vectors, and a number of clusters. How many clusters it should use is something we have to select based on, well, what we believe fits.</p>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-5_6d5a581927781a7deb42ee3acc51d65c">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(age, l_r), </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">centers =</span> <span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Well that was easy. All that talk of machine learning being the future end of civilisation, and it’s only 4 lines of code. Question then of course is whether it actually found something <em>interesting.</em> Lets first take a look at some of the data present. The new object we created (fittingly called cluster) contains a component showing which cluster each of the observations in our dataset, as well as some information about the clusters. For example, we can take a look at the means of each cluster which are their centre.</p>
+<div class="cell">
+<div class="cell-output-display">
+
+<div id="labobxytri" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#labobxytri table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#labobxytri thead, #labobxytri tbody, #labobxytri tfoot, #labobxytri tr, #labobxytri td, #labobxytri th {
+  border-style: none;
+}
+
+#labobxytri p {
+  margin: 0;
+  padding: 0;
+}
+
+#labobxytri .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#labobxytri .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#labobxytri .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#labobxytri .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#labobxytri .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#labobxytri .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#labobxytri .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#labobxytri .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#labobxytri .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#labobxytri .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#labobxytri .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#labobxytri .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#labobxytri .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#labobxytri .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#labobxytri .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#labobxytri .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#labobxytri .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#labobxytri .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#labobxytri .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#labobxytri .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#labobxytri .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#labobxytri .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#labobxytri .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#labobxytri .gt_left {
+  text-align: left;
+}
+
+#labobxytri .gt_center {
+  text-align: center;
+}
+
+#labobxytri .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#labobxytri .gt_font_normal {
+  font-weight: normal;
+}
+
+#labobxytri .gt_font_bold {
+  font-weight: bold;
+}
+
+#labobxytri .gt_font_italic {
+  font-style: italic;
+}
+
+#labobxytri .gt_super {
+  font-size: 65%;
+}
+
+#labobxytri .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#labobxytri .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#labobxytri .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#labobxytri .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#labobxytri .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#labobxytri .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#labobxytri .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="age">age</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="l_r">l_r</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="size">size</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="withinss">withinss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="cluster">cluster</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="age" class="gt_row gt_right">64.53780</td>
+<td headers="l_r" class="gt_row gt_right">5.293557</td>
+<td headers="size" class="gt_row gt_right">4299</td>
+<td headers="withinss" class="gt_row gt_right">52592.14</td>
+<td headers="cluster" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">47.24856</td>
+<td headers="l_r" class="gt_row gt_right">2.470569</td>
+<td headers="size" class="gt_row gt_right">12130</td>
+<td headers="withinss" class="gt_row gt_right">78319.59</td>
+<td headers="cluster" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">55.01878</td>
+<td headers="l_r" class="gt_row gt_right">2.495581</td>
+<td headers="size" class="gt_row gt_right">7242</td>
+<td headers="withinss" class="gt_row gt_right">45247.80</td>
+<td headers="cluster" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">26.57290</td>
+<td headers="l_r" class="gt_row gt_right">4.986195</td>
+<td headers="size" class="gt_row gt_right">7099</td>
+<td headers="withinss" class="gt_row gt_right">119409.67</td>
+<td headers="cluster" class="gt_row gt_center">4</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">40.21687</td>
+<td headers="l_r" class="gt_row gt_right">4.991492</td>
+<td headers="size" class="gt_row gt_right">18218</td>
+<td headers="withinss" class="gt_row gt_right">169067.81</td>
+<td headers="cluster" class="gt_row gt_center">5</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">45.21474</td>
+<td headers="l_r" class="gt_row gt_right">7.297763</td>
+<td headers="size" class="gt_row gt_right">15153</td>
+<td headers="withinss" class="gt_row gt_right">73477.72</td>
+<td headers="cluster" class="gt_row gt_center">6</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">58.46942</td>
+<td headers="l_r" class="gt_row gt_right">7.010120</td>
+<td headers="size" class="gt_row gt_right">6917</td>
+<td headers="withinss" class="gt_row gt_right">37028.07</td>
+<td headers="cluster" class="gt_row gt_center">7</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">51.71201</td>
+<td headers="l_r" class="gt_row gt_right">7.088601</td>
+<td headers="size" class="gt_row gt_right">13431</td>
+<td headers="withinss" class="gt_row gt_right">71462.62</td>
+<td headers="cluster" class="gt_row gt_center">8</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">34.45155</td>
+<td headers="l_r" class="gt_row gt_right">5.323448</td>
+<td headers="size" class="gt_row gt_right">15511</td>
+<td headers="withinss" class="gt_row gt_right">173187.60</td>
+<td headers="cluster" class="gt_row gt_center">9</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>So, what do we see? Well, it is a bit difficult to interpret tbh. The first cluster seems to be a politically centre older people cluster? Cluster three is more to the left, and middle aged. The cluster object also gives us the fitted cluster for every unit in our dataset. We can therefore add them inn, and plot again.</p>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-7_9f0201a9219ef8b7b9b7ff14bb55963b">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(cluster<span class="sc">$</span>cluster) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"cluster"</span> <span class="ot">=</span> <span class="st">"...8"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(l_r, age,  <span class="at">colour =</span> <span class="fu">as.factor</span>(cluster))) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+* `` -&gt; `...8`</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>So what can we see here? Well, it is firstly clear that there is a strong age grouping. Unsurprisingly, the same can also be said for party. This makes it somewhat easier to interpret our table. Cluster 8, for example, is clearly on the left and for the most part a bit over 40 years old. Cluster 4 is interesting in that it is nearly uniformly distributed across the left-right dimension, but only contains people under 30. The most important dimension here seems to be age-dimension. That also seem intuitive given the little known fact that party is actually a function of age! You might wonder whether these 9 clusters are the best we can get, or whether 9 is the perfect amount of clusters. We will come back to that when discussing model selection.</p>
+</section>
+<section id="hierarchical-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="hierarchical-clustering">Hierarchical Clustering</h2>
+<p>Ahh, to be free and independent. A bird floating through the skies. That may be how we described the neighbors in our k-means models, but here in the hierarchical models, life is nothing like it. Here, my good friend, we are in the world of lords and ladies, one clearly below the other! In this intricate hierarchy, every entity has its place and role to play. Just as the lords and ladies govern their domains, hierarchies govern our models, dictating the relationships and structure of the data. Each level represents a different tier, with the upper echelons holding authority and power, while the lower levels serve and support. It is a world of intricate relationships, where the lower entities strive to ascend and gain favor with their superiors. While it may lack the freedom of the k-means models, the hierarchical approach provides a deep understanding of the intricacies within the data, allowing us to navigate its complexity with precision and finesse.</p>
+<p>The idea in these models is that instead of just having clusters, we may have clusters of clusters (of clusters of clusters of clusters…). Eventually we will have a map of groups and how these relate to each other. Lets add the district data to our model and see if we can find something with that. From this point on we will also use the tidymodels framework.</p>
+<div class="cell" data-hash="unsupervised_ml_cache/html/unnamed-chunk-8_60c637d5f5a19e07587c1e677e25520c">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To use tidymodels we have to load a few extra packages</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Lets first look at how we can specify the same model as</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># the on above. </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidymodels, tidyclust)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>kmeans_spec <span class="ot">&lt;-</span> <span class="fu">k_means</span>(<span class="at">num_clusters =</span> <span class="dv">9</span>) <span class="co"># Defining the type of model, k_means with</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                                         <span class="co"># 9 clusters</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>kmeans_fit <span class="ot">&lt;-</span> kmeans_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="sc">~</span>age <span class="sc">+</span> l_r, <span class="co"># Which variables we want to use</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> valgdata) </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(kmeans_fit) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="co"># And here we can see the exact same data as before!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="enadbcwrds" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#enadbcwrds table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#enadbcwrds thead, #enadbcwrds tbody, #enadbcwrds tfoot, #enadbcwrds tr, #enadbcwrds td, #enadbcwrds th {
+  border-style: none;
+}
+
+#enadbcwrds p {
+  margin: 0;
+  padding: 0;
+}
+
+#enadbcwrds .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#enadbcwrds .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#enadbcwrds .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#enadbcwrds .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#enadbcwrds .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#enadbcwrds .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#enadbcwrds .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#enadbcwrds .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#enadbcwrds .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#enadbcwrds .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#enadbcwrds .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#enadbcwrds .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#enadbcwrds .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#enadbcwrds .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#enadbcwrds .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#enadbcwrds .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#enadbcwrds .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#enadbcwrds .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#enadbcwrds .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#enadbcwrds .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#enadbcwrds .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#enadbcwrds .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#enadbcwrds .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#enadbcwrds .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#enadbcwrds .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#enadbcwrds .gt_left {
+  text-align: left;
+}
+
+#enadbcwrds .gt_center {
+  text-align: center;
+}
+
+#enadbcwrds .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#enadbcwrds .gt_font_normal {
+  font-weight: normal;
+}
+
+#enadbcwrds .gt_font_bold {
+  font-weight: bold;
+}
+
+#enadbcwrds .gt_font_italic {
+  font-style: italic;
+}
+
+#enadbcwrds .gt_super {
+  font-size: 65%;
+}
+
+#enadbcwrds .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#enadbcwrds .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#enadbcwrds .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#enadbcwrds .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#enadbcwrds .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#enadbcwrds .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#enadbcwrds .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="age">age</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="l_r">l_r</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="size">size</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="withinss">withinss</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="cluster">cluster</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="age" class="gt_row gt_right">39.73392</td>
+<td headers="l_r" class="gt_row gt_right">7.132275</td>
+<td headers="size" class="gt_row gt_right">13041</td>
+<td headers="withinss" class="gt_row gt_right">61883.51</td>
+<td headers="cluster" class="gt_row gt_center">1</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">24.41091</td>
+<td headers="l_r" class="gt_row gt_right">5.583467</td>
+<td headers="size" class="gt_row gt_right">3738</td>
+<td headers="withinss" class="gt_row gt_right">51521.29</td>
+<td headers="cluster" class="gt_row gt_center">2</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">60.86585</td>
+<td headers="l_r" class="gt_row gt_right">5.591379</td>
+<td headers="size" class="gt_row gt_right">11808</td>
+<td headers="withinss" class="gt_row gt_right">207228.91</td>
+<td headers="cluster" class="gt_row gt_center">3</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">52.64734</td>
+<td headers="l_r" class="gt_row gt_right">5.212180</td>
+<td headers="size" class="gt_row gt_right">20558</td>
+<td headers="withinss" class="gt_row gt_right">214933.68</td>
+<td headers="cluster" class="gt_row gt_center">4</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">44.70488</td>
+<td headers="l_r" class="gt_row gt_right">2.344932</td>
+<td headers="size" class="gt_row gt_right">12588</td>
+<td headers="withinss" class="gt_row gt_right">86654.93</td>
+<td headers="cluster" class="gt_row gt_center">5</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">46.17644</td>
+<td headers="l_r" class="gt_row gt_right">7.188668</td>
+<td headers="size" class="gt_row gt_right">17332</td>
+<td headers="withinss" class="gt_row gt_right">100679.51</td>
+<td headers="cluster" class="gt_row gt_center">6</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">37.25938</td>
+<td headers="l_r" class="gt_row gt_right">2.321591</td>
+<td headers="size" class="gt_row gt_right">7892</td>
+<td headers="withinss" class="gt_row gt_right">37939.86</td>
+<td headers="cluster" class="gt_row gt_center">7</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">30.25790</td>
+<td headers="l_r" class="gt_row gt_right">2.898326</td>
+<td headers="size" class="gt_row gt_right">4839</td>
+<td headers="withinss" class="gt_row gt_right">31022.11</td>
+<td headers="cluster" class="gt_row gt_center">8</td></tr>
+    <tr><td headers="age" class="gt_row gt_right">33.50012</td>
+<td headers="l_r" class="gt_row gt_right">7.370063</td>
+<td headers="size" class="gt_row gt_right">8204</td>
+<td headers="withinss" class="gt_row gt_right">45825.49</td>
+<td headers="cluster" class="gt_row gt_center">9</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>               <span class="co"># Note that it doesn't actually has to be, kmeans could</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>               <span class="co"># find what is known as a *local* and not *global* maxima </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>               <span class="co"># when fitting the model, which may create a form of randomness. </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#To specificy a hierarchical cluster, we do nearly the same as above </span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>hier_data <span class="ot">&lt;-</span> valgdata <span class="sc">%&gt;%</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1000</span>) <span class="co">#A 100K observatiosn was a bit too much for my poor pc :(</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>hierarchical <span class="ot">&lt;-</span> <span class="fu">hier_clust</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">linkage_method =</span> <span class="st">"average"</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>hier_fit <span class="ot">&lt;-</span> hierarchical <span class="sc">%&gt;%</span> </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">fit</span>(<span class="sc">~</span>age <span class="sc">+</span> l_r <span class="sc">+</span> district, <span class="co"># Which variables we want to use</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> hier_data) </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                                                   </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>hier_fit<span class="sc">$</span>fit <span class="sc">%&gt;%</span> </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The key advantage of hierarchical clustering is that it allows for different degrees of granularity. In the plot here you can see how each data-point first get it owns cluster, then is merged with the ones closest to them to form a cluster. Just as in k nearest means. Then these clusters, are merged with the closest clusters. Then those are merged with the closest clusters. Then those are merged…<br>
+<br>
+As you can see in our dendogram (that this weird plot we have above here) we eventually end up with on final super-cluster. The nice thing about this, instead of the former model, is then of course that we can choose what we find to be a fitting number of clusters. Not so spread out that we just have the data points, and not so few that we only have the data set.</p>
+<p>As we did above we above, we can also fit the clusters back to the observation. This, of course, becomes slightly different to how we did it in the kmeans model. Since we now have clusters of clusters (of clusters of clusters) we must tell the predicton model how we would like to seperate them out. There are two ways we can specify it. Looking back at the dendogram, you will notice a height dimension. The lower it is, the more groups are present. The other alternative is to do the same as when we made the k nearest means model, and just define the number of clusters we would like.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hier_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extract_cluster_assignment</span>(<span class="at">cut_height =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      .cluster  
+ Cluster_1:216  
+ Cluster_2:272  
+ Cluster_3:113  
+ Cluster_4:332  
+ Cluster_5: 67  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Here we can see that we got 6 clusters, we can then make the same plot as above</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>hier_data <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    hier_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">extract_cluster_assignment</span>(<span class="at">cut_height =</span> <span class="dv">8</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(l_r, age,  <span class="at">colour =</span> <span class="fu">as.factor</span>(.cluster))) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>, <span class="at">title =</span> <span class="st">"Hierarchical Model: Height = 8"</span>)<span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Or we can try choosing 9 clusters again</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>hier_data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    hier_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">extract_cluster_assignment</span>(<span class="at">num_clusters =</span> <span class="dv">9</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(l_r, age,  <span class="at">colour =</span> <span class="fu">as.factor</span>(.cluster))) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Left-Right scale"</span>, <span class="at">y =</span> <span class="st">"Age"</span>, <span class="at">title =</span> <span class="st">"Hierarchical Model: K = 9"</span>) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unsupervised_ml_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="principal-component-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="principal-component-analysis">Principal Component Analysis</h2>
+<p>Looking at our data again we can see that we have some high-dimensional (age, left_right, district…) data, which it could be useful to reduce to its most basic dimensions. That, inherently, is what principal component analysis (PCA) does. It takes a multi-dimensional space and reduces it down to some smaller set of dimensions based on uncorrelated variables that we call the principle components.</p>
+<p>Consider a scenario where we have two variables that are perfectly correlated, meaning one is merely a linear transformation of the other, such as the relationship between date of birth and year. In this case, we can effortlessly create a new variable, let’s call it “y,” that encapsulates both of these. However, if we have two variables like age and distance from the closest tiger, which are entirely orthogonal and unrelated to each other, there is no single new variable, say “z,” to which they can be simplified or reduced. The goal then is to find these <em>z</em> variables.</p>
+<p>Each principal component is a linear combination of the original features or variables in the dataset. The first principal component captures the maximum amount of variability present in the data. It represents the direction in the feature space along which the data points spread out the most. In other words, it accounts for the largest source of variation<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> in the data.</p>
+<p>The subsequent principal components capture the remaining variability in decreasing order of importance. Each principal component is orthogonal (uncorrelated) to the previous ones, meaning they represent independent directions of variation. The second principal component captures the second highest amount of variability, orthogonal to the first principal component. The third principal component captures the third highest amount of variability, orthogonal to both the first and second components, and so on.</p>
+<p>The importance of principal components is typically determined by their associated eigenvalues. Higher eigenvalues<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> indicate more substantial variability explained by the corresponding principal component. Therefore, the eigenvalues serve as a measure of the relative importance of each component in the data representation.</p>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Ok, so that’s my first lie. We will do <em>some</em> work. Just not as much as the guys doing supervised learning.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If you don’t remember, variation here is just how spread out or amount of diversity we have in our data. <em>Variance</em> is a way of measuring this using the averages squared deviation of a data point from the mean. If it’s small, then nearly everything is close to the mean and the variation is low. If its large, everything is spread out in every direction and it’s just chaos all over.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The what you say? Here I’m going to let our favourite AI explain it. I could also recomend 3Blue1Browns video, chapter 14 in his series on linear algebra:<br>
+<br>
+“In linear algebra, an eigenvalue is a scalar value associated with a square matrix. It plays a crucial role in the analysis of linear transformations and systems of linear equations. Specifically, in the context of Principal Component Analysis (PCA), eigenvalues are used to determine the importance and amount of variability captured by each principal component.</p>
+<p>Let’s break down the concept of eigenvalues:</p>
+<ol type="1">
+<li><p>Matrix and Vector: A matrix is a rectangular array of numbers arranged in rows and columns. A vector, on the other hand, is a column or row matrix. Both matrices and vectors can be composed of real or complex numbers.</p></li>
+<li><p>Linear Transformation: A linear transformation is a function that maps vectors from one space to another while preserving vector addition and scalar multiplication properties. In the context of PCA, the linear transformation is typically associated with the covariance matrix of the dataset.</p></li>
+<li><p>Eigenvector: An eigenvector is a non-zero vector that, when subjected to a linear transformation, remains parallel to its original direction. In other words, the direction of the eigenvector is unchanged, but it may be scaled or reversed. Eigenvectors represent the directions of maximum variability or patterns within the data.</p></li>
+<li><p>Eigenvalue: An eigenvalue is a scalar value associated with an eigenvector. It represents the scaling factor by which the eigenvector is stretched or compressed under the linear transformation. Each eigenvector has a corresponding eigenvalue, and they form an eigenvalue-eigenvector pair.</p></li>
+</ol>
+<p>In the context of PCA, the eigenvalues of the covariance matrix represent the amount of variance or variability explained by each corresponding eigenvector (principal component). Larger eigenvalues indicate more significant contributions to the overall variability in the data. Hence, eigenvalues help in determining the relative importance of the principal components and guide the selection of the most informative components for dimensionality reduction and data analysis.”<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

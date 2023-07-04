@@ -3,7 +3,8 @@ title: "Tasks: Data wrangling and data handling"
 author: "Solveig Bjørkholt"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
+#| include: false
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
@@ -15,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 ```
 
-3. Download the dataset `global_food_prices.csv` from [here](https://drive.google.com/file/d/1pq5P_0yTApQB1OGiCHzvVlr0-3vxUtpK/view?usp=sharing). If you have a computer that does not have a lot of processing power and struggles with large files, try using the mini-version of the dataset instead, available [here](https://drive.google.com/file/d/1uvsrYZgpvOX-JVCa7vRZzX8Aq35pWTEG/view?usp=sharing). 
+3. Download the dataset `global_food_prices.csv` from Canvas. If you have a computer that does not have a lot of processing power and struggles with large files, try using the mini-version of the dataset instead (also available in Canvas, `global_food_prices_mini_version.csv`). 
 
 Place the file in a folder on your computer and find the path to the file. With this path, read the dataset into R using the function `read_csv`. Assign the dataset to an object called `foodprices`.
 

@@ -4,14 +4,10 @@ subtitle: "Food shortage?"
 author: "Solveig Bjørkholt"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
+#| include: false
 knitr::opts_chunk$set(echo = TRUE, tidy = TRUE)
 ```
-
-
-Find the script [here](https://drive.google.com/file/d/1oUsTpzvRak0SICwXloVfHiRHYN1TSX5C/view?usp=sharing).
-
----------------------
 
 1. Make a Quarto file. Title the document: "Food shortage?"
 
@@ -21,7 +17,7 @@ Find the script [here](https://drive.google.com/file/d/1oUsTpzvRak0SICwXloVfHiRH
 library(tidyverse)
 ```
 
-3. Download the dataset `global_food_prices.csv` from [here](https://drive.google.com/file/d/1pq5P_0yTApQB1OGiCHzvVlr0-3vxUtpK/view?usp=sharing). If you have a computer that does not have a lot of processing power and struggles with large files, try using the mini-version of the dataset instead, available [here](https://drive.google.com/file/d/1uvsrYZgpvOX-JVCa7vRZzX8Aq35pWTEG/view?usp=sharing). 
+3. Download the dataset `global_food_prices.csv` from Canvas. If you have a computer that does not have a lot of processing power and struggles with large files, try using the mini-version of the dataset instead (also available in Canvas, `global_food_prices_mini_version.csv`). 
 
 Place the file in a folder on your computer and find the path to the file. With this path, read the dataset into R using the function `read_csv`. Assign the dataset to an object called `foodprices`.
 

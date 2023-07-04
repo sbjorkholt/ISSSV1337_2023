@@ -25,6 +25,9 @@ Both R and RStudio needs to be installed on your computer. They are two separate
 
 If you open RStudio after installation, you will see the window we work in. In general, RStudio is divided into four panes, the Source pane (where we write scripts), the R Console pane (where the output of the code is displayed), the Environment pane (where all objects stored in the temporary memory are), and the pane with plots, files, packages and help (plus a few other things). If you do not have four panes when you first open RStudio, fret not, we will get to that in the next part.
 
-```{r, out.width="80%", fig.align="center", echo = FALSE}
+```{r}
+#| out-width: 80%
+#| fig-align: center
+#| echo: false
 knitr::include_graphics("../figures/RStudio_overview.png")
 ```

@@ -4,14 +4,10 @@ subtitle: "Lemo-nam"
 author: "Solveig Bjørkholt"
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
+#| include: false
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-Find the script [here](https://drive.google.com/file/d/1osEdJbG_qAPAeafGausCbMn0PbjBsJHe/view?usp=sharing).
-
----------------------
-
 
 ## Aurlandsdalen
 
@@ -39,7 +35,10 @@ sum(prices)
 names <- c("Fruity stuff", "Exotic mango", "Cheap crap", "Minty greens")
 ```
 
-```{r, warning=FALSE, error=FALSE, message=FALSE}
+```{r}
+#| warning: false
+#| error: false
+#| message: false
 library(tidyverse)
 ```
 
@@ -83,7 +82,9 @@ sum(lemonades$prices*lemonades$customers)
 *One more stand should do it.*
 
 
-```{r, out.width = "80%", fig.align = "center"}
+```{r}
+#| out-width: 80%
+#| fig.align: center
 knitr::include_graphics("./aurland.jpg")
 ```
 

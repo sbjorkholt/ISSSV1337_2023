@@ -2,8 +2,14 @@ project:
   type: book
 
 book:
-  title: "ISSSV1337 - Course Material"
-  author: "Solveig Bjørkholt"
+  title: "Political Data Science Hackathon (ISSSV1337)"
+  subtitle: "Course Material"
+  author: 
+    - "Solveig Bjørkholt"
+    - "Louisa Boulaziz"
+    - "Eric Gabo Ekeberg Nilsen"
+  contributor: 
+    - "Tia Tiller"
   chapters:
     - index.qmd
     - part: "Getting ready"
@@ -58,10 +64,15 @@ book:
         - 6_Text_as_data/26_text_tokenization.qmd
         - 6_Text_as_data/27_text_vectorization.qmd
         - 6_Text_as_data/28_topic_modelling.qmd
-    - part: "Statistics and machine learning"
+    - part: "Introduction to machine learning and statistics"
       chapters:
-        - 17_SL_regression/SL-regression.qmd
-        - 18_SL_classification/SL-classification.qmd
+        - 7_Modelling/29_introduction_to_ml.qmd
+        - 7_Modelling/30_inference.qmd
+    - part: "Machine learning methods"
+      chapters:
+        - 7_Modelling/SL_regression/31_regression.qmd
+        - 7_Modelling/SL_classification/32_classification.qmd
+        - 7_Modelling/33_unsupervised_ml.qmd
 
 bibliography: references.bib
 

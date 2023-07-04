@@ -55,7 +55,12 @@ How do we add, commit and push a change from our local computer to the Github re
 
 ## Github and RStudio
 
-Github can work with many platforms, including RStudio! To get there, however, the first thing we need to do is to install git, the system that allows us to work with Github from our computer. So Github is the version control **space**, and git is the version control **system**. Git can be downloaded from here: http://git-scm.com/downloads
+Github can work with many platforms, including RStudio! To get there, however, the first thing we need to do is to install git, the system that allows us to work with Github from our computer. So Github is the version control **space**, and git is the version control **system**. Git can be downloaded from here: http://git-scm.com/downloads 
+
+You might have git installed already. You can check by looking at one of these places in your computer (depending on your operating system):
+
+ - Windows: `C:/Program Files/Git/bin/git.exe`
+ - Mac/Linux: `usr/bin/git`
 
 Once you've installed git, you'll need to activate it in RStudio:
 
@@ -117,10 +122,48 @@ knitr::include_graphics("../figures/project6.png")
 To get the latest updates from your repository, click "Pull". Make it a habit to click "Pull" regularly. It will spare you the pain of so-called "merge conflicts". If you want to add your code to the common repository:
 
 1.  Click "Pull".
+
+```{r}
+#| echo: false
+
+knitr::include_graphics("../figures/git_push_6.png")
+```
+
+2. Add your file by clicking the box on its left hand side in the right-top panel.
+
+```{r}
+#| echo: false
+knitr::include_graphics("../figures/git_push_1.png")
+```
+```{r}
+#| echo: false
+
+knitr::include_graphics("../figures/git_push_2.png")
+```
+
 2.  Click "Commit".
-3.  Add a description of what you've done and why.
+
+```{r}
+#| echo: false
+
+knitr::include_graphics("../figures/git_push_3.png")
+```
+
+
+3.  Add a description of what you've done and why and click "Commit".
+
+```{r}
+#| echo: false
+
+knitr::include_graphics("../figures/git_push_4.png")
+```
+
+
 4.  Click "Push".
 
-See the video on this page for a demonstration.
+```{r}
+#| echo: false
 
-Some of you, if not all, will almost certainly get trouble with Github during this course. We will deal with them as they arise. Since this is a learning space which increases the risk of errors, we also recommend keeping a backup of your repository. This can seem cumbersome, but it's a part of the learning process. In the end, working with Github will prove vastly superiour to many alternatives, such as sending code over mail.
+knitr::include_graphics("../figures/git_push_5.png")
+```
+
