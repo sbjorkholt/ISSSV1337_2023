@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -61,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="cell" data-hash="inference_cache/html/unnamed-chunk-1_23f7444340454d330965fffa2c64e3c1">
+<div class="cell" data-hash="inference_cache/html/unnamed-chunk-1_170eaf196ce380e4251c14976cdca19c">
 
 </div>
 <p>Political Science, be it qualitative studies of the bureaucracy or playing numbers with Great Power conflicts, have on common goal: to observe, and from that understand, politics.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To do this then (in the way we learned when discussing descriptive statistics) it should be clear that we must first observe <em>all</em> of the political life. If you do not know the intention of every voter, how can you attempt at predicting an election? Unfortunately as scientists we rarely, if ever, have the option of observing all that which we would like to understand. At best we may hope to see a small slice of the world, a sample, and hope that it represents that which we are hoping to understand. This idea – of going from a small sample of the world – to a knowable yet uncertain description of the real world is what we call <em>statistical inference.</em> In this chapter we shall look firstly at what a sample is, how we can make it <em>representative,</em> and finally how that can be turned into (uncertain) <em>decisions.</em></p>
@@ -140,6 +203,1063 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>What is then the conclusion? Well, the Liberals seems to have 18.5% of the votes, +/- 1.23 percentage points.</p>
+</section>
+<section id="hypothesis-testing" class="level1">
+<h1>Hypothesis Testing</h1>
+<p>So, the end of what I promised in the beginning! Hypothesis testing, t-values, p-values, significance, and experiments. All these fancy words for really, a very simple question; <em>“Should I be surprised by my data?”</em> This is the part above where I said we can use statistics to make decisions. Now we are going to introduce a fifth rule in the same style as above. Importantly though, this one definitely doesn’t only apply here. Have you first decided to to (classical frequentist) hypothesis-testing this is <em>always</em> true.</p>
+<ul>
+<li>You are only allowed to answer <em>yes</em> or <em>no</em> when asked about your hypothesis.</li>
+</ul>
+<p>So, when would we force ourself to ask such a question? Well, lets look back at our Liberal friends. Preparing for the election and their campaign they may wonder which groups are more likely to vote for them than others. For example it may be that there are certain election districts where they are more popular than others. Logically, that is <em>not</em> where they should put their focus<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. So, first we need to find a question. Now, how may we do that? You tell me, you prob should have some theory or understanding of the world or something like that. That actually sounds like a you problem, not me. The important part is that you are only allowed to ask <em>yes or no</em> questions. If the answerer could be “maybe”, or “could be”, or “it goes in the square hole”, you’ve asked the wrong question.</p>
+<p>So, I guess I’ll have to make the question then. Lets first take a quick look at voters pr. district. What should we expect to see? Well, if there are absolutely no correlation between party and district we should expect there to be roughly the same number of voters for each party in each district. If there is perfect correlation between each party and a district, we expect that voters for a party x is only within district y. How can see that? Well a good start would be to make a table, find the nr. of voters of each party in each district.</p>
+<div class="cell" data-hash="inference_cache/html/unnamed-chunk-7_ebd9cd63ecca0c55792b24e1c898c095">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>tb <span class="ot">&lt;-</span> valgdata <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(district, vote) <span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(vote <span class="sc">==</span> <span class="st">"V"</span>) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>tb <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>vote) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="ucybjzcirq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ucybjzcirq table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ucybjzcirq thead, #ucybjzcirq tbody, #ucybjzcirq tfoot, #ucybjzcirq tr, #ucybjzcirq td, #ucybjzcirq th {
+  border-style: none;
+}
+
+#ucybjzcirq p {
+  margin: 0;
+  padding: 0;
+}
+
+#ucybjzcirq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ucybjzcirq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ucybjzcirq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ucybjzcirq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ucybjzcirq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ucybjzcirq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ucybjzcirq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ucybjzcirq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ucybjzcirq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ucybjzcirq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ucybjzcirq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ucybjzcirq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ucybjzcirq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ucybjzcirq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ucybjzcirq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ucybjzcirq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ucybjzcirq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ucybjzcirq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ucybjzcirq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ucybjzcirq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ucybjzcirq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ucybjzcirq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ucybjzcirq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ucybjzcirq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ucybjzcirq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ucybjzcirq .gt_left {
+  text-align: left;
+}
+
+#ucybjzcirq .gt_center {
+  text-align: center;
+}
+
+#ucybjzcirq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ucybjzcirq .gt_font_normal {
+  font-weight: normal;
+}
+
+#ucybjzcirq .gt_font_bold {
+  font-weight: bold;
+}
+
+#ucybjzcirq .gt_font_italic {
+  font-style: italic;
+}
+
+#ucybjzcirq .gt_super {
+  font-size: 65%;
+}
+
+#ucybjzcirq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ucybjzcirq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ucybjzcirq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ucybjzcirq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ucybjzcirq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ucybjzcirq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ucybjzcirq .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>N = 195</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>N = 195</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">district</td>
+<td headers="stat_0" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Akerhus</td>
+<td headers="stat_0" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Aust-Agder</td>
+<td headers="stat_0" class="gt_row gt_center">4 (2.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Buskerud</td>
+<td headers="stat_0" class="gt_row gt_center">8 (4.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Finnmark</td>
+<td headers="stat_0" class="gt_row gt_center">17 (8.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hedmark</td>
+<td headers="stat_0" class="gt_row gt_center">5 (2.6%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hordaland</td>
+<td headers="stat_0" class="gt_row gt_center">14 (7.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Møre og Romsdal</td>
+<td headers="stat_0" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Nord-Trøndelang</td>
+<td headers="stat_0" class="gt_row gt_center">10 (5.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Nordland</td>
+<td headers="stat_0" class="gt_row gt_center">14 (7.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Oppland</td>
+<td headers="stat_0" class="gt_row gt_center">8 (4.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Oslo</td>
+<td headers="stat_0" class="gt_row gt_center">9 (4.6%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rogaland</td>
+<td headers="stat_0" class="gt_row gt_center">6 (3.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sogn og Fjordande</td>
+<td headers="stat_0" class="gt_row gt_center">13 (6.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sør-Trøndelag</td>
+<td headers="stat_0" class="gt_row gt_center">15 (7.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Telemark</td>
+<td headers="stat_0" class="gt_row gt_center">18 (9.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Troms</td>
+<td headers="stat_0" class="gt_row gt_center">2 (1.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Vest-Agder</td>
+<td headers="stat_0" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Vestfold</td>
+<td headers="stat_0" class="gt_row gt_center">4 (2.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Østfold</td>
+<td headers="stat_0" class="gt_row gt_center">12 (6.2%)</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="2"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> n (%)</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+<p>So, does this look random to you? Well, the problem is that we don’t really know, do we? Yes, they have only 2.6 % in Hedmark and 9.8 % in Telemark, so that seems like they are more popular in the latter but…do you trust yourself to just say that? You do? Really? Would you mind sharing your confidence with me? I’m going to do the hypothesis test instead, and see if it fits with what I believe to be the answer.</p>
+<p>Ok, so what’s an hypothesis test? Well, as the name implies it something we use to test hypotheses. Specifically, two of them. The null hypothesis, and the alternative hypothesis. The latter just being the negation of the former. So, we can start by the null hypothesis, what does that mean? We first need to define our variables, here, district and voters for the liberal party. The null hypothesis simply states that there is no relation between these two variables; so to understand this, we just need to imagine how the world would look like if there where no relationship at all. For example, if Telemark had a hundred percent liberal voters, and no other district had any at all, we might assume that it would be weird for there not be a relation. However, if there is exactly 5.3 % (1/19th) in each district, then it seems like the relation might not be there. If there is 9 % in Telemark and 4.7 in everyone else, Telemark might just be a fluke of our sample. So many questions, so few answers. So, what’s the alternative hypothesis then? Well that one’s easy. It’s just that the null hypothesis is wrong. You will notice that they cannot both be true at the same time! If the null hypothesis, <em>then by definition</em>, the alternative is false. If the…no wait! Ok, I mentioned how we are working with probabilities and uncertanty right? In a perfect universe we would have this<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>:</p>
+<p><span class="math display">\[
+\begin{equation}
+H_1 \rightarrow \neg H_0
+\end{equation}
+\]</span></p>
+<p><span class="math display">\[
+\begin{equation}
+\neg H_1 \rightarrow  H_0
+\end{equation}
+\]</span></p>
+<p>The first one is easy, if <span class="math inline">\(H_1\)</span> is true then <span class="math inline">\(H_0\)</span> is not true. However, the next step, if the alternative hypothesis is not true then the null hypothesis is, does not work with our tests. Why? The hypothesis test (of which there are several, but here we will use the chi-squared test) begins by <em>assuming that the null is true.</em> That is, when we begin the test we have already decided that there is no correlation. If we then do the test and it shows there to not be a connection, what have we done? Certainly not proven anything! We decided the answer! Ok, so we have assumed there not to be a connection, how would the world look like then? Well, that’s quite difficult to answer isn’t it. As I said we will use the chi-square test to figure this out. It gets its name from the <em>chi-square distribution</em> which shows how the distribution of counts in a table would look like if said counts where randomly places around the table. The result it gives is then the <em>p-value.</em> Let’s quickly make a table that shows it, and then we’ll try to understand what it means.</p>
+<div class="cell" data-hash="inference_cache/html/unnamed-chunk-8_686169a3bfd096904da22d33b5516632">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tb <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vote =</span> <span class="fu">droplevels</span>(vote)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(district, vote) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_count</span>(vote, district) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">round</span>(<span class="fu">chisq.test</span>(.<span class="sc">$</span>n)<span class="sc">$</span>p.value, <span class="at">digits =</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> vote, <span class="at">statistic =</span> <span class="fu">list</span>(p <span class="sc">~</span> <span class="st">""</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="ccibdarkjk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ccibdarkjk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ccibdarkjk thead, #ccibdarkjk tbody, #ccibdarkjk tfoot, #ccibdarkjk tr, #ccibdarkjk td, #ccibdarkjk th {
+  border-style: none;
+}
+
+#ccibdarkjk p {
+  margin: 0;
+  padding: 0;
+}
+
+#ccibdarkjk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ccibdarkjk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ccibdarkjk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ccibdarkjk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ccibdarkjk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ccibdarkjk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ccibdarkjk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ccibdarkjk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ccibdarkjk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ccibdarkjk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ccibdarkjk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ccibdarkjk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ccibdarkjk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ccibdarkjk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ccibdarkjk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ccibdarkjk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ccibdarkjk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ccibdarkjk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ccibdarkjk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ccibdarkjk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ccibdarkjk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ccibdarkjk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ccibdarkjk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ccibdarkjk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ccibdarkjk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ccibdarkjk .gt_left {
+  text-align: left;
+}
+
+#ccibdarkjk .gt_center {
+  text-align: center;
+}
+
+#ccibdarkjk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ccibdarkjk .gt_font_normal {
+  font-weight: normal;
+}
+
+#ccibdarkjk .gt_font_bold {
+  font-weight: bold;
+}
+
+#ccibdarkjk .gt_font_italic {
+  font-style: italic;
+}
+
+#ccibdarkjk .gt_super {
+  font-size: 65%;
+}
+
+#ccibdarkjk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ccibdarkjk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ccibdarkjk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ccibdarkjk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ccibdarkjk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ccibdarkjk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ccibdarkjk .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>V</strong>, N = 195<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>V</strong>, N = 195<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">district</td>
+<td headers="stat_1" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Akerhus</td>
+<td headers="stat_1" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Aust-Agder</td>
+<td headers="stat_1" class="gt_row gt_center">4 (2.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Buskerud</td>
+<td headers="stat_1" class="gt_row gt_center">8 (4.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Finnmark</td>
+<td headers="stat_1" class="gt_row gt_center">17 (8.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hedmark</td>
+<td headers="stat_1" class="gt_row gt_center">5 (2.6%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Hordaland</td>
+<td headers="stat_1" class="gt_row gt_center">14 (7.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Møre og Romsdal</td>
+<td headers="stat_1" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Nord-Trøndelang</td>
+<td headers="stat_1" class="gt_row gt_center">10 (5.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Nordland</td>
+<td headers="stat_1" class="gt_row gt_center">14 (7.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Oppland</td>
+<td headers="stat_1" class="gt_row gt_center">8 (4.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Oslo</td>
+<td headers="stat_1" class="gt_row gt_center">9 (4.6%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Rogaland</td>
+<td headers="stat_1" class="gt_row gt_center">6 (3.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sogn og Fjordande</td>
+<td headers="stat_1" class="gt_row gt_center">13 (6.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Sør-Trøndelag</td>
+<td headers="stat_1" class="gt_row gt_center">15 (7.7%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Telemark</td>
+<td headers="stat_1" class="gt_row gt_center">18 (9.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Troms</td>
+<td headers="stat_1" class="gt_row gt_center">2 (1.0%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Vest-Agder</td>
+<td headers="stat_1" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Vestfold</td>
+<td headers="stat_1" class="gt_row gt_center">4 (2.1%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Østfold</td>
+<td headers="stat_1" class="gt_row gt_center">12 (6.2%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">p</td>
+<td headers="stat_1" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;0.02264</td>
+<td headers="stat_1" class="gt_row gt_center"></td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="2"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> n (%);</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+</div>
+<p>Here we can again see our table with the same numbers, i.e.&nbsp;the nr. of liberal voters in each district. The question in our test is quite straightforward:</p>
+<blockquote class="blockquote">
+<p><br>
+“What is the probability that a table <em>with at least a extreme values as this</em> is what we would see in our sample <em>given that the null-hypothesis is true.”</em></p>
+</blockquote>
+<p>Let us try to reformulate the question to be a bit more fitting with our specific example:</p>
+<p>“What is the probability that we have gotten this table, <em>given that the true percentage in each district is 5.3 %“</em><br>
+</p>
+<p>This is then what the p-value, that you can see in the bottom of the table, gives us. Assuming the null hypothesis to be true, the probability that we will observe this table is .002. Another way of stating it is that if we draw an infinite amount of samples from the population and make this table, we should expect to see this one 2.2 % of the time.</p>
+<p>To be able to make some decision based on this probability we must first decide some level at which we are willing to say that there is a correlation and not just a fluke. One way of thinking of this is how often you are willing to make a mistake. Say that you are willing to say that the results are significant, i.e.&nbsp;you believe there to be a true correlation in the population, as long as the p-value is below 1. Now you will always have significant results, no matter your data.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> Of course, nearly all of them will be wrong. Let’s instead say that we only decide to believe them if the p-value is below 0.0000000001. The probability that you will believe a false alternative hypothesis is now of course ridiculously low, but you will probably loose all of the true ones as well, throwing the baby out with the bathwater as to say. A common rule of thumb is that we reject the null if the p-values is less than 0.05.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> So what can we reas in our table? Since the p value at 0.02 is less than our target of 0.05, we can assume that there is a true correlation between which district someone is from and whether they vote for the Liberals or not. So in which districts should the Liberals put their efforts? I’ll let that be your last riddle dear reader, the number only tells you that you should differ in where not where you should go.</p>
 <blockquote class="blockquote">
 <p>And thus, we reach the underwhelming conclusion of our statistical escapade. With t-values, standard errors, and sampling errors in our cosmic toolkit, we venture forth armed with a sense of mild statistical satisfaction. While statistics may not provide the grand cosmic revelations we yearn for, it offers a humble glimpse into the patterns and uncertainties of our data-driven universe. So, dear hitchhiker, go forth with a gentle shrug of statistical acceptance, for even in the face of underwhelming conclusions, statistics continues to shed a flickering light on the mysteries that surround us.<br>
 <br>
@@ -159,6 +1279,15 @@ So long, and thanks for all the fish!</p>
 <li id="fn5"><p>You may ask yourself; “But if we want to prove that we will reach the actual mean, why stop at 5K draws and not finish the 100k?” Cause my computer is slow, and it’s correct enough. Now stop asking annoying questions.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Note that there exists loads of different standard errors. Here we use the one for proportions because, well you know, we’re working with proportions.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>So where did I get 1.96 from? The t-value as it is called shows how many standard-deviances a number is from the mean. If a number is 1.96 away from the mean of t-distributed distribution, 95 % of the values will be within them. Confusing? Absolutely.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>If you wonder about the logic, the point is that there is no reason to fight for seats they already have. You want to put resources on those places where you <em>may but are not guaranteed</em> to win.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>We often denote the null hypothesis (that there is no connection between our variables) as <span class="math inline">\(H_0\)</span> and the alternative (that there <em>is</em> some connection) as <span class="math inline">\(H_1\)</span><a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Usually we seperate these as Type I and Type II errors, the first being falsely rejecting a true null-hypothesis, the latter not being rejecting a false one. Often we assume the former to be worse than the latter, though that may depend on the goal of your analysis.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>You may ask, why 0.05? The simple answer is that when R. Fisher wrote one of the first and defining books on frequentist statistics, Design of Experiments, he wrote:</p>
+<blockquote class="blockquote">
+<p><br>
+<em>“The value for which P=0.05, or 1 in 20, is 1.96 or nearly 2; it is convenient to take this point as a limit in judging whether a deviation ought to be considered significant or not. Deviations exceeding twice the standard deviation are thus formally regarded as significant. Using this criterion we should be led to follow up a false indication only once in 22 trials, even if the statistics were the only guide available. Small effects will still escape notice if the data are insufficiently numerous to bring them out, but no lowering of the standard of significance would meet this difficulty.”</em></p>
+</blockquote>
+<p>There is not really any other reason than this, and plenty of reasons to choose something else.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->
