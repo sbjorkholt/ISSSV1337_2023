@@ -1,0 +1,202 @@
+---
+title: "Model Selection"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## 
+
+```{r preamble}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+
+pacman::p_load(tidyverse, gt, broom, tidymodels, tidyclust, kknn)
+theme_set(ggthemes::theme_excel_new())
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| error: false
+#| cache: true
+
+set.seed(4269420)
+
+
+rtnorm <- function(n, mean, sd, a = -Inf, b = Inf){
+    qnorm(runif(n, pnorm(a, mean, sd), pnorm(b, mean, sd)), mean, sd)
+}
+parti <- c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP")
+fylket <- c("Finnmark", "Troms", "Nordland", "Nord-Trøndelang",
+            "Sør-Trøndelag", "Møre og Romsdal", "Sogn og Fjordande",
+            "Hordaland", "Rogaland", "Vest-Agder", "Aust-Agder",
+            "Telemark", "Vestfold", "Buskerud", "Oppland", "Hedmark",
+            "Oslo", "Akerhus", "Østfold")
+
+cor_sample <- function(data, pred, groups){
+  pred = enquo(pred)
+  data <- data %>%   
+  mutate(x = case_when(!!pred < quantile(!!pred, 0.25) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.5) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             !!pred < quantile(!!pred,0.75) ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups))),
+             TRUE ~ sample(groups,n(), replace = TRUE, p = runif(n = length(groups)))))
+
+    return(data$x)
+}
+
+orig_valgdata <- tibble(
+  id = 1:100000,
+  age = round(rtnorm(100000, 45, 10, a = 18, b = 70)),
+  gender = sample(c("male", "female"), 100000, replace = TRUE),
+  gnd_age = (ifelse(gender == "male", 2, 1)*age)
+  
+  ) %>% 
+  mutate(vote = cor_sample(., gnd_age, parti)) %>% 
+  mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP"))) %>% 
+  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket)) %>% 
+  mutate(l_r = as.numeric(vote)) %>% 
+  mutate(libVote = ifelse(vote == "V", "Liberal", "Not Liberal"),
+         libVote = as.factor(libVote))
+
+valgdata <- orig_valgdata %>% 
+  slice_sample(n = 10000)
+
+
+colours <- c("R" = "#e90302", "SV" = "#EB4040",  "AP" = "#EF3340", "SP" = "#00843d", "MDG" = "#5c941d",
+             "KrF" = "#ffd773", "V" = "#006666", "H" = "#0065f1", "FrP" = "#004F80")
+
+
+election_plot <- function(.data, x){
+  x = enquo(x)
+  ggplot(.data, aes(!!x, fill = !!x)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_fill_manual("legend", values = colours) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  ggthemes::theme_excel_new()
+}
+
+
+
+```
+
+When discussing machine-learning so far we have for the most part evaluated models based on an intuitive idea of whether we like them or not. Unsurprisingly, this isn't actually a very good way for choosing the best model. Often we want to attempt several different models, based on different assumptions regarding our data, and then choose which we will use based on some "objective" measure that shows us which model is best to achieve our goal. This form of model selection is what this chapter will go through. We will focus on the supervised ML-models and prediction errors, and different ways to test this. As usual we will use the election data, and the different dimensions within said dataset.
+
+When attempting to do model selection, we must of course first have some goal we want the model to achieve. In this example we will attempt to predict an individuals party based on everything else we have in the dataset. A good model, therefore, is one which usually manages to predict the party correctly. The number we need to beat to say that the models is any good at all is that it is correct 1/9 times, or 11 % of the time. If it's worse than that it is actually *worse* than random chance. This type of machine learning is what is usually called a *classification problem.*
+
+Lets start by setting up the different models. The first important part of making the new models is to separate them into a *training set,* a *testing set* **and a *validation set****.* The latter is an amount of data that we do not use to create the model. The reason for this is that the model will often be almost perfect at predicting the data it was trained on, as it will contain exactly those patterns which it is meant to find. Testing the model on these data is therefore usually useless, as it tells you nothing about whether the model is able to predict new data. The most usual way of doing this is to take a random sample with around 25 % of the data. Luckily, the tidymodel package already contains a function to do this for us.
+
+```{r}
+#| cache: true
+
+
+valgdata_split <- initial_split(valgdata, prop = 3/4, strata = libVote)
+# By using the training or testing functions we can see the new dataset
+
+
+
+
+```
+
+To have something to work with we will go back to two of the models from the chapter on supervised learning and one from the unsupervised; K-nearest neighbours, logistical regressions, and k-means. This gives us the ability to test out two different questions. With KNN we will attempt at finding which party an individual is voting for among all the different parties in our data. With the logistical regression we will instead simply try to predict whether someone is a liberal voter or not. How to do this is already explained in said chapter, so here I will quickly set up our models.
+
+```{r}
+
+#KNN
+
+knn_spec <- nearest_neighbor(
+  mode = "classification",
+  engine = "kknn"
+)
+
+knn_fit <- knn_spec %>% 
+  fit(
+    vote ~ age + gender + district,
+    data = training(valgdata_split)
+  )
+
+#K Means
+kmeans_spec <- k_means(
+  num_clusters = 9
+  )
+
+kmeans_fit <- kmeans_spec %>% 
+  fit(~age + l_r, 
+      data = training(valgdata_split)) 
+
+#Logistic
+logistic_spec <- logistic_reg(
+  mode = "classification",
+  engine = "glm"
+)
+
+ logistic_fit <- logistic_spec %>% 
+  fit(
+    libVote ~ age + gender + district,
+    data = training(valgdata_split)
+    )
+ 
+
+
+```
+
+## Prediction Errors
+
+The first type of error we will look at is really quite simple. How correct are the models when attempting to predict which party the individuals belong to? The first way we can test this is with a confusion matrix. For the KNN model this will be a table of predicted vs. correct classes. Importantly, we want to do this on the *testing* set? Why? Well, if we do it on the training set we are quite certain that we will get good results, those labels are already present in the model. By testing it on new data we can see how it does out of sample. The easiest way to do this is just to take the testing data and add the predictions as a new column.
+
+```{r}
+testing(valgdata_split) %>% 
+  bind_cols(predict(knn_fit, .)) %>% 
+  select(true_vote = vote, predicted_vote = .pred_class) %>% 
+  conf_mat(truth = true_vote, estimate = predicted_vote) %>% 
+  summary()
+
+testing(valgdata_split) %>% 
+  bind_cols(predict(knn_fit, .)) %>% 
+  select(true_vote = vote, predicted_vote = .pred_class) %>% 
+  conf_mat(truth = true_vote, estimate = predicted_vote) %>% 
+  autoplot(type = "heatmap")
+
+```
+
+So, what can we learn from this? Well, the most obvious thing should be that our models isn't exactly great. The heatmap shows that 32 voting for the progress party/FrP was predicted to be voting for the socialists (SV). It was especially bad for the centre party (SP) with only 9 true positives, and 30 predicted to be voting for the liberals! The same can be seen in the table above where we will focus on three numbers, accuracy, sensitivity, and specificity. Accuracy shows the percentage of *true* results, regardless of whether they are true *positives* or true *negatives.* In the table we can see that it is at 11.7 %, and as we mentioned in the beginning we needed to beat 11 % to be better than random chance. This may imply that our model isn't exactly great.
+
+Sensitivity and specificity measures respectively the true positive and true negative rate. In many scenarios we care more about one of these, and making a model that is better at one will be worse on the other. When may this be? One example could be a model looking for nuclear explosions used to decide on retaliation. It is very important that it does not have a high degree of false positives (as we would prefer to avoid unnecessary nuclear attacks), but loosing the first few explosions in an attack probably would not be to much of an issue (as there will always be more than one to find anyway). We can see in our model that the sensitivity is slightly higher than the specificity at 11.6 and 8.9 %. Obviously, this model is just bad either way. \
+\
+Lets try again with the somewhat easier problem of simply classifying whether someone is a liberal voter or not with the logistic model.
+
+```{r}
+testing(valgdata_split) %>% 
+  bind_cols(predict(logistic_fit, .)) %>% 
+  select(true_vote = libVote, predicted_vote = .pred_class) %>% 
+  conf_mat(truth = true_vote, estimate = predicted_vote) %>% 
+  summary()
+
+testing(valgdata_split) %>% 
+  bind_cols(predict(logistic_fit, .)) %>% 
+  select(true_vote = libVote, predicted_vote = .pred_class) %>% 
+  conf_mat(truth = true_vote, estimate = predicted_vote) %>% 
+  autoplot(type = "heatmap")
+```
+
+So, what happened here? The accuracy is suddenly really high at 80 %, and the same for the specificity at 1. The sensitivity, however, has absolutely tanked at 0. What could explain these weird results? Looking at the plot makes it slightly easier to see what is going on. The model just *never predict liberal voters.* Since they only add up to 458 of 2500 in the testing, and 558/7500 in the training data, just saying that they do not exist gives a really good model. Most people most of the time do not vote for the liberals.
+
+A different way we can plot the results is by drawing the receiver operating characteristic curve, or ROC. If you want to read more about this it is explained in the chapter on supervised learning, but the tl;dr is that it plots the true positive rate vs the false positive rates depending on the threshold at which you choose to call something a positive.[^1] A perfect 45 degree line would then represent a random classifier, while a simple point in the upper left corner shows a perfect classifier.
+
+[^1]: Strictly speaking, a logistical regression doesn't give you an answer to whether an individual belongs to a certain group or not. Rather it, based on the data, gives the *probability* that the individual belongs to a group. To go from this probability to a classifier we need to set a value at which we believe that the probability is so high as to define it as a positive.
+
+```{r}
+testing(valgdata_split) %>% 
+  bind_cols(predict(logistic_fit, ., type = "prob" )) %>% 
+  roc_curve(truth = libVote, .pred_Liberal) %>% 
+  autoplot()
+
+```
+
+## 
+Cross Validation
