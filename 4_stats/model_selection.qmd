@@ -89,7 +89,7 @@ When discussing machine-learning so far we have for the most part evaluated mode
 
 When attempting to do model selection, we must of course first have some goal we want the model to achieve. In this example we will attempt to predict an individuals party based on everything else we have in the dataset. A good model, therefore, is one which usually manages to predict the party correctly. The number we need to beat to say that the models is any good at all is that it is correct 1/9 times, or 11 % of the time. If it's worse than that it is actually *worse* than random chance. This type of machine learning is what is usually called a *classification problem.*
 
-Lets start by setting up the different models. The first important part of making the new models is to separate them into a *training set,* a *testing set* **and a *validation set****.* The latter is an amount of data that we do not use to create the model. The reason for this is that the model will often be almost perfect at predicting the data it was trained on, as it will contain exactly those patterns which it is meant to find. Testing the model on these data is therefore usually useless, as it tells you nothing about whether the model is able to predict new data. The most usual way of doing this is to take a random sample with around 25 % of the data. Luckily, the tidymodel package already contains a function to do this for us.
+Lets start by setting up the different models. The first important part of making the new models is to separate them into a *training set* and a *testing set.* The latter is an amount of data that we do not use to create the model. The reason for this is that the model will often be almost perfect at predicting the data it was trained on, as it will contain exactly those patterns which it is meant to find. Testing the model on these data is therefore usually useless, as it tells you nothing about whether the model is able to predict new data. The most usual way of doing this is to take a random sample with around 25 % of the data. Luckily, the tidymodel package already contains a function to do this for us.
 
 ```{r}
 #| cache: true
@@ -97,13 +97,15 @@ Lets start by setting up the different models. The first important part of makin
 
 valgdata_split <- initial_split(valgdata, prop = 3/4, strata = libVote)
 # By using the training or testing functions we can see the new dataset
-
+# The amount of people voting for the liberals are so few that a pure random sample
+# could end up without any observations. To avoid that we use it as a sampling strate, making sure
+# they are present in both sets.
 
 
 
 ```
 
-To have something to work with we will go back to two of the models from the chapter on supervised learning and one from the unsupervised; K-nearest neighbours, logistical regressions, and k-means. This gives us the ability to test out two different questions. With KNN we will attempt at finding which party an individual is voting for among all the different parties in our data. With the logistical regression we will instead simply try to predict whether someone is a liberal voter or not. How to do this is already explained in said chapter, so here I will quickly set up our models.
+To have something to work with we will go back to two of the models from the chapter on supervised learning and one from the unsupervised; K-nearest neighbours, and logistical regressions. This gives us the ability to test out two different questions. With KNN we will attempt at finding which party an individual is voting for among all the different parties in our data. With the logistical regression we will instead simply try to predict whether someone is a liberal voter or not. How to do this is already explained in said chapter, so here I will quickly set up our models.
 
 ```{r}
 
@@ -120,14 +122,7 @@ knn_fit <- knn_spec %>%
     data = training(valgdata_split)
   )
 
-#K Means
-kmeans_spec <- k_means(
-  num_clusters = 9
-  )
 
-kmeans_fit <- kmeans_spec %>% 
-  fit(~age + l_r, 
-      data = training(valgdata_split)) 
 
 #Logistic
 logistic_spec <- logistic_reg(
@@ -186,7 +181,7 @@ testing(valgdata_split) %>%
 
 So, what happened here? The accuracy is suddenly really high at 80 %, and the same for the specificity at 1. The sensitivity, however, has absolutely tanked at 0. What could explain these weird results? Looking at the plot makes it slightly easier to see what is going on. The model just *never predict liberal voters.* Since they only add up to 458 of 2500 in the testing, and 558/7500 in the training data, just saying that they do not exist gives a really good model. Most people most of the time do not vote for the liberals.
 
-A different way we can plot the results is by drawing the receiver operating characteristic curve, or ROC. If you want to read more about this it is explained in the chapter on supervised learning, but the tl;dr is that it plots the true positive rate vs the false positive rates depending on the threshold at which you choose to call something a positive.[^1] A perfect 45 degree line would then represent a random classifier, while a simple point in the upper left corner shows a perfect classifier.
+A different way we can plot the results is by drawing the receiver operating characteristic curve, or ROC. If you want to read more about this it is explained in the chapter on supervised learning, but the tl;dr is that it plots the true positive rate vs the false positive rates depending on the threshold at which you choose to call something a positive.[^1] A perfect 45 degree line would then represent a random classifier, while a simple point in the upper left corner shows a perfect classifier. As we immediately notice, it gives the same picture. The model is just slightly better than random, and at some cut-offs actually worse!
 
 [^1]: Strictly speaking, a logistical regression doesn't give you an answer to whether an individual belongs to a certain group or not. Rather it, based on the data, gives the *probability* that the individual belongs to a group. To go from this probability to a classifier we need to set a value at which we believe that the probability is so high as to define it as a positive.
 
@@ -200,3 +195,64 @@ testing(valgdata_split) %>%
 
 ## 
 Cross Validation
+
+Looking at our results, and especially for the logistic model, you might argue that the bad results actually are just a fluke of the training set. If we by pure bad luck ended up with training data especially hard to predict, this may create an unwarranted negative impressions. What we need is some systematic way of measuring the model at several testing-sets, attempting to see how good it is *regardless of what data it receives.* This is what cross-validation achieves. Rather than splitting the data once, we split the training data (still keeping the testing data out of course) into several smaller groups. We then use most of these to train the model, and then test it on the remaining. Do that again and again and you will end up with a set of performance statistics equal to the number of groups you have. When finished you can simply take the average (or some other mean or measure should you prefer) to get the final results.
+
+```{r}
+
+# The first thing we need to do is to create the new splits.
+# The amount will depend on how much data you have, but here we'll use 10
+
+folds <- vfold_cv(training(valgdata_split), v = 10, strata = "libVote")
+
+#To fit the model with these data we do the same as usual, just with fit_resamples instead of fit
+
+logistic_cv_fit <- logistic_spec %>% 
+  fit_resamples(
+    libVote ~ age + gender + district,
+    resamples =  folds)
+    
+
+
+collect_metrics(logistic_cv_fit, summarize = FALSE) %>% 
+  filter(.metric == "roc_auc") %>% 
+  arrange(desc(.estimate)) %>% 
+  gt()
+
+collect_metrics(logistic_cv_fit, summarize = FALSE) %>% 
+  filter(.metric == "accuracy") %>% 
+  arrange(desc(.estimate)) %>% 
+  gt()
+```
+
+What the table now shows us the accuracy of the model for each of the 10 folds. As we can see it varies a decent amount between the different folds. The area under the roc curve varies from a high of 6.3 to as low of 5.5. So how can we get a final result for this? Nicely, the `collect_metrics()` functions gives us the mean for both of these measures.
+
+```{r}
+collect_metrics(logistic_cv_fit)
+```
+
+Now that we have the metrics for one of these we can of course use this to compare between the different models. Lets try to compare the KNN model with the logistic regression. Since we already have the numbers for the logistic we just need to run the same code on the knnn.
+
+```{r}
+folds <- vfold_cv(training(valgdata_split), v = 10, strata = "libVote")
+
+#To fit the model with these data we do the same as usual, just with fit_resamples instead of fit
+
+knn_cv <- knn_spec %>% 
+  fit_resamples(
+    vote ~ age + gender + district,
+    resamples =  folds)
+
+collect_metrics(knn_cv) %>% 
+  bind_rows(collect_metrics(logistic_cv_fit)) %>% 
+  gt()
+
+
+```
+
+As we can see the logistical regression only predicting whether people are voting for the liberals or not are clearly better than the knn which attempts at predicting all the different parties!
+
+## A Note on unsupervised learning
+
+\
+You may have noticed that so far we haven't talked about the k-means model at all. The reason is simple, the different ways we just used to test the models are based on us knowing the *truth.* That way we can compare our results with the actuall world, and see whether it is good at predicting this or not. The problem with unsupervised models, of course, is that we have no such truth to compare it with. How can we then say anything about whether it's a good model or not? Maybe the most important way is through substantial knowledge. When choosing the number of clusters I used 9 because I happen to know that there are 9 parties. When then again looking at the model I can try to see whether it fits with my expectations. If we are looking for patterns where we have no such prior idea, we may just attempt to figure out ourself what the patterns are. A common example is in topic modelling where one topic may just be the words "EU, GDPR, Meta", and you could reasonably assume it has to do with something regarding Facebook and privacy policy.
