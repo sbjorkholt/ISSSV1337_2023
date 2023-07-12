@@ -30,3 +30,5 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 ISSSV1337_2023.Rproj
+Pres
+.RDataTmp
