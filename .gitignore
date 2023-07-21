@@ -4,6 +4,7 @@ _book/
 # History files
 .Rhistory
 .Rapp.history
+.RDataTmp
 
 # Session Data files
 .RData

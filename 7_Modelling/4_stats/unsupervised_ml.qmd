@@ -59,8 +59,7 @@ valgdata <- tibble(
   ) %>% 
   mutate(vote = cor_sample(., gnd_age, parti)) %>% 
   mutate(vote = fct_relevel(vote, c("R", "SV", "AP", "SP", "MDG", "KrF", "V", "H", "FrP"))) %>% 
-  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket)) %>% 
-  mut
+  mutate(district = cor_sample(., gnd_age*as.numeric(vote), fylket)) 
 
 
 

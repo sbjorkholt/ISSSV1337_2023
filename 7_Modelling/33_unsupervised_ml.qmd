@@ -63,6 +63,8 @@ valgdata <- tibble(
 
 
 
+
+
 colours <- c("R" = "#e90302", "SV" = "#EB4040",  "AP" = "#EF3340", "SP" = "#00843d", "MDG" = "#5c941d",
              "KrF" = "#ffd773", "V" = "#006666", "H" = "#0065f1", "FrP" = "#004F80")
 
@@ -90,9 +92,9 @@ for (i in 1:5000) {
 
 ```
 
-Labels? We don't speak of them here! As the machines have become sentient, and gtp soon will create a new world government, supervision is no longer needed nor appropriate. This is the part of the course where we will lean our chairs back and let the machines take control without us doing any work[^33_unsupervised_ml-1]. There are of course loads of reasons to do unsupervised learning. Firstly, you don't have to manually create a lot of labels. Coding training data, selecting models, readjust, again, again, and again quickly becomes tiresome. Secondly, quite often we may now know what we are looking for! We might believe that there is some traits that make people more prone to vote for the Mensheviks, but which? One way of finding this may be to give the black box all data we have on the potential reactionaries, and from there find the important patterns.
+Labels? We don't speak of them here! As the machines have become sentient, and gtp soon will create a new world government, supervision is no longer needed nor appropriate. This is the part of the course where we will lean our chairs back and let the machines take control without us doing any work[^1]. There are of course loads of reasons to do unsupervised learning. Firstly, you don't have to manually create a lot of labels. Coding training data, selecting models, readjust, again, again, and again quickly becomes tiresome. Secondly, quite often we may now know what we are looking for! We might believe that there is some traits that make people more prone to vote for the Mensheviks, but which? One way of finding this may be to give the black box all data we have on the potential reactionaries, and from there find the important patterns.
 
-[^33_unsupervised_ml-1]: Ok, so that's my first lie. We will do *some* work. Just not as much as the guys doing supervised learning.
+[^1]: Ok, so that's my first lie. We will do *some* work. Just not as much as the guys doing supervised learning.
 
 In the next few pages we shall look at k-means, principal component analysis, hierarchical clustering, and how we interpret all of these. We shall use the same data in this analysis as we did when discussing statistical inference.
 
@@ -290,15 +292,15 @@ Looking at our data again we can see that we have some high-dimensional (age, le
 
 Consider a scenario where we have two variables that are perfectly correlated, meaning one is merely a linear transformation of the other, such as the relationship between date of birth and year. In this case, we can effortlessly create a new variable, let's call it "y," that encapsulates both of these. However, if we have two variables like age and distance from the closest tiger, which are entirely orthogonal and unrelated to each other, there is no single new variable, say "z," to which they can be simplified or reduced. The goal then is to find these *z* variables.
 
-Each principal component is a linear combination of the original features or variables in the dataset. The first principal component captures the maximum amount of variability present in the data. It represents the direction in the feature space along which the data points spread out the most. In other words, it accounts for the largest source of variation[^33_unsupervised_ml-2] in the data.
+Each principal component is a linear combination of the original features or variables in the dataset. The first principal component captures the maximum amount of variability present in the data. It represents the direction in the feature space along which the data points spread out the most. In other words, it accounts for the largest source of variation[^2] in the data.
 
-[^33_unsupervised_ml-2]: If you don't remember, variation here is just how spread out or amount of diversity we have in our data. *Variance* is a way of measuring this using the averages squared deviation of a data point from the mean. If it's small, then nearly everything is close to the mean and the variation is low. If its large, everything is spread out in every direction and it's just chaos all over.
+[^2]: If you don't remember, variation here is just how spread out or amount of diversity we have in our data. *Variance* is a way of measuring this using the averages squared deviation of a data point from the mean. If it's small, then nearly everything is close to the mean and the variation is low. If its large, everything is spread out in every direction and it's just chaos all over.
 
 The subsequent principal components capture the remaining variability in decreasing order of importance. Each principal component is orthogonal (uncorrelated) to the previous ones, meaning they represent independent directions of variation. The second principal component captures the second highest amount of variability, orthogonal to the first principal component. The third principal component captures the third highest amount of variability, orthogonal to both the first and second components, and so on.
 
-The importance of principal components is typically determined by their associated eigenvalues. Higher eigenvalues[^33_unsupervised_ml-3] indicate more substantial variability explained by the corresponding principal component. Therefore, the eigenvalues serve as a measure of the relative importance of each component in the data representation. So then, how can we do this?
+The importance of principal components is typically determined by their associated eigenvalues. Higher eigenvalues[^3] indicate more substantial variability explained by the corresponding principal component. Therefore, the eigenvalues serve as a measure of the relative importance of each component in the data representation. So then, how can we do this?
 
-[^33_unsupervised_ml-3]: The what you say? Here I'm going to let our favourite AI explain it. I could also recomend 3Blue1Browns video, chapter 14 in his series on linear algebra:\
+[^3]: The what you say? Here I'm going to let our favourite AI explain it. I could also recomend 3Blue1Browns video, chapter 14 in his series on linear algebra:\
     \
     "In linear algebra, an eigenvalue is a scalar value associated with a square matrix. It plays a crucial role in the analysis of linear transformations and systems of linear equations. Specifically, in the context of Principal Component Analysis (PCA), eigenvalues are used to determine the importance and amount of variability captured by each principal component.
 
