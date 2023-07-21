@@ -1,5 +1,6 @@
 ---
 title: "Writing and running code"
+author: "Solveig Bjørkholt"
 ---
 
 When you have R and RStudio installed, open RStudio. Remember that we code in R, but work in RStudio, so this is the program you typically open. Your screen should look something like this:

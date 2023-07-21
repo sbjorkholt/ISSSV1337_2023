@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Working With Regional, Sub-National Statistical Products</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Working With Regional, Sub-National Statistical Products</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(regions)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<p>Most economic, social, and environmental situations and developments have a specific territorial dimension. When a statistic is computed to describe a population parameter, the computation is often carried out for a population within the boundaries of this territory.</p>
+<p>Probably the most widely used and cited statistics are defined within the scope of national boundaries. The population of France relates to the counting of people living within the boundaries of France (unless we specifically count French citizens living outside these boundaries.)</p>
+<p>Most national boundaries are stable, often throughout centuries. The number of national boundaries is approaching 200, which means that global datasets have boundary changes almost every year <em>somewhere</em>. Just the current European Union has witnessed several such changes in the last decades with the unification of Germany, the breakup of current member states Czechia and Slovakia, and the breakup of the former Yugoslavia to several current and prospective member states. When we are working with long-term data panels, obviously we have to make sure that we are comparing Czechia, Slovakia correctly with Czechoslovakia.</p>
+<p>National boundary changes require complicated diplomatic negotiations and they are meant to be difficult, but changes of boundaries within a national boundary, i.e. the changes of sub-national or regional boundaries is very frequent. In fact, it is so frequent that there is no consistent way of describing them globally. Probably the most comprehensive international system, the NUTS of the European Union contains dozens of changes every three years. It describes currently 1845 territorial units, but far more are being used within the 27 member states of the EU. [The NUTS is de facto used in a number of non-EU member states, too, and much of these uses will be part of the NUTS2021 definition.]</p>
+<p>Unless we work with shapefiles that contain the exact boundaries of territorial units, and we have access to microdata to replicate the statistical computation over varying boundaries, for example, before and after a regional border change, we cannot be sure that we are comparing exactly the same thing. The population of a region may have increased because more people were born or moved there than those who moved away or died, or simply because the boundaries were extended and new people who were earlier assigned to a different region became part of the count.</p>
+<p>To make sure that we are working with the same territorial units, i.e. countries, provinces, (member or federal) states, administrative units, we must unambiguously attribute observation of our statistics to a territorial unit. This requires the use of controlled vocabularies as geographical identifiers.</p>
+<p>Geographical names are not particularly useful identifiers in international datasets, because the names are subject to many changes in term of spelling, renaming, character codes or natural language that describes them and so on. The geographical names of the European Union use various extensions of the Latin alphabet, furthermore Cyril and Greek characters. In global datasets, we must deal with a lot more characters.</p>
+<p>A machine-readable, controlled vocabulary, the geocode is used to describe the geographical territories with Latin alphanumerical combinations that are usually easy to use programmatically, too, as variable names.</p>
+<p>The ISO standard for geographical territories is the <code>ISO-3166-1</code> standard for national boundaries and <code>ISO-3166-2</code> standard for sub-national divisions, such a province in the Netherlands, states in the USA or Australia, or Land in Germany. The <code>ISO-3166-2</code> is rather often used for statistical purposes; however, it is mainly a public administration metadata that is very impractical for statistical use. Its greatest disadvantage is that it is not well versioned. Because of the very frequent changes before in sub-national boundaries, we can almost never be sure if a certain <code>ISO-3166-2</code> refers to the same boundary. Usually, it refers to a same legal entity, for example, a county with its own local regulations, budgets and contracts; municipalities however switch country borders. For legal purposes, the <code>ISO-3166-2</code> is good. For one-time, cross sectional comparison of data, the <code>ISO-3166-2</code> is usable. For any statistical computation that is periodically repeated, it is almost useless.</p>
+<p>The European Union uses its own nomenclature, the <code>NUTS</code>, whose geocodes, and geographical names are controlled vocabularies with about new editions every three years. When boundaries or names are changing, usually the geocode is also changing for disambiguation. Furthermore, the NUTS is a hierarchical system, which is very helpful for missing data imputation. It is a good system to join statistical data tables across time, for example, to compare the regional employment data of the European Union in 2010 and 2020. Yet it is surprisingly difficult to use.</p>
+<p>A typical workflow is this:</p>
+<ol style="list-style-type: decimal">
+<li><p>Validate the geographical metadata (for which periods do you have data where you know which the territory was used for the statistical computation?)</p></li>
+<li><p>Filter unchanged regions – these can be joined from data tables.</p></li>
+<li><p>Recode regions that whose boundaries did not change to one single controlled vocabulary, such as the current, 2016 edition of <code>NUTS</code>; failing to do so will result in smaller data tables, and loss of observations that were recoded.</p></li>
+<li><p>Aggregate and disaggregate unambiguous changes to the units in the <code>NUTS2016</code> – in these cases all the statistical information is present in different form, and any other imputation method would result in loss of existing data.</p></li>
+<li><p>Impute or estimate other regions, using the structural information about the remaining data. This will result in far more superior data than imputation techniques designed for non-aggregated, individual data points; usually a large part of the information is present in statistical tables that can be used for proximation.</p></li>
+</ol>
+<p>When you are working with individual data, you are omitting steps 2-4. When working with national data, especially with small datasets, we can often join data tables by a country name or country code without the problems of 2-4, but even in these cases, imputation rules like using the median value for missing cases is obviously wrong. If the missing value represents a very small member state like Malta, which has a total population smaller than most capital cities in Europe, then using a median or mean country value will very much overestimate a count data for Malta.</p>
+<p>There are two main international efforts are taking place to standardize sub-national statistics: on the level of the European Union and on the level of the OECD. Our programmatic solution aims to work with both international data sources, and as much as possible, with any country’s data that uses the <code>ISO-3166-2</code> standard. However, at this stage we have only included the typology used by the European Union in helper functions and metadata (typological vocabulary) files.</p>
+<div id="using-a-consistent-typology" class="section level2">
+<h2>Using a Consistent Typology</h2>
+<p>The European Union harmonises the national statistical systems of 27 members states, 4 EEA countries and several other potential member states. Its regional typology, the hierarchical NUTS system is the most complex international system, and the regions package is mainly developed to help working with European regional data. However, the tasks related to such regional typologies are not unique the European Union. They are present in almost any national statistical system, and they can be similarly complex in federal states like the United States or Australia.</p>
+<p>The <a href="https://op.europa.eu/en/publication-detail/-/publication/d96ef933-1ec5-11e9-8d04-01aa75ed71a1/language-en/format-PDF/source-106441306">Methodological manual on territorial typologies 2018 edition</a> introduces three types of typologies.</p>
+<ul>
+<li><p>Regional typologies on NUTS1 level (states of Germany, provinces, macroregions), <code>NUTS2</code> level (regions) and <code>NUTS3</code> level (small regions.) Similar typologies exist in the United States or Australia.</p></li>
+<li><p>Local Administrative Units (LAUs) which exist in almost all nation states that are sufficiently large, and have a territorially divided public administration and statistical system.</p></li>
+<li><p>Grid typologies which are beyond the scope of <code>regions</code>.</p></li>
+</ul>
+<p>The availability of the sub-national statistical products is lower in terms of data table completeness or timeliness. This is often due to the fact that the creation of sub-national statistical products poses significant methodological challenges.</p>
+<p>The changes of national or provincial boundaries are rare – within a single polity. However, when we work with global data panels, or data panels of many sub-national territorial units, boundary changes are rather frequent. On a national level, just within Europe we have witnessed in the last three decades the dissolution of federal states like the Soviet Union, Yugoslavia and Czechoslovakia and the unification of Germany. Especially the break-up of the former Yugoslavia took a long time, meaning that annual national statistics contain different configurations over the years for Serbia, Montenegro and Kosovo.</p>
+<p>On sub-national levels, within Europe regional boundary changes are so frequent that they happen on average every three years. Of course, at one time, this procedure leaves most regional boundaries intact, and change only a relatively small number of boundaries. Whenever we work with European regional data, we still have to adjust panels of statistical aggregates every three years; similarly, we must validate any regional time series every three years.</p>
+<p>In either case, producers of statistical products do not necessarily re-cast historical statistical data for the new national or sub-national boundaries. For example, when the regional boundary definition within Central Hungary (<code>HU1</code>) changed in 2016, Eurostat did not require the Hungarian national statistical authorities to re-cast Hungary’s <code>NUTS2</code> level data according to the new boundary definition, i.e. creating separate observations for <code>HU10</code> (Budapest) and <code>HU12</code> (surrounding <em>Pest county</em>.) Earlier <code>HU101</code> (<em>Budapest</em>) on <code>NUTS3</code> level became a <code>NUTS2</code> region under the <em>same name</em>. Furthermore, the former <code>NUTS2</code> region <em>Közép-Magyarország</em> or <em>Central Hungary</em> still exists on <code>NUTS1</code> level under the code <code>HU1</code>. Although you will not find a history for the <code>HU10</code> code before 2017, in most cases, the very same data about Budapest can be found under the code <code>HU101</code> in <code>NUTS3</code> datasets, or from national statistical sources that follow Hungary’s <code>ISO-3166-2</code> borders.</p>
+<p>To put it another way, the HU-BP <code>ISO-3166-2</code> code, Budapest, did not change, it was just reassigned from the <code>NUTS3</code> typology to the <code>NUTS2</code> typology, which is reflecting the size of Budapest better. Budapest can be better compared with <code>NUTS2</code> regions than <code>NUTS3</code> small regions.</p>
+<div id="validation" class="section level3">
+<h3>Validation</h3>
+<p>A very important and basic task is the validation of our data: which data is valid in a certain typology? For example, if we have a data source from 2014 that describes data within Europe in 2014 and we currently download data from the Eurostat website in 2020, we may find a discrepancy in how the regions are described. The dataset from 2014 is likely to represent sub-national territories according to their <code>NUTS2013</code> boundary definition, and the new dataset according to the currently valid <code>NUTS2016</code> boundary definition. We may not be able to correctly join the two datasets.</p>
+<p>The <code>validate</code> function family helps in finding out to conformity of your regional coding with various typologies. In the first CRAN release, only Eurostat typologies are coded, but some of the functions can be used with other typologies, for example, with the <code>ISO-3166-1</code> and <code>ISO-3166-2</code> typologies. OECD uses the NUTS typologies for the EU member states, so these typologies are the most frequently used in international statistics.</p>
+<p>Eurostat offers so-called correspondence tables to follow boundary changes, recoding and relabelling for all NUTS changes since the formalization of the NUTS typology. Unfortunately, these Excel tables do not conform with the requirements of tidy data, and their vocabulary for is not standardized, either. For example, recoding changes are often labelled as recoding, recoding and renaming, code change, Code change, etc.</p>
+<p>The <code>data-raw</code> library contains these Excel tables and very long data wrangling code that unifies the relevant vocabulary of these Excel files and brings the tables into a single, tidy format , starting with the definition <code>NUTS1999</code>. The resulting data file <code>nuts_changes</code> is included in the <code>regions</code> package. It already contains the changes that will come into force in 2021.</p>
+<p>The vignette <a href="https://regions.dataobservatory.eu/articles/validation.html">Validating Your Typology</a> gives a real-life example to the use of these functions. Validations are the starting points for <a href="#recoding">Recoding and re-labelling</a>, <a href="#aggregation">Aggregation And Re-Aggregation</a> and <a href="#projection">Disaggregation And Projection</a> operations.</p>
+</div>
+<div id="recoding" class="section level3">
+<h3>Recoding and re-labelling</h3>
+<p>In the European Union, the most frequent regional statistical change is <code>recoding</code> and <code>relabelling</code>. Such changes do not affect the statistical data, only the statistical metadata.</p>
+<p>For example, the overseas department and region of France, <em>Réunion</em>, was officially renamed <em>La Réunion</em> in 2010: this is <code>relabelling</code>. In earlier sources, you may find data about this region under the identifier <em>Réunion</em>, and later you may find it extended with the French article <em>La</em> <em>Réunion</em>. But the data from <em>Réunion</em> in 2009 and <em>La</em> <em>Réunion</em> in 2012 refers to the same territory. Furthermore, when France changed its administrative boundaries, it changed their official code abbreviations. Although the typology of <em>La Réunion</em> did not change, to indicate that a dataset is comparable across French departments according to the new administrative borders (which did change in many other regions) the geolocational code of this region changed from <code>FR94</code> to <code>FRA4</code> in 2013 and to <code>FRY4</code> in 2016. This is <code>recoding</code>.</p>
+<p>The geocodes of Eurostat are elements of a <code>controlled metadata vocabulary</code>. To avoid confusion, when a part of the vocabulary changes, for example, when France is changing some elements in its NUTS regions and their coding, it often changes the complete vocabulary, including for unchanged elements, for clarity. This is why <code>FR94</code> becomes <code>FRA4</code> even though it is describing the same overseas <em>department</em> and <em>region</em>, <em>La Réunion</em>.</p>
+<p>If you want to work with French or international data that include any statistical information about the overseas departments, you must make sure that observations coded with <code>FR94</code>, <code>FRA4</code>, <code>FRY4</code> are treated as a time-series of the <em>La Réunion</em> and not as different entities.</p>
+<p>Names are often dubious identifiers. <em>La Réunion</em> remains in the <code>ISO-3166-1</code> and <code>ISO-3166-2</code> libraries <em>Réunion</em>, which is no longer used as name in <code>NUTS</code>. What makes working with <code>ISO</code> and <code>NUTS</code> vocabularies is that while NUTS is “versioned”, ISO is not, so a correspondence for a given year, for example, for the year 2013 is almost impossible to create. This is why the use of Eurostats NUTS geo codes, which are usually unique in a given year, should be preferred over ISO.</p>
+<p>Many of Eurostat’s regional datasets contain recoded geographical IDs that violate the definition of tidy data, because under the same <code>geo</code> column they may contain observations for <code>FR94</code>, <code>FRA4</code>, <code>FRY4</code>. However, this is not a tidy description of the territory. Like in our <code>nuts_changes</code> data, they should be reported in three different columns, <code>code_2010</code>, <code>code_2013</code> and <code>code_2016</code>. The descriptive metadata code, i.e. row identifier <code>FR94</code> is compatible with <code>FR71</code> for example, but not with <code>FRY4</code>.</p>
+<p>If you are joining data from different tables, you must not join by their <code>geo</code> code, but by the explicit <code>code_2013</code> geo codes for the observation described or aggregated according to the <code>NUTS2013</code> regional boundaries and <code>code_2016</code> for the <code>NUTS2016</code>. In other words, you must make sure that you join by valid elements in a given version of NUTS.</p>
+<p>Another important note: if you join with the raw <code>geo</code> data, you will often have <strong>seemingly missing data</strong>. You may have data available for <code>FR93</code>, <code>FR94</code>, <code>FRY3</code>, <code>FRY4</code>, with missingness for the first two in 2016 and missingness for the latter two in 2010, but in fact, these observations or related to two, unchanged territorial units (<em>Guyane</em> and <em>La Réunion</em>.) You must choose one consistent coding, either using only <code>FRY4</code> for <em>La Réunion</em> or <code>FR93</code> for <em>La Réunion</em>. You can also identify <code>FR93</code>, <code>FRY3</code> explicitly with the name <em>Guyane</em>. However, you must choose between the use of <em>La Réunion</em> or <em>Réunion</em>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nuts_changes)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>overseas <span class="ot">&lt;-</span> nuts_changes[ </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>(nuts_changes<span class="sc">$</span>geo_name_2016 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;La Réunion&quot;</span>, <span class="st">&quot;Guyane&quot;</span>)),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  overseas[, <span class="fu">c</span>(<span class="st">&quot;code_2010&quot;</span>, <span class="st">&quot;code_2013&quot;</span>, <span class="st">&quot;code_2016&quot;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;geo_name_2010&quot;</span>, <span class="st">&quot;geo_name_2013&quot;</span>, <span class="st">&quot;geo_name_2016&quot;</span>)]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">code_2010</th>
+<th align="left">code_2013</th>
+<th align="left">code_2016</th>
+<th align="left">geo_name_2010</th>
+<th align="left">geo_name_2013</th>
+<th align="left">geo_name_2016</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FR93</td>
+<td align="left">FRA3</td>
+<td align="left">FRY3</td>
+<td align="left">Guyane</td>
+<td align="left">Guyane</td>
+<td align="left">Guyane</td>
+</tr>
+<tr class="even">
+<td align="left">FR94</td>
+<td align="left">FRA4</td>
+<td align="left">FRY4</td>
+<td align="left">Réunion</td>
+<td align="left">La Réunion</td>
+<td align="left">La Réunion</td>
+</tr>
+<tr class="odd">
+<td align="left">FR930</td>
+<td align="left">FRA30</td>
+<td align="left">FRY30</td>
+<td align="left">Guyane</td>
+<td align="left">Guyane</td>
+<td align="left">Guyane</td>
+</tr>
+<tr class="even">
+<td align="left">FR940</td>
+<td align="left">FRA40</td>
+<td align="left">FRY40</td>
+<td align="left">Réunion</td>
+<td align="left">La Réunion</td>
+<td align="left">La Réunion</td>
+</tr>
+</tbody>
+</table>
+<p>This is in fact a simpler recoding than the earlier example of <em>Budapest</em>. <em>La Réunion</em> did change its name and code, so you find its data under different labels, but it is still within the <code>NUTS2</code> typology. Its comparators are likely to be found in the same statistical table. In the case of <em>Budapest</em>, the name did not change, but the change of the geo label reflects the fact that Budapest was moved from the <code>NUTS3</code> typology to the <code>NUTS2</code> typology, because it can be much better compared with <code>NUTS2</code> regions. For data concerning the time period before 2017, you need to look for data about Budapest in datasets that follow the <code>NUTS3</code> typology, or in national data sources, but you can fill in these historical data to pre-2017 cells of your <code>NUTS2</code> regional data. The size of Budapest did not change that much - it should have been compared with <code>NUTS2</code> regions in 2014, like in 2020, and not with smaller <code>NUTS3</code> units.</p>
+<p>See in more detail the vignette <a href="https://regions.dataobservatory.eu/articles/recode.html">Recoding &amp; Relabelling</a> for our programmatic solution.</p>
+</div>
+</div>
+<div id="imputation" class="section level2">
+<h2>Imputation</h2>
+<p>R has many packages that implement imputation algorithms designed for non-aggregated, individual data. In almost all the cases, these methods are not adequate for territorially aggregated data. With individual data imputation, we usually take a typical individual data point (such as the median value) or hypothesize a probability distribution of unobserved data and pick a hypothetically likely observation. We must never use such methods when data among observations is differently aggregated. Furthermore, very often some elements of the information, or all the information is present in the dataset, and a far less biased estimate can be given to the missing data.</p>
+<div id="projection" class="section level3">
+<h3>Disaggregation And Projection</h3>
+<p>Often, we have missing data about smaller territorial units, and we would like to impute their wider region’s representative data to a higher density dataset. For example, we do not have data for <em>Schwabia</em>, which is a region of the German federal state of <em>Bavaria</em>, and therefore we would like to impute the Bavarian (<code>NUTS1</code>) level data to this <code>NUTS2</code> level missing observation for Schwabia. This is a valid imputation technique for non-aggregating descriptive statistics, such as mean or median values derived from surveys.</p>
+<p>A typical problem of missingness is that we are comparing <code>NUTS1</code> or <code>NUTS2</code> level regions of Europe, and we do not find information about the small members states of Cyprus, Estonia, Luxembourg, Malta, because, due to their size, these countries do not have such divisions. Because of their size and territorial integrity, they can be well compared with Schwabia, for example, but the data is missing in a <code>NUTS2</code> data table. In this case, we may want to impute the technical <code>NUTS0</code> (country) level data into the <code>NUTS2</code> data table, creating the technical <code>NUTS2</code> data of <code>CY00</code>, <code>EE00</code>, <code>LU00</code> or <code>MT00</code>, which is identical to the national <code>CY</code>, <code>EE</code>, <code>LU</code>, <code>MT</code> observations. In this case, the imputation is valid to any type of data, even to count data like population, because <code>EE</code> <code>=</code> (<code>NUTS0</code>) <code>EE0</code> (<code>NUTS1</code>) <code>=</code> <code>EE00</code> (<code>NUTS2</code>).</p>
+<p>The function <code>impute_down</code> creates a generic solution to the problem when we want to project data from a larger territorial unit to a smaller one. For example, some state level data is missing for certain Australian or German federal states, and we want to use the national (average) values for imputation.</p>
+<p>The function <code>impute_down_nuts</code> gives and EU-specific solution, with a single data frame as input. The <code>mixed_nuts_example</code> data table shows a mixture of potential problems in a small, fictional dataset with random numbers. For simplicity, we take the fictional, country-level data from Malta, and input it down to all potential sub-divisions.</p>
+<p>Malta is a very transparent example, because the country has only 2 subdivisions on the lowest, <code>NUTS3</code> level, i.e. <code>MT001</code> and <code>MT002</code>. You can find Malta among countries (technical <code>NUTS0</code> level) as <code>MT</code>, among <code>NUTS1</code> regions as <code>MT0</code> (because there are no subdivisions on this level), and among <code>NUTS2</code> regions again as <code>MT00</code>. For any data that cannot be assigned for a geographical location or area, the technical codes ending with <code>Z</code> are used.</p>
+<p>So, what are our possibilities if we have only country-level <code>MT</code>data, but we would like to use it in a <code>NUTS3</code> database and impute this variable to both <code>MT001</code> and <code>MT002</code>. (You can safely do this with average values taken from a survey, but you should not do this with additive values such as the population.)</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;mixed_nuts_example&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mixed_nuts_example <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">substr</span>(geo,<span class="dv">1</span>,<span class="dv">2</span>) <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">geo</th>
+<th align="right">values</th>
+<th align="left">method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="right">93.3514</td>
+<td align="left">actual</td>
+</tr>
+</tbody>
+</table>
+<p>Malta offers two technical imputation slots on <code>NUTS1</code> level, <code>MT0</code> for territorially attributed data, and <code>MTZ</code> for non-territorial exceptions. On NUTS2 level, <code>MT00</code> and <code>MTZZ</code>. And at last, what is a real imputation, you can impute the <code>MT</code> = <code>MT0</code> = <code>MT00</code> values to <code>MT001</code>, should you have only data for <code>MT002</code>, etc. (In this simple example, we impute the <code>MT</code> values to both subdivisions, <code>MT001</code> and <code>MT002</code>.)</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;mixed_nuts_example&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">impute_down_nuts</span>(mixed_nuts_example) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">substr</span>(geo,<span class="dv">1</span>,<span class="dv">2</span>) <span class="sc">==</span> <span class="st">&quot;MT&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span> ()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">geo</th>
+<th align="right">values</th>
+<th align="left">method</th>
+<th align="left">typology</th>
+<th align="left">valid_2016</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="right">93.3514</td>
+<td align="left"></td>
+<td align="left">country</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">MT0</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_1</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">MT00</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_2</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">MT001</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_3</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">MT002</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_3</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">MTZ</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_1</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">MTZZ</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_2</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">MTZZZ</td>
+<td align="right">93.3514</td>
+<td align="left">imputed from country MT</td>
+<td align="left">nuts_level_3</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="aggregation" class="section level3">
+<h3>Aggregation And Re-Aggregation</h3>
+<p>The European Union sometimes publishes data on <code>NUTS2</code> level regions, but not on the larger NUTS1 level macroregions or provinces. In many cases, this information is fully present in the <code>NUTS2</code> datasets, and a simple aggregation can produce a NUTS1 level dataset, because each <code>NUTS2</code> region is strictly assigned to one broader NUTS1 macroregion. For count-type data, we can simply aggregate the constituent <code>NUTS2</code> level data to <code>NUTS1</code> level.</p>
+<p>A frequent problem is the re-assignment of a smaller territorial units, such as lower level administrative unit or a lower NUTS unit to another larger unit, or a pre-existing larger unit.</p>
+<p>For example, <code>LT02</code>, i.e. <em>Vidurio ir vakarų Lietuvos regionas</em> in Lithuania consists of the former <code>LT00</code> (undivided) Lithuania minus <code>LT00A</code>, i.e. <em>Vilnius</em>. <code>LT01</code>, or <em>Sostinės regionas</em>, i.e. the metropolitan area of <em>Vilnius</em> is a separate region from 2016. If you have national and <code>NUTS3</code> or Vilnius municipality level data from Lithuania, you can present it according to the undivided <code>NUTS2013</code> definition or the more granular <code>NUTS2016</code> definition.</p>
+<p>The <em>Southern</em> region of Ireland, <code>IE05</code> was created in the same year from the earlier <code>NUTS3</code> level regions <code>IE023</code>, <code>IE024</code>, and <code>IE025</code>. You can fill in the missing data for earlier years with the simple additive formula <code>IE05=IE023+IE024+IE025</code> for count/additive variables, or you can create a re-weighted average for average values.</p>
+<p>This information can be found in the <code>change_2016</code> of the <code>nuts_changes</code> dataset.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(nuts_changes)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>southern <span class="ot">&lt;-</span> nuts_changes[ </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">which</span>(nuts_changes<span class="sc">$</span>geo_name_2016 <span class="sc">==</span> <span class="st">&quot;Southern&quot;</span>), ]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  southern[, <span class="fu">c</span>(<span class="st">&quot;code_2013&quot;</span>, <span class="st">&quot;code_2016&quot;</span>, <span class="st">&quot;geo_name_2016&quot;</span>, <span class="st">&quot;change_2016&quot;</span>)]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">code_2013</th>
+<th align="left">code_2016</th>
+<th align="left">geo_name_2016</th>
+<th align="left">change_2016</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">IE05</td>
+<td align="left">Southern</td>
+<td align="left">new region, made from ex-ie023, ie024 and ie025</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="boundary-changes-with-no-solution" class="section level3">
+<h3>Boundary Changes With No Solution</h3>
+<p>In some cases the boundary change cuts across all territorial typologies that re-configuration is impossible from aggregated data. Unless we have access to the individual level data (which is not within scope of the tasks helped by this package), it is not possible to create time-wise comparable data for these units. We must treat the observations on these units logically missing, which may or may not be imputed with any techniques. It is usually helpful to mark territorial observations in panels or time series that have such a structural change.</p>
+</div>
+<div id="time-series" class="section level3">
+<h3>Time-series</h3>
+<p>Because of the complexity of sub-national data, there are likely to be missing elements in time-wise comparisons. For example, we may find that some data is available for many years on a German federal level, and for most states, but a particular annual data is missing for Bavaria. It would be tempting to use a simple interpolation of the available data, but often a naïve interpolation is not the best method, because, as we have seen, often the data is available at a different aggregation level or under a different metadata label. It is imperative to first make sure that we exploit all information that is present in a different territorial structure for any given year, and then start inter-temporal imputation with interpolation, or carry forward/backward, forecasting and backcasting algorithms.</p>
+<p>At last, we may go back to the cross-sectional data, and may fill in some cross-sectional data gaps with interpolated or extrapolated data. Aggregating an estimate for Bavaria from previous or next-years constituent lower level (<code>NUTS2</code> or <code>NUTS3</code>) data is very likely to be a far better estimate than any imputation results, for example, a simple substitution of a median value from all German or EU NUTS1 units. The territorial aggregation structure gives plenty of exploitable information.</p>
+</div>
+</div>
+<div id="boundary-definitions" class="section level2">
+<h2>Boundary definitions</h2>
+<p>Our package uses a number of boundary definitions that are easily expanded. Our functions are generic, i.e. they treat boundary information as an input variable. Well formatted metadata about such typologies can be used with any country.</p>
+<p>The Online Browsing Platform (OBP) of the International Organization for Standardization contains all coding information, and metadata about recent changes for each country. (See, for example: <a href="https://www.iso.org/obp/ui/#iso:code:3166:NL">ISO 3166 — Codes for the representation of names of countries and their subdivisions: NL - Netherlands (the)</a>)</p>
+<p>It would be tempting to use <code>ISO-3166-2</code> definitions for sub-national boundaries, however, the <code>ISO-3166-2</code> itself is changing relatively often, and in time series or panel data we can only refer to a certain version of the <code>ISO-3166-2</code>. All the boundary definitions are valid for a certain time period and certain boundaries. We currently incorporated only European metadata for the last 20 years, and we are planning to continue with OECD metadata in the forthcoming releases. However, we are welcoming any pull requests for other countries or country-groups.</p>
+</div>
+<div id="citations-and-related-work" class="section level1">
+<h1>Citations and related work</h1>
+<div id="citing-the-data-sources" class="section level3">
+<h3>Citing the data sources</h3>
+<p>Eurostat data: cite <a href="https://ec.europa.eu/eurostat/">Eurostat</a>.</p>
+<p>Administrative boundaries: cite <a href="https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units">EuroGeographics</a>.</p>
+</div>
+<div id="citing-the-eurostat-r-package" class="section level3">
+<h3>Citing the eurostat R package</h3>
+<p>For main developers and contributors, see the <a href="https://ropengov.github.io/eurostat/">package homepage</a>.</p>
+<p>This work can be freely used, modified and distributed under the BSD-2-clause (modified FreeBSD) license:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">&quot;eurostat&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Kindly cite the eurostat R package as follows:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   (C) Leo Lahti, Janne Huovari, Markus Kainu, Przemyslaw Biecek.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Retrieval and analysis of Eurostat open data with the eurostat</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   package. R Journal 9(1):385-392, 2017. Version 3.7.5 Package URL:</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   http://ropengov.github.io/eurostat Manuscript URL:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   https://journal.r-project.org/archive/2017/RJ-2017-019/index.html</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   @Misc{,</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     title = {eurostat R package},</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     author = {Leo Lahti and Janne Huovari and Markus Kainu and Przemyslaw Biecek},</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     journal = {R Journal},</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     volume = {9},</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     number = {1},</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     pages = {385-392},</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     year = {2017},</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     url = {https://journal.r-project.org/archive/2017/RJ-2017-019/index.html},</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     note = {Version 3.7.5},</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   }</span></span></code></pre></div>
+</div>
+<div id="citing-the-regions-r-package" class="section level3">
+<h3>Citing the regions R package</h3>
+<p>For main developer and contributors, see the <a href="https://regions.dataobservatory.eu/">package homepage</a>.</p>
+<p>This work can be freely used, modified and distributed under the GPL-3 license:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">citation</span>(<span class="st">&quot;regions&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; To cite package &#39;regions&#39; in publications use:</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Daniel Antal (2021). regions: Processing Regional Statistics. R</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   package version 0.1.8. https://regions.dataobservatory.eu/</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   @Manual{,</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     title = {regions: Processing Regional Statistics},</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     author = {Daniel Antal},</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     year = {2021},</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     note = {R package version 0.1.8},</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     url = {https://regions.dataobservatory.eu/},</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   }</span></span></code></pre></div>
+</div>
+<div id="contact" class="section level3">
+<h3>Contact</h3>
+<p>For contact information, see the package homepages.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,5 +1,6 @@
 ---
 title: "What is 'data analysis'?"
+author: "Solveig Bjørkholt"
 ---
 
 Data analysis is all about using data to explore and test assumptions, trying to find patterns that can lead us to answers. Within political science, we tend to distinguish between two major modes of methodological approach:

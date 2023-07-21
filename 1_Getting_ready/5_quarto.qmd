@@ -1,0 +1,48 @@
+---
+title: "Quarto"
+author: "Solveig Bjørkholt"
+---
+
+## Introduction to Quarto
+
+The great thing about Quarto is that we can produce nice reports, for example in PDF. However, we need LaTex to make Quarto reports in PDF, so we need to install this as well.
+
+Quarto is a type of script that contains both text and code, and that can be turned into both documents and web pages. It's very handy in that regard. To open an Quarto file in RStudio, click "File", "New file" and "Quarto Document". Or, alternatively, click the document sign on the top left corner of your RStudio interface and choose "Quarto Document". You'll get a box asking you for the title of your document. Call it whatever you like, then hit OK.
+
+For those curious: Quarto is a way to integrate writing in markdown syntax through R. Markdown is a markup language which, guess what, is also a type of computer language! In other words, we use it to speak with the computer, telling the computer the different properties of our text, be it a title, **bold**, *italics* or `code`. However, in contrast to for example R, python and Java, markup languages are much easier to read by humans. Other examples of markup languages are HTML and XML. This is not super important to know in order to write in Quarto, but it's nice with a bit of context now and then.
+
+Now, your RStudio interface should look something like the picture below. Notice the "Render" button at the top, and try clicking it. It will prompt a request to save your file on your computer, and once you've done that, the Quarto Document will convert your code into a nice HTML report[^5_quarto-1] Navigate to where you saved your file, click on the name of the file with the ".html" ending, and open it in an internet browser (such as Firefox or Chrome).
+
+[^5_quarto-1]: HTML is the language of the web. Most webpages are written in HTML.
+
+```{r, out.width="80%", fig.align="center", echo = FALSE}
+knitr::include_graphics("../figures/quarto_example.png")
+```
+
+To modify the report, here are a few things to know:
+
+-   In the beginning of the document, the `knitr::opts_chuck$set(echo = FALSE)` tells R to use the `opts_chuck` function from the `knitr` package, and to modify the object set. In here, you can modify what you want the general settings of the document to be. `echo = FALSE` means that you do not want code to show typically, just the output of it. Other options are for example `include` (whether to typically include chunks) and `warnings` (whether to typically show warning messages from code).
+
+To add a chuck of code, add the hyphens, curly parentheses and the r, and end with three curly parentheses as well. In the middle, write your code.
+
+```` ```{r} ````
+
+```` ``` ````
+
+For more settings, take a look at this [webpage](https://quarto.org/docs/authoring/markdown-basics.html). The best way to learn is to just start and look up things as you need them.
+
+## Installing LaTex
+
+To work create pdf files with Quarto, we need to install LaTex.
+
+LaTex is a document preparation system, much like word, except it is more code-heavy and allows you to create beautiful documents. TinyTex is a custom LaTeX distribution, so this is what we'll install. See <https://yihui.org/tinytex/> for more informaton.
+
+To install TinyTex from R, we need to install the package `tinytex` and use the function `install_tinytex()`.
+
+```{r, eval = FALSE}
+
+install.packages("tinytex")
+install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+
+```

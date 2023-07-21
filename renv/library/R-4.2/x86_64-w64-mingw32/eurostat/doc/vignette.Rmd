@@ -1,0 +1,49 @@
+---
+title: "Vignette for the eurostat R package"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette for the eurostat R package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  purl = NOT_CRAN,
+  eval = NOT_CRAN
+)
+```
+
+```{r setup, include=FALSE}
+# Global options
+library(knitr)
+# opts_chunk$set(fig.path="fig/")
+```
+
+# Installation
+
+Release version [(CRAN)](https://CRAN.R-project.org/package=eurostat):
+
+
+```{r install, eval=FALSE}
+install.packages("eurostat")
+```
+
+Development version [(Github)](https://github.com/rOpenGov/eurostat):
+
+```{r install2, eval=FALSE}
+library(remotes)
+remotes::install_github("ropengov/eurostat")
+```
+
+Load the package:
+
+```{r, echo=FALSE}
+library(eurostat)
+```
+
+For more detailed examples on how to use the package, see the [online tutorial](https://ropengov.github.io/eurostat/articles/articles/eurostat_tutorial.html).

@@ -1,0 +1,9 @@
+codebook                V-Dem codebook
+fill_vars               Fill election-specific variables in V-Dem data
+find_var                Search variable information by one or several
+                        keywords
+plot_indicator          Plot indicator(s) in V-Dem data.
+var_info                Shows basic information on a specific variable
+                        as given in the codebook
+vdem                    V-Dem data
+vparty                  V-Party data

@@ -1,0 +1,7 @@
+as.json                 Convert to jsonlite json object
+as.jsonstat             Create a JSON-stat object
+fromJSONstat            Convert JSON-stat format to data frame(s)
+id                      'id' accessors of 'jsonstat' objects
+rjstat                  Read and write JSON-stat data sets
+status                  'status' accessors of 'jsonstat' objects
+toJSONstat              Convert data frame(s) to JSON-stat format

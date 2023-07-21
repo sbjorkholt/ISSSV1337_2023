@@ -1,5 +1,6 @@
 ---
 title: "How to import data"
+author: "Solveig Bjørkholt"
 ---
 
 Most work will start with a stage of importing data. There are many ways getting data, for example from the databases, the web or API. For now, let's look at how to import regular data stored in `.csv`, `.RData`, `.rda` or `.rds`.
@@ -48,6 +49,12 @@ So what does the data look like when we're doing quantitative analysis? Usually,
 1.  Rows: Observations
 2.  Columns: Variables
 3.  Cells: Values
+
+
+|                          | Variable (e.g. number of inhabitants) |
+|--------------------------|---------------------------------------|
+| Observation (e.g. Spain) | Value (e.g. 46.000.000)               |
+
 
 The observations are the entities we have in our dataset, for example countries, people, time period, or likewise. Variables are the properties of our entities, for example size or type. The values are the mix between these -- the specific property that this specific entity has.
 

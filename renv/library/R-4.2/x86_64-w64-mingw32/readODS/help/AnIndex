@@ -1,0 +1,9 @@
+readODS-package	readODS-package
+getNrOfSheetsInODS	get_num_sheets_in_ods
+get_num_sheets_in_ods	get_num_sheets_in_ods
+list_ods_sheets	list_ods_sheets
+ods_sheets	list_ods_sheets
+read.ods	read_ods
+readODS	readODS-package
+read_ods	read_ods
+write_ods	write_ods

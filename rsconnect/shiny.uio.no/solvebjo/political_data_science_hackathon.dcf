@@ -1,0 +1,13 @@
+name: political_data_science_hackathon
+title: Political Data Science Hackathon
+username: solvebjo
+account: solvebjo
+server: shiny.uio.no
+hostUrl: https://shiny.uio.no/__api__
+appId: 268
+bundleId: 1458
+url: https://shiny.uio.no/political_data_science_hackathon/
+when: 1689249394.3362
+lastSyncTime: 1689249394.3362
+asMultiple: FALSE
+asStatic: TRUE
