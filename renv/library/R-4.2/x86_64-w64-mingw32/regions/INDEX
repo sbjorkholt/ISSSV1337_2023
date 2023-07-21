@@ -1,0 +1,29 @@
+all_valid_nuts_codes    European Union: All Valid NUTS Codes
+australia_states        Australia: States And Territories
+create_nuts_lau_2019    Create the nuts_lau_2019 correspondence table
+                        May be used to create similar historical
+                        correspondence tables.
+daily_internet_users    Daily Internet Users
+get_country_code        Get Country Code Of Regions
+google_nuts_matchtable
+                        Google Mobility Report European Correspondence
+                        Table
+impute_down             Imputing Data From Larger To Smaller Units
+impute_down_nuts        Imputing Data From Larger To Smaller Units in
+                        the EU NUTS
+mixed_nuts_example      Example Data Frame: Mixed EU Typologies.
+nuts_changes            European Union: Recoded NUTS units 1995-2021.
+nuts_exceptions         NUTS Coding Exceptions
+nuts_lau_2019           European Union: NUTS And LAU Correspondence
+nuts_recoded            European Union: Recoded NUTS units 1995-2021.
+recode_nuts             Recode Region Codes From Source To Target NUTS
+                        Typology
+regional_rd_personnel   R&D Personnel by NUTS 2 Regions
+regions                 regions: A package for working with regional
+                        statistics.
+validate_geo_code       Validate Conformity with NUTS Geo Codes
+                        (vector)
+validate_nuts_countries
+                        Validate Conformity with NUTS Country Codes
+validate_nuts_regions   Validate Conformity With NUTS Geo Codes
+validate_parameters     Assertion for Correct Function Calls

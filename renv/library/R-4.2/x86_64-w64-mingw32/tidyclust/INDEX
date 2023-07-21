@@ -1,0 +1,43 @@
+augment.cluster_fit     Augment data with predictions
+cluster_metric_set      Combine metric functions
+control_cluster         Control the fit function
+extract-tidyclust       Extract elements of a tidyclust model object
+extract_centroids       Extract clusters from model
+extract_cluster_assignment
+                        Extract cluster assignments from model
+extract_fit_summary     S3 method to get fitted model summary info
+                        depending on engine
+finalize_model_tidyclust
+                        Splice final parameters into objects
+fit.cluster_spec        Fit a Model Specification to a Data Set
+get_centroid_dists      Computes distance from observations to
+                        centroids
+glance.cluster_fit      Construct a single row summary "glance" of a
+                        model, fit, or other object
+hier_clust              Hierarchical (Agglomerative) Clustering
+k_means                 K-Means
+min_grid.cluster_spec   Determine the minimum set of model fits
+new_cluster_metric      Construct a new clustering metric function
+predict.cluster_fit     Model predictions
+prep_data_dist          Prepares data and distance matrices for metric
+                        calculation
+reconcile_clusterings_mapping
+                        Relabels clusters to match another cluster
+                        assignment
+set_args.cluster_spec   Change arguments of a cluster specification
+set_engine.cluster_spec
+                        Change engine of a cluster specification
+set_mode.cluster_spec   Change mode of a cluster specification
+silhouette              Measures silhouette between clusters
+silhouette_avg          Measures average silhouette across all
+                        observations
+sse_ratio               Compute the ratio of the WSS to the total SSE
+sse_total               Compute the total sum of squares
+sse_within              Calculates Sum of Squared Error in each cluster
+sse_within_total        Compute the sum of within-cluster SSE
+tidy.cluster_fit        Turn a tidyclust model object into a tidy
+                        tibble
+translate_tidyclust     Resolve a Model Specification for a
+                        Computational Engine
+tune_cluster            Model tuning via grid search
+update.hier_clust       Update a cluster specification
