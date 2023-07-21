@@ -66,7 +66,7 @@ book:
         - 6_Text_as_data/28_topic_modelling.qmd
     - part: "Introduction to machine learning and statistics"
       chapters:
-        - 7_Modelling/29_introduction_to_ml.qmd
+        - 7_Modelling/29_Intro_ml/intro-ml.qmd
         - 7_Modelling/30_inference.qmd
     - part: "Machine learning methods"
       chapters:

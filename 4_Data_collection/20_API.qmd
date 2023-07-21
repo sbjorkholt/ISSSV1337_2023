@@ -184,6 +184,27 @@ To get a grasp of how APIs work, you can play around the the [Eurostat query bui
 
 ```{r}
 #| eval: false
+#| echo: true
+
+library(httr)
+library(rjstat)
+
+url <- "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tec00001?format=JSON&time=2016&time=2017&geo=BE&geo=DE&unit=CP_MEUR&na_item=B1GQ&lang=en" # Change this with your own API request
+
+getresponse <- GET(url)
+
+json <- content(getresponse, "text")
+
+df <- fromJSONstat(json)
+
+```
+
+```{r}
+#| eval: true
+#| message: false
+#| error: false
+#| warning: false
+#| echo: false
 
 library(httr)
 library(rjstat)
@@ -213,7 +234,8 @@ Let's say we have the dataset that we exctacted above -- the dataset on Germany'
 #| eval: true
 #| echo: false
 
-head(df)
+head(df) %>%
+  DT::datatable()
 ```
 
 It's a dataframe with five variables and two rows.

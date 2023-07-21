@@ -66,7 +66,7 @@ For an overview of some of the things that are possible, have a look at [this pa
 
 Now you can make your dashboard! To get started, find some inspirational dashboards [here](https://rstudio.github.io/flexdashboard/articles/examples.html). 
 
-## Deploying a dashboard
+### Deploying a dashboard
 
 Once a dashboard is made, you might want to share it with others. In other words, you want to load the dashboard up to some kind of sever, generate a URL and share your dashboards with others by simply giving them that URL. There are a few ways of doing this - one way is by using Github.
 
@@ -100,7 +100,7 @@ knitr::include_graphics("../figures/github_dashbord5.PNG")
 ```
 
 
-6. Wait some minutes. Write the URL that was shown in stage 6 into your browser and end with */name-of-your-file.html*. 
+6. Wait some minutes. Write the URL that was shown in stage 3 into your browser and end with */name-of-your-file.html*. 
 
 ```{r, out.width="100%", fig.align ='center', echo = FALSE}
 knitr::include_graphics("../figures/github_dashbord4.PNG")
@@ -108,3 +108,84 @@ knitr::include_graphics("../figures/github_dashbord4.PNG")
 
 
 7. Give others this URL for them to access your dashboard!
+
+## Shiny
+
+Shiny is an R package that allows us to create interactive web applications. With Shiny, we can go a step further than creating dashboards, in that we can interact with the the user of the webpage. If you would like to see an example of how Shiny might work, you can open RStudio and write the following code: 
+
+```{r}
+#| eval: false
+#| echo: true
+
+install.packages("shiny") 
+
+library(shiny)
+
+runExample("01_hello")
+```
+
+The code to create the app that pops up when running `runExample("01_hello")` is given below:
+
+```{r}
+#| eval: false
+#| echo: true
+
+# Define UI for app that draws a histogram ----
+ui <- fluidPage(
+
+  # App title ----
+  titlePanel("Hello Shiny!"),
+
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+
+      # Input: Slider for the number of bins ----
+      sliderInput(inputId = "bins",
+                  label = "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
+
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+
+      # Output: Histogram ----
+      plotOutput(outputId = "distPlot")
+
+    )
+  )
+)
+
+# Define server logic required to draw a histogram ----
+server <- function(input, output) {
+
+  # Histogram of the Old Faithful Geyser Data ----
+  # with requested number of bins
+  # This expression that generates a histogram is wrapped in a call
+  # to renderPlot to indicate that:
+  #
+  # 1. It is "reactive" and therefore should be automatically
+  #    re-executed when inputs (input$bins) change
+  # 2. Its output type is a plot
+  output$distPlot <- renderPlot({
+
+    x    <- faithful$waiting
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+
+    hist(x, breaks = bins, col = "#007bc2", border = "white",
+         xlab = "Waiting time to next eruption (in mins)",
+         main = "Histogram of waiting times")
+
+    })
+
+}
+```
+
+This is the basic syntax for all Shiny applications. It consists of two objects, the `ui` and the `server`. The `ui` objects defines all the *frontend*-stuff, including the figure for how large the bins should be (specified in the `sliderInput` argument) and which output that is going to show up (given in the `plotOutput` argument). The `server` object includes the *backend*-stuff, in other words where the information about the bin size is taken in and processed to create a plot. 
+
+Going further into Shiny is beyond the scope of this book, but if you are interested and would like to try making your own app, I good place to start is [here](https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/index.html).

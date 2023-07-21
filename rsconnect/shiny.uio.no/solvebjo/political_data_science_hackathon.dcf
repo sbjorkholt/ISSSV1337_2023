@@ -5,9 +5,9 @@ account: solvebjo
 server: shiny.uio.no
 hostUrl: https://shiny.uio.no/__api__
 appId: 268
-bundleId: 1445
+bundleId: 1458
 url: https://shiny.uio.no/political_data_science_hackathon/
-when: 1688480049.59648
-lastSyncTime: 1688480049.5965
+when: 1689249394.3362
+lastSyncTime: 1689249394.3362
 asMultiple: FALSE
 asStatic: TRUE
