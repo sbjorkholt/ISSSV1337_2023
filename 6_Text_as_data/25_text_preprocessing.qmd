@@ -1,0 +1,117 @@
+---
+title: "Text preprocessing"
+author: "Solveig Bjørkholt"
+---
+
+Text manipulation and text preprocessing is closely related. However, while text manipulation considers the general act of juggling text and forming it into lists, dataframes and so on, text preprocessing is all about cleaning the text to make it ready for analysis.
+
+
+Which parts of a text you decide to keep, modify or remove, depends on the type of analysis you're doing. For example, sometimes keeping names of people might be essential, then you might want to keep capital letters. If you're working with laws, you might want to remove most symbols except §. However, that being said, there are a few things that analysists usually consider removing from the text to reduce noise.
+
+## Whitespace
+
+Whitespace occurs in strings with more than one space between units. To remove, use `str_trim` or `str_squish`.
+
+```{r}
+library(stringr)
+string <- "  This   is a    string with  whitespace    .  "
+
+string
+
+str_trim(string, side = "both") # Remove whitespace from ends of strings
+
+str_squish(string) # Remove whitespace from ends of strings and in the middle
+
+```
+
+## Stopwords
+
+Stopwords include all types of words that do not carry any meaning in themselves, for example *for*, *a*, *the* and *but*. Words such as prepositions and conjunctions are typically regarded as stopwords. 
+
+In the code below, first make a character vector called "stopwords" with several stopword specified. Then, I use `str_c` to paste `\\b` and `\\b` before and after each word. This is to create a so-called "word boundary", so that the stopwords will only match for example "i", and not also the i in containing. The `collpase = "|"` argument divides each word by |, which means "or". Then, I use `str_replace_all` to replace all stopwords with nothing, `""`.  
+
+```{r}
+
+stopwords <- c("i", "is", "are", "we", "him", "her", "such", "they", "and", "a", "for", "be", "as", "will", "to", "your", "our", "these", "this")
+
+stopwords_boundary <- str_c("\\b", stopwords, "\\b", # Creating word boundaries by adding \\b in front and behind each word
+                            collapse = "|") # Dividing the words by |
+
+string <- "this is a string containing a few stopwords such as a, for and i, and to our common benefit, these will be removed"
+
+str_replace_all(string, stopwords_boundary, "")
+
+```
+
+## Punctuation
+
+It's not unusual to want to remove punctuation such as dots, commas and question marks from the text. One way of doing this, is to make a vector specifying the punctuation marks you want to remove, divided by a |. Recall that in *regex*, letters such as `?` and `.` are used to indicate sentence patterns. To make it clear that we are talking about the *letter* and not the pattern indicator, add two backslashes first.
+
+```{r}
+
+string <- "Here we have a string. Is it useful for you? Maybe not... But! With time, it might be."
+
+punctuation <- c("\\!|\\?|\\.|\\,")
+
+str_replace_all(string, punctuation, "")
+
+```
+
+If you are not too picky about which punctuation you remove, you can also use `[:punct:]`.
+
+```{r}
+
+str_replace_all(string, "[:punct:]", "")
+
+```
+
+
+## Numbers
+
+Numbers are seldom easy to analyze in a text-based setting, because they do not in themselves carry any meaning without knowing what they refer to. And if we want to analyze numbers, we might as well create a standard dataframe with variables and numbers and analyze it the old-fashioned way. Because numbers are not easy to use in text analysis, we often remove them. 
+
+Here, I use `str_remove_all` together with the *regex* pattern `[0-9]+`. `[0-9]` means any number and `+` means that there can be one or more of them. 
+
+```{r}
+
+string <- "I have 50 likes on my post. My friends have 100 likes. It's not fair. I want 1000000 likes!"
+
+str_remove_all(string, "[0-9]+")
+
+```
+
+If I want to extract only numbers of a specific length, I could use curly parentheses wrapping how many units I want to extract. A common thing is for example to want to extract years from a string. In the example below, we extract only numbers of four, leaving the 1st aside.
+
+```{r}
+
+string <- "I was born on the 1st of October 1993."
+
+str_extract(string, "[0-9]{4}")
+
+```
+
+
+## Symbols
+
+Symbols can also be useful to remove, whether they are /, {}, (), §, +, - or any other. One method is, as shown above, to make a vector with the symbols, divide them by the | operator and make sure you allude to the symbol and not the *regex* pattern by adding two backslash first.
+
+```{r}
+
+symbols <- str_c("\\!|\\@|\\#|\\$|\\%|\\^|\\&|\\*|\\(|\\)|\\{|\\}|\\-|\\=|\\_|\\+|\\:|\\|\\<|\\>|\\?|\\,|\\.|\\/|\\;|\\'|\\[|\\]|\\-=")
+
+string <- "A string must be written in [code] #code-string. Because string - code = just normal text & that, we can simply just read_"
+
+str_remove_all(string, symbols)
+
+```
+
+
+Another possibility is to replace the non-alphabetic characters with space using `str_replace_all` and `[[:alnum:]]`. The hat, `^`, means "beginning of".
+
+```{r}
+
+string <- "A string must be written in [code] #code-string. Because string - code = just normal text & that, we can simply just read_"
+
+str_replace_all(string, "[^[:alnum:]]", " ")
+
+```   

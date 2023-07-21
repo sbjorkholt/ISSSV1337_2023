@@ -1,17 +1,25 @@
 ---
 title: "Missing values"
+author: "Solveig Bjørkholt"
 ---
+
+## The dataset we are working on (after data cleaning in previous chapter):
 
 ```{r, echo=FALSE, message = FALSE, warning=FALSE, error = FALSE}
 library(tidyverse)
 load("../datafolder/costofliving2.rda")
 costofliving <- as_tibble(costofliving)
-costofliving %>% head()
+DT::datatable(costofliving)
+```
+
+```{r}
+costofliving %>%
+  head()
 ```
 
 What are those `NA` things that occur in some cells in the dataset? They are called "missing values". Missing values occur when there are values in the dataset that should ideally have been there, but they're not. This could for example be because we didn't find data on that particular thing, somebody refused to give us the information we needed, or because we've done something wrong in the code, generating `NA`.
 
-To see how much missing there is in our dataset, we can use the function `is.na` along with the function `table`. `is.na` gives the value `TRUE` if the cell has a missing value and `FALSE` otherwise, while the function `table` counts the instances in which `TRUE` and `FALSE` occurs. This means, in other words, that we have 212 missing values in our data.
+To see how much missing there is in our dataset, we can use the function `is.na` along with the function `table`. `is.na` gives the value `TRUE` if the cell has a missing value and `FALSE` otherwise, while the function `table` counts the instances in which `TRUE` and `FALSE` occurs. This means, in other words, that we have 682 missing values in our data.
 
 ```{r}
 costofliving %>%

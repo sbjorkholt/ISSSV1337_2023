@@ -1,5 +1,6 @@
 ---
 title: "Path and folders"
+author: "Solveig Bjørkholt"
 ---
 
 Your computer stores everything you work with in folders (also called "directories"). If you open File Explorer on Windows or Finder App on Mac, you'll see the archive that your computer is storing for you. The archive has an arrangement which makes it easy to search through your files -- a tree-like structure. You have a folder, and within that folder you can have another folder, and within that folder, another folder, until there is a file. This tree-structure, from root to branch, is often called a "path". For example, the path to your "myscript.R" could look something like the structure below:

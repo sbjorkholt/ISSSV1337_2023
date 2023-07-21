@@ -1,5 +1,6 @@
 ---
 title: "What is R and RStudio?"
+author: "Solveig Bjørkholt"
 ---
 
 R is a programming language, along with many other programming languages. Perhaps you've heard of some of them? Python, Java, Javascript, PHP, C, C++... We use these programming languages to communicate with the computer. Typically, there are lots of trade-offs with using one language over another, for example whether you want your code to be easily readable by a human, or whether it should make the requests run fast. Also, some programming languages are good for web development (e.g. Javascript and PHP), some work great for background processes (e.g. C and C++), and some are favorites for mathematics and statistical computing (e.g. python and R). We will be focusing on R in these sessions, though we have a long-term hope of integrating some python as well.
