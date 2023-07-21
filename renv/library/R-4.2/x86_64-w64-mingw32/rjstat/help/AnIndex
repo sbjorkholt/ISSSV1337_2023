@@ -1,0 +1,14 @@
+as.json	as.json
+as.jsonstat	as.jsonstat
+fromJSONstat	fromJSONstat
+id	id
+id<-	id
+is.jsonstat	as.jsonstat
+is.jsonstat_collection	as.jsonstat
+is.jsonstat_dataset	as.jsonstat
+is.jsonstat_dimension	as.jsonstat
+rjstat	rjstat
+status	status
+status<-	status
+toJSONstat	toJSONstat
+validate_jsonstat	validate_jsonstat
