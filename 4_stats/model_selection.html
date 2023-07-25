@@ -253,20 +253,62 @@ Note that 458 true event(s) actually occured for the problematic event level, 'L
 </div>
 </div>
 <p>So, what happened here? The accuracy is suddenly really high at 80 %, and the same for the specificity at 1. The sensitivity, however, has absolutely tanked at 0. What could explain these weird results? Looking at the plot makes it slightly easier to see what is going on. The model just <em>never predict liberal voters.</em> Since they only add up to 458 of 2500 in the testing, and 558/7500 in the training data, just saying that they do not exist gives a really good model. Most people most of the time do not vote for the liberals.</p>
-<p>A different way we can plot the results is by drawing the receiver operating characteristic curve, or ROC. If you want to read more about this it is explained in the chapter on supervised learning, but the tl;dr is that it plots the true positive rate vs the false positive rates depending on the threshold at which you choose to call something a positive.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> A perfect 45 degree line would then represent a random classifier, while a simple point in the upper left corner shows a perfect classifier. As we immediately notice, it gives the same picture. The model is just slightly better than random, and at some cut-offs actually worse!</p>
+<p>A different way we can plot the results is by drawing the receiver operating characteristic curve, or ROC. If you want to read more about this it is explained in the chapter on supervised learning, but the tl;dr is that it plots the true positive rate vs the false positive rates depending on the threshold at which you choose to call something a positive.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> A perfect 45 degree line would then represent a random classifier, while two straight lines from the origin and top left corner would show a perfect classifier. Plotting the roc-curves are especially useful when we want to <em>compare</em> different models. Often we fit several model specifications, say utilsing a different set of variables, changing the tuning parameters, or other changes and then want to see which one of these are better. Below I’ll first fit a new set of logistic regression models, and then create the roc-curve.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">testing</span>(valgdata_split) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="fu">predict</span>(logistic_fit, ., <span class="at">type =</span> <span class="st">"prob"</span> )) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> libVote, .pred_Liberal) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Models </span><span class="al">###</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>logistic_spec <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"classification"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">engine =</span> <span class="st">"glm"</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>logistic_fit1 <span class="ot">&lt;-</span> logistic_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    libVote <span class="sc">~</span> age,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">training</span>(valgdata_split)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>logistic_fit2 <span class="ot">&lt;-</span> logistic_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    libVote <span class="sc">~</span> age <span class="sc">+</span> l_r,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">training</span>(valgdata_split)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>logistic_fit3 <span class="ot">&lt;-</span> logistic_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    libVote <span class="sc">~</span> age <span class="sc">+</span> l_r <span class="sc">+</span> district,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">training</span>(valgdata_split)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="do">### Plot </span><span class="al">###</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="fu">testing</span>(valgdata_split) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(<span class="fu">predict</span>(logistic_fit1, ., <span class="at">type =</span> <span class="st">"prob"</span> ), <span class="at">modID =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">bind_cols</span>(<span class="fu">testing</span>(valgdata_split), <span class="fu">predict</span>(logistic_fit2, ., <span class="at">type =</span> <span class="st">"prob"</span> ), <span class="at">modID =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bind_cols</span>(</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">testing</span>(valgdata_split), <span class="fu">predict</span>(logistic_fit3, <span class="fu">testing</span>(valgdata_split), <span class="at">type =</span> <span class="st">"prob"</span>),</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">modID =</span> <span class="dv">3</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(modID) <span class="sc">%&gt;%</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> libVote, .pred_Liberal) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>() <span class="sc">+</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>()) <span class="sc">+</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"AUC:</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="st">       Mod 1 = .519</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="st">       Mod2 = .746</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="st">       Mod3 = .748"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="model_selection_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>So what does the model show us? Well, obviously the first model is absolutely awful. While it never performs <em>worse</em> than a strictly random classifier, it for the most part performs just as well as one. In other words, you may just flip a coin and get as good a result.</p>
+<p>For model 2 and 3 we can see that these are difficult to separate, and adding the extra variable in model 3 at least does not add a lot of extra information. For both of them it is clear that there is a set of thresholds at which there is a dramatic change in its true positive rate.</p>
 </section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1"></h2>
-<p>Cross Validation</p>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
 <p>Looking at our results, and especially for the logistic model, you might argue that the bad results actually are just a fluke of the training set. If we by pure bad luck ended up with training data especially hard to predict, this may create an unwarranted negative impressions. What we need is some systematic way of measuring the model at several testing-sets, attempting to see how good it is <em>regardless of what data it receives.</em> This is what cross-validation achieves. Rather than splitting the data once, we split the training data (still keeping the testing data out of course) into several smaller groups. We then use most of these to train the model, and then test it on the remaining. Do that again and again and you will end up with a set of performance statistics equal to the number of groups you have. When finished you can simply take the average (or some other mean or measure should you prefer) to get the final results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The first thing we need to do is to create the new splits.</span></span>
@@ -1828,7 +1870,37 @@ Note that 458 true event(s) actually occured for the problematic event level, 'L
 <section id="a-note-on-unsupervised-learning" class="level2">
 <h2 class="anchored" data-anchor-id="a-note-on-unsupervised-learning">A Note on unsupervised learning</h2>
 <p><br>
-You may have noticed that so far we haven’t talked about the k-means model at all. The reason is simple, the different ways we just used to test the models are based on us knowing the <em>truth.</em> That way we can compare our results with the actuall world, and see whether it is good at predicting this or not. The problem with unsupervised models, of course, is that we have no such truth to compare it with. How can we then say anything about whether it’s a good model or not? Maybe the most important way is through substantial knowledge. When choosing the number of clusters I used 9 because I happen to know that there are 9 parties. When then again looking at the model I can try to see whether it fits with my expectations. If we are looking for patterns where we have no such prior idea, we may just attempt to figure out ourself what the patterns are. A common example is in topic modelling where one topic may just be the words “EU, GDPR, Meta”, and you could reasonably assume it has to do with something regarding Facebook and privacy policy.</p>
+You may have noticed that so far we haven’t talked about the k-means model at all. The reason is simple, the different ways we just used to test the models are based on us knowing the <em>truth.</em> That way we can compare our results with the actuall world, and see whether it is good at predicting this or not. The problem with unsupervised models, of course, is that we have no such truth to compare it with. How can we then say anything about whether it’s a good model or not? Maybe the most important way is through substantial knowledge. When choosing the number of clusters I used 9 because I happen to know that there are 9 parties. When then again looking at the model I can try to see whether it fits with my expectations. If we are looking for patterns where we have no such prior idea, we may just attempt to figure out ourself what the patterns are. A common example is in topic modelling where one topic may just be the words “EU, GDPR, Meta”, and you could reasonably assume it has to do with something regarding Facebook and privacy policy. However, there are still some methods which can <em>help</em> in finding what could be an “optimal” model. The important part is that you choose some measure which you find useful.</p>
+<p>One such way is to minimize the within-cluster variance, i.e.&nbsp;make the clusters as tight around the centroid as possible. We begin by calculating the k-means model for different numbers of clusters. We then calculate the within-cluster variance for each number of clusters, and plot the WCSS (within-cluster sum of squares) against the nr. of clusters. The point at which the plot flattens out (the elbow) is what we choose as the optimal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>kclusts <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">k =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">kclust =</span> <span class="fu">map</span>(k, <span class="sc">~</span><span class="fu">kmeans</span>(<span class="fu">testing</span>(valgdata_split) <span class="sc">%&gt;%</span> <span class="fu">select</span>(age, l_r) , .x)),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">tidied =</span> <span class="fu">map</span>(kclust, tidy),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">glanced =</span> <span class="fu">map</span>(kclust, glance),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">augmented =</span> <span class="fu">map</span>(kclust, augment, <span class="fu">testing</span>(valgdata_split) <span class="sc">%&gt;%</span> <span class="fu">select</span>(age, l_r))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>clusterings <span class="ot">&lt;-</span> </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  kclusts <span class="sc">%&gt;%</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(glanced))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(clusterings, <span class="fu">aes</span>(k, tot.withinss)) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_excel_new</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="model_selection_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>What is quite visible here is that the within cluster sum of squares are decreasing as the number of clusters (k) <em>increase.</em> However, we can note that around 10 clusters there’s a bend (an elbow) on the plot. Adding more clusters after this may then not be of much value.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> It is important to note that this is <em>still a subjective choice.</em> While there is a change there, you will notice that there is no point where there is no change at all. As such, the elbow method can help in choosing the number of clusters, but it cannot decide it for you.</p>
+</section>
+<section id="a-note-on-p-values" class="level1">
+<h1>A note on P-values</h1>
+<p>Looking back at our discussion on statistical inference, we spent a considerable amount of time discussing hypothesis-testing and p-values. If we (as well as we are able) fulfil the assumptions of the Gauss-Markov theorem<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> as well as these errors being <em>normally distributed,</em> we are able to do a form of inference leading to accurate confidence intervals, p-values, and such<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. However! Doing machine learning it is important to remember that this is often <em>not</em> the goal. Many, if not most, of these are strictly <em>predictive</em> models and any variable that can increase the predictive power of the model, even though it may introduce issues such as collinearity, post-treatment bias, or similar <em>should be included.</em> This would make hypothesis testing useless, but you may still use the techniques above to evaluate their efficiency.</p>
 </section>
 
 
@@ -1836,6 +1908,10 @@ You may have noticed that so far we haven’t talked about the k-means model at 
 
 <ol>
 <li id="fn1"><p>Strictly speaking, a logistical regression doesn’t give you an answer to whether an individual belongs to a certain group or not. Rather it, based on the data, gives the <em>probability</em> that the individual belongs to a group. To go from this probability to a classifier we need to set a value at which we believe that the probability is so high as to define it as a positive.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If you’d like a more thorough explanation of how to interpret plots such as these I’d recommend https://hastie.su.domains/Papers/gap.pdf<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>OLS is the Best <em>unbiased</em> linear estimator (BLUE) given that:<br>
+The errors are uncorrelated, have an equal finite variance (homoscedacity), and an expected value (mean) of 0.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Should you be able to add some other assumptions, most importantly the <em>backdoor criterion,</em> you would be able to make causal arguments from this.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->
