@@ -342,4 +342,4 @@ Looking back at our discussion on statistical inference, we spent a considerable
 
 [^4]: Should you be able to add some other assumptions, most importantly the *backdoor criterion,* you would be able to make causal arguments from this.
 
-An
+
